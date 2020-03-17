@@ -1,0 +1,95 @@
+.container{
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+
+  .notFound{
+    text-align: center;
+    padding-top: 60px;
+    padding-bottom: 10px;
+    display: flex;
+    color: #272727;
+
+    .wrapImg{
+      margin-bottom: 30px;
+
+      .img{
+        max-width: 100%;
+        display: block;
+        vertical-align: middle;
+        border-style: none;
+      }
+    }
+  }
+
+  .h1{
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .btns{
+    width: 100%;
+    margin-top: 20px;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    text-align: center;
+
+    .a{
+      box-sizing: border-box;
+      margin-right: 0;
+      margin-bottom: 20px;
+      width: 100%;
+      background-color: #272727;
+      color: #ffffff;
+      max-width: 100%;
+      display: inline-flex;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      fill: #272727;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      text-align: center;
+      padding: 19px 28px;
+      justify-content: center;
+    }
+  }
+
+  .span{
+    line-height: 1.7;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+
+  .socials{
+    text-align: center;
+
+    .socialList{
+      display: flex;
+      margin: 10px auto 30px;
+      width: 50%;
+      justify-content: space-between;
+
+      .soc{
+        flex: 1;
+        width: 20px;
+        margin: 0 10px;
+
+        .img{
+          display: block;
+          width: 100%;
+        }
+
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.app{
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  min-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex-flow: column;
+  background-color: #f2f2f2;
+
+  .header {
+    position: fixed;
+    z-index: 999;
+    left: 50%;
+    top: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    height: 50px;
+
+    width: 100%;
+    transform: translateX(-50%);
+  }
+
+  .main{
+    flex: 1;
+    display: flex;
+    margin-top: 49px;
+    box-sizing: border-box;
+  }
+
+  .footer{ margin-top: auto }
+}
+
