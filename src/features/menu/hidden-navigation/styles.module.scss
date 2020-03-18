@@ -1,0 +1,20 @@
+.template{
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  top: 60px;
+  background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  .container{
+    border: 1px solid red;
+    height: 300px;
+    box-sizing: border-box;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 12px 40px;
+
+  }
+}

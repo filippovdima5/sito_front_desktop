@@ -1,25 +1,25 @@
 import React  from 'react'
-import config from './config'
 
-import { Scope } from 'effector/fork';
-import { Provider } from 'effector-react/ssr';
-import { useEffectSafe } from './helpers/hooks/use-effect-safe'
+import { Scope } from 'effector/fork'
+import { Provider , useEvent, useStore } from 'effector-react/ssr'
 import { useLocation } from 'react-router'
-import {Helmet} from "react-helmet"
+import { Helmet } from 'react-helmet'
+import { useEffectSafe } from './helpers/hooks/use-effect-safe'
 
-import { useEvent, useStore } from 'effector-react/ssr'
+
+import config from './config'
 import { $fetchUser } from './stores/user'
 import { $setUrlInfo, $seo } from './stores/env'
 import { Pages } from './pages'
 
+import { Header } from './features/header'
 import BackToTop from './commons/molecules/back-to-top'
-
-
+import styles from './media/css/app.module.scss'
 import './media/css/reset.module.scss'
 
 
 interface Props {
-  root: Scope;
+  root: Scope,
 }
 
 
@@ -52,16 +52,16 @@ function Main() {
       </Helmet>
   
   
-      <div>
-        <header>
-          header
+      <div className={styles.app}>
+        <header className={styles.header}>
+          <Header/>
         </header>
     
-        <main>
+        <main className={styles.main}>
           <Pages/>
         </main>
     
-        <footer>
+        <footer className={styles.footer}>
           footer
         </footer>
     
@@ -74,11 +74,11 @@ function Main() {
 
 
 export function App({ root }: Props) {
-    return(
-       <Provider value={root}>
-         <Main/>
-       </Provider>
-    )
+  return(
+    <Provider value={root}>
+      <Main/>
+    </Provider>
+  )
 }
 
 
