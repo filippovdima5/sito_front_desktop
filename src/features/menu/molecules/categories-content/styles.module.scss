@@ -1,0 +1,61 @@
+.categoriesContent{
+  padding: 5px 15px 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+  font-weight: 400;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+
+
+
+  .subcategoryGroup{
+    display: flex;
+    flex-direction: column;
+    height: 95%;
+    margin: 0 1%;
+    border-right: 1px solid rgb(219, 219, 219);
+
+    &:nth-child(1){
+      flex-grow: 2;
+    }
+
+    &:nth-child(2){
+      flex-grow: 1;
+    }
+
+    &:nth-child(3){
+      flex-grow: 2;
+    }
+
+    .titleSubcategory{
+      margin-bottom: 7px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      padding-left: 12px;
+      cursor: pointer;
+    }
+
+    .subContent{
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 100%;
+
+      .categoryLink{
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 15px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        white-space: pre-line;
+        box-sizing: border-box;
+      }
+    }
+  }
+}

@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { useStore } from 'effector-react/ssr'
+import { useStore, useEvent } from 'effector-react/ssr'
+import {$setNavActive, $setMenuContent } from '../store'
 import { $genderInfo } from '../../../stores/user'
 import { $baseRoute } from '../../../stores/env'
+import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
 import styles from './styles.module.scss'
 
-//  ? true : (baseRoute !== 'products' && baseRoute !=='brands' && sexId === 2)
 
 function ActiveBorder({ active }: { active: boolean }) {
   if (!active) return null
@@ -13,16 +14,27 @@ function ActiveBorder({ active }: { active: boolean }) {
 }
 
 export function Navigation() {
+  useMouseOpenMenu(200)
   const genderInfo = useStore($genderInfo)
   const baseRoute = useStore($baseRoute)
+  const setNavActive = useEvent($setNavActive)
+  const setMenuContent = useEvent($setMenuContent)
+
+  
+  
   const sexId = useMemo(() => {
     if (genderInfo === null) return null
     return genderInfo.sexId
   }, [genderInfo])
   
   return (
-    <ul className={styles.navigation}>
-      <li className={styles.navItem}>
+    <ul
+      onMouseOver={() => setNavActive(true)}
+      onMouseOut={() => setNavActive(false)}
+      className={styles.navigation}>
+      <li
+        onMouseOver={() => setMenuContent('BRANDS')}
+        className={styles.navItem}>
         <Link
           to={'/brands'}
           className={styles.navLink}
@@ -34,7 +46,9 @@ export function Navigation() {
       </li>
   
   
-      <li className={styles.navItem}>
+      <li
+        onMouseOver={() => setMenuContent('MEN_CATEGORIES')}
+        className={styles.navItem}>
         <Link
           //onClick = {handleSetSex}
           to={'/products/men'}
@@ -48,7 +62,9 @@ export function Navigation() {
       </li>
         
         
-      <li className={styles.navItem}>
+      <li
+        onMouseOver={() => setMenuContent('WOMEN_CATEGORIES')}
+        className={styles.navItem}>
         <Link
           // onClick = {handleSetSex}
           to={'/products/women'}

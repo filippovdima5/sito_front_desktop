@@ -9,12 +9,36 @@
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 
   .container{
-    border: 1px solid red;
     height: 300px;
     box-sizing: border-box;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 20px 12px 40px;
-
+    padding: 10px 12px;
   }
+}
+
+._enter{
+  opacity: 0;
+}
+
+._enter_active{
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+._enter_is_done{
+  opacity: 1;
+}
+
+._exit{
+  opacity: 1;
+}
+
+._exit_active{
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+._exit_is_done{
+  opacity: 0;
 }
