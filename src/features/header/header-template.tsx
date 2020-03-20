@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigation } from '../menu'
 import { HiddenNavigation } from '../menu/hidden-navigation'
+import { Search } from '../search'
 import styles from './styles.module.scss'
 
 import { Logo } from './atoms/logo'
@@ -21,7 +22,7 @@ export function HeaderTemplate() {
         </nav>
         
         <div className={styles.search}>
-          search
+          <Search/>
         </div>
         
       </div>
