@@ -1,60 +1,72 @@
-.categoriesContent{
-  padding: 5px 15px 0;
+.categoriesContent {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
   font-size: 1rem;
   font-weight: 400;
-
   display: flex;
-  justify-content: space-between;
   align-items: center;
 
+  .subcategoryGroupBox {
+    box-sizing: border-box;
+    height: 100%;
 
-
-
-  .subcategoryGroup{
-    display: flex;
-    flex-direction: column;
-    height: 95%;
-    margin: 0 1%;
-    border-right: 1px solid rgb(219, 219, 219);
-
-    &:nth-child(1){
-      flex-grow: 2;
-    }
-
-    &:nth-child(2){
-      flex-grow: 1;
-    }
-
-    &:nth-child(3){
-      flex-grow: 2;
-    }
+    &:nth-child(1) { width: 40%; .liLink{ width: 50% }; .subContentBox{border-left: 1px solid rgba(0, 0, 0, 0.1);} }
+    &:nth-child(2) { width: 20% }
+    &:nth-child(3) { width: 40%; .liLink{ width: 50% }; }
 
     .titleSubcategory{
-      margin-bottom: 7px;
-      font-size: 0.78rem;
+      padding-left: 20px;
+      cursor: default;
+      box-sizing: border-box;
+      display: block;
       font-weight: bold;
-      padding-left: 12px;
-      cursor: pointer;
+      height: 45px;
+      line-height: 45px;
+      font-size: 18px;
+      margin-bottom: 2px;
     }
 
-    .subContent{
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      height: 100%;
+    .subContentBox{
+      box-sizing: border-box;
+      padding-left: 15px;
+      overflow: hidden;
 
-      .categoryLink{
-        font-size: 1rem;
-        font-weight: 500;
-        line-height: 15px;
-        padding: 6px 10px;
-        border-radius: 10px;
-        cursor: pointer;
-        white-space: pre-line;
+      .subContent{
         box-sizing: border-box;
+        height: 210px;
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        //justify-content: flex-start;
+
+
+
+
+        .liLink{
+          height: 30px;
+          line-height: 30px;
+          display: block;
+          box-sizing: border-box;
+
+          .categoryLink{
+            display: block;
+            height: 100%;
+            width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .categoryLink:hover{
+            background-color: rgba(0, 0, 0, 0.05);
+          }
+        }
+
+
       }
     }
   }

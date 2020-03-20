@@ -17,7 +17,7 @@ export function useMouseOpenMenu(delay: number) {
       if (timer.current) clearTimeout(timer.current)
       setShowMenu(true)
     } else {
-      timer.current = setTimeout(() => setShowMenu(false), delay)
+      //timer.current = setTimeout(() => setShowMenu(false), delay)
     }
   }, [ navActive, menuActive ])
   
