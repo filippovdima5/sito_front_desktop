@@ -70,6 +70,11 @@ export const api = {
     allBrands: ( params: { sexId: 1 | 2 }): AxiosPromise<Array<AllBrandsRequest>> => {
       return apiGet
         .get(`/simple/all-brands/?sexId=${params.sexId}`)
+    },
+    
+    popularBrands: (params: { sexId: 1 | 2 | null }): AxiosPromise<Array<string>> => {
+      return apiGet
+        .get(`/simple/popular-brands/?sexId=${params.sexId}`)
     }
   },
   

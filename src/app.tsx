@@ -8,8 +8,8 @@ import { useEffectSafe } from './helpers/hooks/use-effect-safe'
 
 
 import config from './config'
-import { $fetchUser } from './stores/user'
-import { $setUrlInfo, $seo } from './stores/env'
+import { $fetchUser, $genderInfo } from './stores/user'
+import { $setUrlInfo, $seo, $setLoadPopularBrands } from './stores/env'
 import { Pages } from './pages'
 
 import { Header } from './features/header'
@@ -26,9 +26,14 @@ interface Props {
 function Main() {
   const { pathname, search } = useLocation()
   const { title, description } = useStore($seo)
+  const genderInfo = useStore($genderInfo)
   const fetchUser = useEvent($fetchUser)
   const setUrlInfo = useEvent($setUrlInfo)
+  const setLoadPopularBrands = useEvent($setLoadPopularBrands)
   
+  useEffectSafe(() => {
+    setLoadPopularBrands({ sexId: genderInfo === null ? null : genderInfo.sexId })
+  }, [genderInfo])
   
   useEffectSafe(() => {
     if (config.local) {

@@ -1,8 +1,8 @@
-import { createStore, createEvent,  combine, createEffect, guard } from 'lib/effector'
-import { $sexLine } from './user'
+import { createStore, createEvent,  combine, createEffect, guard, merge } from 'lib/effector'
 import { sexStrToId } from '../helpers/lib'
 import { SeoReqParams, SeoRequest } from '../api/types'
 import { api } from '../api'
+import { $sexLine } from './user'
 
 
 type BaseRoute = 'home' | 'products' | 'brands'
@@ -27,21 +27,22 @@ $baseRoute.on($setUrlInfo, (_, { path }) => {
 
 
 export const $baseLink = combine({ $search, $baseRoute, $sexLine }, ({ $search, $baseRoute, $sexLine }) => {
- const path = `/${$baseRoute}`;
- const search =  Boolean($search) ? `?${$search}` : '';
- const sex = Boolean($sexLine) ? `/${$sexLine}` : '';
+  const path = `/${$baseRoute}`
+  const search =  Boolean($search) ? `?${$search}` : ''
+  const sex = Boolean($sexLine) ? `/${$sexLine}` : ''
  
- return ({
-   readyLink: path + sex + search,
-   linkParams: {
-     baseRoute: $baseRoute,
-     sexLine: $sexLine,
-     search: $search
-   }
- })
+  return ({
+    readyLink: path + sex + search,
+    linkParams: {
+      baseRoute: $baseRoute,
+      sexLine: $sexLine,
+      search: $search
+    }
+  })
 })
 
 
+// region Seo:
 export const $seo = createStore<SeoRequest>({
   title: 'SITO - сайт выгодных скидок. Каталог акций в интернет-магазинах.',
   description: 'Все скидки рунета на SITO: поиск выгодных цен на одежду, обувь и аксессуары в интернет-магазинах. Агрегатор скидок – акции от 50%'
@@ -55,7 +56,7 @@ $seo.on(fetchSeo.done, (state, { result: { data } }) => data)
 const seoParams =  $baseLink.map(clock => {
   const sexId = clock.linkParams.sexLine !== null ? sexStrToId(clock.linkParams.sexLine) : null
   const path = clock.linkParams.baseRoute as string
-  const search = clock.linkParams.search
+  const { search } = clock.linkParams
   
   return ({ sexId, path, search })
 })
@@ -65,4 +66,27 @@ guard({
   filter: () => true,
   target: fetchSeo
 })
+// endregion Seo
+
+
+// region PopularChamps:
+export const $popularBrands = createStore<Array<string>>([])
+export const $setLoadPopularBrands = createEvent<{ sexId: 1 | 2 | null }>()
+export const $loadingPopularBrands = createStore<boolean>(false)
+
+const fetchPopularBrands = createEffect({
+  handler: (params: { sexId: 1 | 2 | null }) => api.simple.popularBrands(params)
+})
+
+$popularBrands.on(fetchPopularBrands.done, (_, { result: { data } }) => data)
+$loadingPopularBrands.on(fetchPopularBrands.pending, () => true)
+$loadingPopularBrands.on(merge([fetchPopularBrands.done, fetchPopularBrands.fail]), () => false)
+
+
+guard({
+  source: $setLoadPopularBrands.map(payload => payload),
+  filter: () => true,
+  target: fetchPopularBrands
+})
+// endregion PopularChamps
 

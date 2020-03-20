@@ -1,15 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useStore } from 'effector-react/ssr'
+import { $popularBrands } from '../../../../stores/env'
 import styles from './styles.module.scss'
 
 
-const brands: Array<string> = []
-for (let i = 0; i < 52; i++ ){
-  brands.push('Some brand')
-}
-
 export function BrandsContent() {
-
+  const brands = useStore($popularBrands)
   
   return (
     <div  className={styles.brandsContent}>
