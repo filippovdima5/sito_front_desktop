@@ -1,0 +1,40 @@
+.wrap{
+  padding: 2px 10px;
+  box-sizing: border-box;
+
+  .container{
+    overflow-x: auto;
+    overflow-y: hidden;
+    line-height: 1;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid silver;
+
+    .preWrap{
+      white-space: nowrap;
+      line-height: 1;
+      padding: 5px 0;
+
+      .item:last-child{
+        margin-right: 0;
+      }
+
+      .item{
+        border: 1px solid black;
+
+        height: 75px;
+        width: 187.5px;
+        position: relative;
+        display: inline-block;
+        margin-right: 5px;
+
+        .img{
+          position: absolute;
+          top: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+}

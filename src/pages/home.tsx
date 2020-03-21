@@ -7,6 +7,7 @@ import { sexStrToId, preDetectedGender } from '../helpers/lib'
 import { $genderInfo, $setGender } from '../stores/user'
 
 import { GenderDetected } from '../features/gender-detected'
+import { HomePage } from '../features/home-page/home-page'
 import { useEffectSafe } from '../helpers/hooks/use-effect-safe'
 
 
@@ -22,7 +23,7 @@ function UseGender({ sexId }: { sexId: 1 | 2 }) {
     setGender(sexId)
   }, [])
   return (
-    <div>HOME PAGE</div>
+    <HomePage sexId={sexId}/>
   )
 }
 

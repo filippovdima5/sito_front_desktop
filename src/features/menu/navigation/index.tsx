@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
-import {$setNavActive, $setMenuContent } from '../store'
-import { $genderInfo } from '../../../stores/user'
+import { $setNavActive, $setMenuContent } from '../store'
+import { $genderInfo, $setGender } from '../../../stores/user'
 import { $baseRoute } from '../../../stores/env'
 import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
+import { sexIdToStr } from '../../../helpers/lib'
 import styles from './styles.module.scss'
 
 
@@ -19,13 +20,15 @@ export function Navigation() {
   const baseRoute = useStore($baseRoute)
   const setNavActive = useEvent($setNavActive)
   const setMenuContent = useEvent($setMenuContent)
-
+  const setGender = useEvent($setGender)
   
   
   const sexId = useMemo(() => {
     if (genderInfo === null) return null
     return genderInfo.sexId
   }, [genderInfo])
+  
+
   
   return (
     <ul
@@ -36,7 +39,8 @@ export function Navigation() {
         onMouseOver={() => setMenuContent('BRANDS')}
         className={styles.navItem}>
         <Link
-          to={'/brands'}
+          
+          to={`/brands/${sexId !== null ? sexIdToStr(sexId) : ''}`}
           className={styles.navLink}
         >
           Бренды
@@ -50,7 +54,7 @@ export function Navigation() {
         onMouseOver={() => setMenuContent('MEN_CATEGORIES')}
         className={styles.navItem}>
         <Link
-          //onClick = {handleSetSex}
+          onClick={() => setGender(1)}
           to={'/products/men'}
           className={styles.navLink}
         >
@@ -66,7 +70,7 @@ export function Navigation() {
         onMouseOver={() => setMenuContent('WOMEN_CATEGORIES')}
         className={styles.navItem}>
         <Link
-          // onClick = {handleSetSex}
+          onClick={() => setGender(2)}
           to={'/products/women'}
           className={styles.navLink}
         >
