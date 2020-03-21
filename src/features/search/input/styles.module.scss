@@ -1,4 +1,4 @@
-.Input {
+.input {
   background-color: transparent;
   height: 100%;
   width: 100%;
@@ -9,5 +9,9 @@
   color: #272727;
   border: none;
   -webkit-appearance: none;
+}
 
-} 
+.placeholderInput{
+  composes: input;
+  color: #27272794;
+}

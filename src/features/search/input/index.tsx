@@ -11,7 +11,7 @@ export function Input() {
   const inputRef = useRef<HTMLInputElement>(null)
   const modSearch = useStore($modSearch)
   const setPhrase = useEvent($setPhrase)
-
+  
   
   useEffectSafe(() => {
     if (modSearch) (inputRef.current as HTMLInputElement).focus()
@@ -31,11 +31,11 @@ export function Input() {
     <input
       onMouseOver={() => {(inputRef.current as HTMLInputElement).focus()}}
       onMouseOut={() => (inputRef.current as HTMLInputElement).blur()}
-      value = { value }
+      value = {modSearch ? value : 'Поиск по ключевому слову'}
       onChange = { handleChange }
       ref = { inputRef }
       placeholder={ 'Поиск по ключевому слову' }
-      className={ styles.Input }
+      className={ modSearch ? styles.input : styles.placeholderInput }
       type={ 'text' }
     />
   )
