@@ -14,3 +14,4 @@ declare module 'lru' {
   
   export default LRU
 }
+

@@ -6,6 +6,7 @@ import { preDetectedGender, sexStrToId } from '../helpers/lib'
 import { useEffectSafe } from '../helpers/hooks/use-effect-safe'
 import { $genderInfo, $setGender } from '../stores/user'
 import { GenderDetected } from '../features/gender-detected'
+import { ProductsPage } from '../features/products-page'
 
 
 type RParams = {
@@ -19,7 +20,7 @@ function UseSex({ sexId }: { sexId: 1 | 2 }) {
     setGender(sexId)
   }, [])
   
-  return <div>Products {sexId}</div>
+  return <ProductsPage sexId={sexId}/>
 }
 
 export function Products({ match }: RouteComponentProps<RParams>) {
