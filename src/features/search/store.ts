@@ -4,13 +4,13 @@ import { MainSearchResultItem, MainSearchReqParams } from '../../api/types'
 import { $sexId } from '../../stores/user'
 
 
-export const $setModSearch = createEvent()
+export const $setModSearch = createEvent<boolean>()
 export const $modSearch  = createStore<boolean>(false)
-$modSearch.on($setModSearch, (state) => !state)
+$modSearch.on($setModSearch, (_, payload) => payload)
 
 
-export const setPhrase = createEvent<string>()
-export const $phrase = restore(setPhrase, '')
+export const $setPhrase = createEvent<string>()
+export const $phrase = restore($setPhrase, '')
 
 
 export const $searchResult = createStore<Array<MainSearchResultItem>>([])

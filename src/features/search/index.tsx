@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEvent } from 'effector-react/ssr'
+import { $setModSearch } from './store'
 import styles from './styles.module.scss'
-import {  $setModSearch } from './store'
 import { Icon } from './icon'
 import { Input } from './input'
 import  { SearchResult } from './modal'
@@ -12,12 +12,17 @@ export function Search() {
   
   return (
     <div
-      onClick={() => setModSearch()}
-      className={`${styles.Search} ${styles.search_active}`}
-    >
-      <Icon/>
-      <Input/>
-      <SearchResult/>
+      onMouseOver={() => {setModSearch(true)}}
+      onMouseLeave={() => setModSearch(false)}
+      className={styles.search}>
+      <div className={styles.searchContent}>
+        <div className={styles.searchInput}>
+          <Icon/>
+          <Input/>
+        </div>
+        <SearchResult/>
+        
+      </div>
     </div>
   )
 }

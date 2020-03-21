@@ -4,8 +4,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { $setMenuActive, $showMenu, $menuContent, $setShowMenu } from '../store'
 import { useTransitionNames } from '../../../helpers/hooks/use-transition-names'
 import { BrandsContent } from '../molecules/brands-content'
-import styles from './styles.module.scss'
 import { CategoriesContent } from '../molecules/categories-content'
+import styles from './styles.module.scss'
 
 
 function MenuContent() {

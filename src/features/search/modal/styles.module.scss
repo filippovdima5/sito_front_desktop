@@ -1,10 +1,7 @@
 .modal {
   width: 100%;
   max-height: 400px;
-  position: absolute;
-  top: 100%;
   box-sizing: border-box;
-  left: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
@@ -21,6 +18,7 @@
 
 
         .link {
+          cursor: pointer;
           display: flex;
           justify-content: space-between;
           color: #272727;
@@ -54,4 +52,32 @@
     }
   }
 }
+
+
+._enter{
+  opacity: 0;
+}
+
+._enter_active{
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+._enter_is_done{
+  opacity: 1;
+}
+
+._exit{
+  opacity: 1;
+}
+
+._exit_active{
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+._exit_is_done{
+  opacity: 0;
+}
+
 

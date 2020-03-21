@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { Link } from 'react-router-dom'
-import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock'
-
+import React, {  useMemo, useRef } from 'react'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { useHistory } from 'react-router'
 import { useStore, useEvent } from 'effector-react/ssr'
+import { useTransitionNames } from '../../../helpers/hooks/use-transition-names'
 import { $searchResult, $showResults, $setModSearch } from '../store'
 import { $genderInfo } from '../../../stores/user'
 
@@ -15,17 +15,8 @@ function  SearchResult() {
   const modalSearchRef = useRef<HTMLDivElement | null>(null)
   const searchResults = useStore($searchResult)
   const genderInfo = useStore($genderInfo)
-  
   const setModSearch = useEvent($setModSearch)
-
-
-
-  useEffect(() => {
-    disableBodyScroll(modalSearchRef.current as NonNullable<HTMLDivElement>)
-    return (() => {
-      clearAllBodyScrollLocks()
-    })
-  }, [])
+  const { push } = useHistory()
   
   
   const sexLine = useMemo(() => {
@@ -33,8 +24,8 @@ function  SearchResult() {
     if (genderInfo.sexLine === null) return ''
     return genderInfo.sexLine
   }, [genderInfo])
-
-
+  
+  
   return (
     <div
       ref = {modalSearchRef}
@@ -45,11 +36,11 @@ function  SearchResult() {
           
           {searchResults.map(({ count, title }) => (
             <li key={title} className={styles.title}>
-              <Link
+              <div
                 onClick={() => {
-                  setModSearch()
+                  setModSearch(false)
+                  push(`/products/${sexLine}?brands=${title}`)
                 }}
-                to={`/products/${sexLine}?brands=${title}`}
                 className={styles.link}
               >
                 {title}
@@ -58,7 +49,7 @@ function  SearchResult() {
                   <span className={styles.count}>{count}</span>
                 </span>
                 
-              </Link>
+              </div>
             </li>
           ))}
         </ul>
@@ -67,15 +58,26 @@ function  SearchResult() {
   )
 }
 
-
-function ShowResults() {
+function ShowModal() {
   const showResults = useStore($showResults)
-  if (!showResults) return null
-
-
-  return <SearchResult/>
+  const classNames = useTransitionNames(styles)
+  
+  return (
+    <TransitionGroup>
+      {showResults && (
+        <CSSTransition
+          timeout={200}
+          classNames={classNames}
+        >
+          <SearchResult/>
+        </CSSTransition>
+      )}
+    </TransitionGroup>
+  )
 }
 
+export { ShowModal as SearchResult }
 
-export { ShowResults as SearchResult }
+
+
 
