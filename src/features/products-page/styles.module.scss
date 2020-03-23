@@ -1,6 +1,4 @@
 .products{
-  border: 1px solid black;
-
   width: 100%;
   padding: 2px 10px;
   margin-right: auto;
@@ -15,7 +13,7 @@
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
-    grid-template-rows: auto 1fr 1fr auto;
+    grid-template-rows: 90px 1fr 1fr 65px;
     grid-template-areas:
             "filters sorters sorters sorters"
             "filters productsList productsList productsList"
@@ -25,7 +23,7 @@
   }
 
   .filters{border: 1px solid red;grid-area: filters;}
-  .sorters{ grid-area: sorters; border: 1px solid green }
-  .productsList{ grid-area: productsList; border: 1px solid hotpink }
-  .pagination{ grid-area: pagination; border: 1px solid firebrick }
+  .sorters{ grid-area: sorters;}
+  .productsList{ grid-area: productsList; }
+  .pagination{ grid-area: pagination; }
 }

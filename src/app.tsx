@@ -67,7 +67,8 @@ function Main() {
         </main>
     
         <footer className={styles.footer}>
-          footer
+          <div className={styles.footerTop}/>
+          <div className={styles.footerBottom}/>
         </footer>
     
         {!config.ssr && <BackToTop/>}

@@ -5,7 +5,7 @@
   box-sizing: border-box;
   flex-flow: column;
   background-color: #f2f2f2;
-  max-width: 1400px;
+
 
 
 
@@ -24,16 +24,28 @@
   .main{
     flex: 1;
     display: flex;
-
-    margin-top: 60px;
+    margin: 70px auto 50px;
     padding: 8px 0 18px;
     box-sizing: border-box;
+
+    max-width: 1400px;
   }
 
 
   .footer{
     margin-top: auto;
+    width: 100%;
     box-sizing: border-box;
     border: 1px solid #1815ff;
+
+    .footerTop{
+      background-color: #272727;
+      padding: 42px 0 53px;
+    }
+
+    .footerBottom{
+      background-color: #383838;
+      padding: 25px 0 27px;
+    }
   }
 }
