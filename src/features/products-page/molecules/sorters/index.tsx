@@ -1,8 +1,14 @@
 import React from 'react'
+import { useEvent } from 'effector-react/ssr'
+import { sortersName } from '../../constants'
+import { $setSort } from '../../store'
+import { TypesSortProducts } from '../../../../api/types'
 import styles from './styles.module.scss'
 
 
 export function Sorters() {
+  const setSort = useEvent($setSort)
+  
   return (
     <div className={styles.sorters}>
       <div className={styles.inner}>
@@ -14,9 +20,15 @@ export function Sorters() {
         
         <div className={styles.body}>
           <div className={styles.sort_btn}>
-            <button className={styles.btn}>По новизне</button>
-            <button className={styles.btn}>По цене</button>
-            <button className={styles.btn}>По скидке</button>
+            {Object.entries(sortersName).map(([key, value]) => (
+              <button
+                onClick={() => setSort((key as TypesSortProducts))}
+                key={key}
+                className={styles.btn}
+              >
+                {value}
+              </button>
+            ))}
           </div>
         </div>
       </div>

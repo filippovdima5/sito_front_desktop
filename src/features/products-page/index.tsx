@@ -3,6 +3,7 @@ import styles from './styles.module.scss'
 import { Sorters } from './molecules/sorters'
 import { Pagination } from './molecules/pagination'
 import { ProductsList } from './organisms/products-list'
+import { Filters } from './organisms/filters'
 
 
 export function ProductsPage({ sexId }: { sexId: 1 | 2 }) {
@@ -19,7 +20,7 @@ export function ProductsPage({ sexId }: { sexId: 1 | 2 }) {
         </div>
         
         <div className={styles.filters}>
-          filters
+          <Filters/>
         </div>
         
         <div className={styles.pagination}>

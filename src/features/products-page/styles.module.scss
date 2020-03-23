@@ -22,8 +22,8 @@
   ;
   }
 
-  .filters{border: 1px solid red;grid-area: filters;}
-  .sorters{ grid-area: sorters;}
+  .filters{ grid-area: filters; }
+  .sorters{ grid-area: sorters; }
   .productsList{ grid-area: productsList; }
   .pagination{ grid-area: pagination; }
 }

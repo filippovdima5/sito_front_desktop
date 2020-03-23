@@ -1,12 +1,12 @@
 //region User:
 export interface UserRequest {
   sex_id?: 1 | 2,
-  likes?: Array<string>
+  likes?: Array<string>,
 }
 
 export interface UserReqParams {
   sex_id?: 1 | 2,
-  likes?: Array<string>
+  likes?: Array<string>,
 }
 // endregion User
 
@@ -30,6 +30,8 @@ export interface PaginateInfo {
   total_pages: number,
 }
 
+export type TypesSortProducts = 'update_up' | 'price_up' | 'sale_up'
+
 export interface ProductsReqParams {
   sex_id: 1 | 2,
   brands?: Array<string>,
@@ -42,7 +44,7 @@ export interface ProductsReqParams {
   sale_to?: number,
 
   page?: number,
-  sort?: 'update_up' | 'price_up' | 'sale_up',
+  sort?: TypesSortProducts,
   limit?: number,
 
   favorite?: boolean,
@@ -120,12 +122,12 @@ export interface MainSearchResultItem {
 //region Simple:
 export interface BrandItem {
   _id: string,
-  count: number
+  count: number,
 }
 
 export interface AllBrandsRequest {
   char: string,
-  brands: Array<BrandItem>
+  brands: Array<BrandItem>,
 }
 // endregion region Simple
 
