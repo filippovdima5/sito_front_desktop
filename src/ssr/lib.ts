@@ -1,3 +1,6 @@
+import { TypesSortProducts } from '../api/types'
+
+
 type AfterDecodeUrl = {
   categories?: Array<number>,
   brands?: Array<string>,
@@ -12,7 +15,7 @@ type AfterDecodeUrl = {
   favorite?: boolean,
   
   page?: number,
-  sort?: 'update_up' | 'price_up' | 'sale_up',
+  sort?: TypesSortProducts,
 }
 
 export const parseSearch = (search: string): any | null => {
@@ -51,7 +54,7 @@ export const parseQueryProducts = (queryParams?: any): AfterDecodeUrl => {
         setObject[key] = Number(value)
         break
       case 'sort': {
-        if (['update_up', 'price_up', 'sale_up'].includes(value)) setObject[key] = value as 'update_up' | 'price_up' | 'sale_up'
+        if (['update_up', 'price_up', 'sale_up'].includes(value)) setObject[key] = value as TypesSortProducts
         break
       }
       case 'favorite':

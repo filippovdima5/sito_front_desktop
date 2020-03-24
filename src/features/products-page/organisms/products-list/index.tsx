@@ -1,6 +1,6 @@
 import React  from 'react'
 import { useStore } from 'effector-react/ssr'
-import { $productsStore, $loadingProducts, $statusPageProducts, $lengthSkeletonData } from '../../store'
+import { $productsStore, $loadingProducts, $statusPageProducts } from '../../store'
 import { ProductCard, SkeletonCard } from '../../../../commons/organisms/product-card'
 import config from '../../../../config'
 import { StatusPage } from '../../types'
@@ -25,14 +25,14 @@ function ProductsList() {
   )
 }
 
-function Controller({ status, lengthSkeleton, loading }: { status: StatusPage, loading: boolean, lengthSkeleton: number }) {
+function Controller({ status, loading }: { status: StatusPage, loading: boolean }) {
   switch (status) {
     case 'EMPTY': return (<EmptyList/>)
     case 'FAIL': return (<div>ОШИБКА</div>)
     default: return (
       <div className={styles.productsList}>
         <ProductsList/>
-        {(loading || status === 'START') && !config.ssr && <SkeletonsList length={lengthSkeleton}/>}
+        {(loading || status === 'START') && !config.ssr && <SkeletonsList length={20}/>}
       </div>
     )
   }
@@ -41,12 +41,12 @@ function Controller({ status, lengthSkeleton, loading }: { status: StatusPage, l
 function List() {
   const status = useStore($statusPageProducts)
   const loading = useStore($loadingProducts)
-  const lengthSkeleton = useStore($lengthSkeletonData)
+
   
   return (
     <div className={styles.wrap}>
       {loading && <Loader/>}
-      <Controller status={status} lengthSkeleton={lengthSkeleton} loading={loading}/>
+      <Controller status={status}  loading={loading}/>
     </div>
   )
 }

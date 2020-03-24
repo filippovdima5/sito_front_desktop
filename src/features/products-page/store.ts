@@ -1,8 +1,14 @@
-import { combine, createEffect, createEvent, createStore, guard, merge, restore } from 'lib/effector'
+import { createEffect, createEvent, createStore, guard, merge, sample } from 'lib/effector'
 import { RouteComponentProps } from 'react-router'
-import { ShortProduct, TypesSortProducts } from '../../api/types'
-import { StatusPage, MainState } from './types'
+import { TypesSortProducts, FilterReqParams, ProductsReqParams, ProductsRequest, PaginateInfo, FiltersRequest } from '../../api/types'
+import { api } from '../../api'
+import { $baseLink } from '../../stores/env'
+import { recordWithoutNull , sexIdToStr, sexStrToId } from '../../helpers/lib'
+import config from '../../config'
+import { parseQueryProducts, parseSearch } from '../../ssr/lib'
+import { StatusPage, MainState  } from './types'
 import { setItemToArray } from './lib'
+
 
 
 //region route_history:
@@ -25,8 +31,8 @@ export const $mainState = createStore<MainState>({
   sale_from: null,
   sale_to: null,
   favorite: null,
-  page: null,
-  sort: null,
+  page: 1,
+  sort: 'update_up',
   limit: null,
 })
 
@@ -43,8 +49,9 @@ export const productsState = $mainState.map(({ limit, page, sort }) => ({ limit,
 
 
 
+
 // region setsSomeFilter:
-export const $setSomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number | boolean | null}>()
+export const $setSomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number | boolean | null}>('filters')
 
 $mainState.on($setSomeFilter, (state, { key, value }) => {
   if (value == null) return ({ ...state, [key] : null })
@@ -62,7 +69,9 @@ $mainState.on($setSomeFilter, (state, { key, value }) => {
     default: return undefined
   }
 })
+
 // endregion setsSomeFilter
+
 
 
 // region setsSomeProductsParams:
@@ -75,24 +84,142 @@ $mainState.on($setSort, (state, sort) => ({ ...state, sort }))
 
 
 
+// region fetchFilters:
+const fetchFilters = createEffect({
+  handler: ( params: FilterReqParams ) => api.products.getFilters(params)
+})
+
+const $fetchFiltersParams = filtersState.map(state => {
+  if (state.sexId === null) return undefined
+  const params: any = { sex_id: state.sexId }
+  return recordWithoutNull(state, params) as FilterReqParams
+})
+
+guard({
+  source: $fetchFiltersParams.updates,
+  filter: () => true,
+  target: fetchFilters
+})
+// endregion fetchFilters
 
 
 
+// region fetchProducts:
+const fetchProducts = createEffect({
+  handler: (params: ProductsReqParams) => api.products.getProducts(params)
+})
+
+const $fetchProductsParams = $mainState.map(state => {
+  if (state.sexId === null) return undefined
+  const params: any = { sex_id: state.sexId }
+  return recordWithoutNull(state, params) as ProductsReqParams
+})
+
+guard({
+  source: $fetchProductsParams.updates,
+  filter: () => true,
+  target: fetchProducts
+})
+// endregion fetchProducts
 
 
 
+// region encodeUrlState:
+sample(routeHistory, $mainState.updates, (history, payload) => {
+  if (config.ssr || payload.sexId === null) return undefined
+  
+  const newUrl = '/products/' + sexIdToStr(payload.sexId)
+  let search = ''
+  
+  const encodeState = recordWithoutNull(payload) as NonNullable<MainState>
+  if (Object.entries(encodeState).length > 0) {
+    search = '?' +
+      Object.entries(encodeState)
+        .filter(([key, value]) => {
+          switch (key as keyof MainState) {
+            case 'sexId': return false
+            case 'sort': return value !== 'update_up'
+            case 'page': return value !== 1
+            case 'favorite': return Boolean(value)
+            default: return true
+          }
+        })
+        .map(([key, value]) => {
+          if (Array.isArray(value)) return key + '=' + value.join('|')
+          switch (typeof value) {
+            case 'number': return key + '=' + value.toString()
+            case 'string': return key + '=' + value
+            case 'boolean': return key + '=' + (value ? '1' : '0')
+            default: return key + '='
+          }
+        })
+        .join('&')
+  }
+  const url = newUrl + search
+  history?.replace(url)
+})
+// endregion encodeUrlState
 
 
 
+//region filtersStore:
+export const $filtersStore = createStore<FiltersRequest | null>(null)
+$filtersStore.on(fetchFilters.done, (state, { result: { data } }) => data)
+//endregion filtersStore
 
 
 
+//region productsStore:
+export const $productsStore = createStore<ProductsRequest['products']>([])
+$productsStore.on(fetchProducts.done, (state, { result: { data: { products } } }) => products)
+
+export const $productsInfoStore = createStore<PaginateInfo>({
+  total: 0,
+  total_pages: 0
+})
+$productsInfoStore.on(fetchProducts.done, ((state, { result: { data: { info } } }) => info))
+//endregion productsStore
 
 
 
+// region mountApp:
+export const $mountProductsPage = createEvent()
 
-export const $productsStore = createStore<Array<ShortProduct>>([])
-export const $loadingProducts = createStore<boolean>(false)
+const storeForMount = $baseLink.map(state => {
+  const { linkParams: { search, sexLine } } = state
+  if (sexLine === null) return null
+  const sexId = sexStrToId(sexLine)
+  const queryParams = parseSearch(search)
+  return { ...parseQueryProducts(queryParams), sexId }
+})
+
+
+const targetUpdate = sample(storeForMount, $mountProductsPage)
+$mainState.on(targetUpdate, (state, payload) => {
+  if (payload === null) return undefined
+  return { ...state, ...payload }
+})
+
+
+$mainState.on($initRouteHistory, (state, history) => {
+  const { location: { pathname, search } } = history
+  if (!pathname.includes('men')) return undefined
+  const sexId = pathname.includes('women') ? 2 : 1
+  const queryParams = parseSearch(search.replace('?', ''))
+  return { ...state, ...parseQueryProducts(queryParams), sexId }
+})
+// endregion mountApp
+
+
+
+// region statusPage:
+export const $loadingProducts = fetchProducts.pending.map(state => state)
+$loadingProducts.on(fetchProducts, () => true)
+$loadingProducts.on(merge([fetchProducts.done, fetchProducts.fail]), () => false)
+
 export const $statusPageProducts = createStore<StatusPage>('START')
-export const $lengthSkeletonData = createStore<number>(20)
-
+$statusPageProducts.on(fetchProducts.done, (state, { result: { data: { products } } }) => {
+  if (products.length === 0) return 'EMPTY'
+  return 'READY'
+})
+// endregion statusPage

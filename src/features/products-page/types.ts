@@ -3,7 +3,7 @@ import { TypesSortProducts } from '../../api/types'
 
 export type StatusPage = 'START' | 'EMPTY' | 'READY' | 'FAIL'
 
-
+export type TypeOfSetParams = 'all' | 'filters' | 'products'
 
 
 export type MainState = {

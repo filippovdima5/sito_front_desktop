@@ -4,7 +4,7 @@
   width: 25%;
   box-sizing: border-box;
   float: left;
-  padding: 15px 12px 10px;
+  padding: 0 12px 30px;
   font-size: 14px;
   line-height: 17px;
   color: #021135;
@@ -12,34 +12,45 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  border: 1px solid transparent;
   border-bottom: 1px solid rgba(0,0,0,.2);
 
   .wrapImg{
     display: block;
     position: relative;
     height: 0;
-    padding-bottom: 125%;
+    padding-bottom: 150%;
     background-color: #fff;
     margin-bottom: 57px;
 
   }
 
   .footer{
+    margin-top: 5px;
     position: relative;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     line-height: 1;
-    font-size: 14px;
+    font-size: 16px;
+    text-transform: capitalize;
 
     .brand{
-      line-height: 12px;
-      margin-bottom: 4px;
+      line-height: 16px;
+      margin-bottom: 6px;
       margin-right: 29px;
+      font-weight: bold;
+      font-size: 17px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .title{
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .cost{
@@ -64,14 +75,14 @@
     }
 
     .sale{
-      margin-top: 4px;
+      margin-top: 6px;
       display: inline-block;
       vertical-align: middle;
-      height: 15px;
-      width: 42px;
-      font-size: 14px;
+      height: 23px;
+      width: 62px;
+      font-size: 16px;
       font-weight: 500;
-      line-height: 15px;
+      line-height: 23px;
       text-align: center;
       color: #fff;
       background: center center no-repeat;
@@ -80,6 +91,11 @@
       background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgNy45IDM1LjUgMTYuMyIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDcuOSAzNS41IDE2LjMiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGZpbGw9IiNGMjRFNEUiIGQ9Ik0zMy42LDcuOWwtMjQuNSwwQzguNSw3LjksNy45LDgsNy4zLDguM2MtMC42LDAuMy0xLjEsMC42LTEuNSwxbC01LjIsNC40QzAuMiwxNCwwLDE1LjUsMCwxNmMwLDAuNSwwLjIsMiwwLjYsMi40bDUuMiw0LjRjMC40LDAuNCwwLjksMC43LDEuNSwxYzAuNiwwLjMsMS4yLDAuNCwxLjgsMC40bDI0LjUsMGMwLjUsMCwxLTAuMiwxLjMtMC42YzAuNC0wLjQsMC42LTAuOCwwLjYtMS40bDAtMTIuNGMwLTAuNS0wLjItMS0wLjYtMS4zQzM0LjYsOC4xLDM0LjEsNy45LDMzLjYsNy45eiBNNi41LDE2YzAsMC41LTAuMiwxLTAuNiwxLjRjLTAuNCwwLjQtMC44LDAuNi0xLjQsMC42Yy0wLjUsMC0xLTAuMi0xLjQtMC42QzIuOCwxNywyLjcsMTYuNSwyLjcsMTZjMC0wLjUsMC4yLTEsMC42LTEuNGMwLjQtMC40LDAuOC0wLjYsMS40LTAuNmMwLjUsMCwxLDAuMiwxLjQsMC42QzYuMywxNSw2LjUsMTUuNSw2LjUsMTZ6Ii8+PC9zdmc+);
     }
   }
+}
+
+.card:hover{
+  border:  1px solid rgba(0,0,0,.2);
+  filter: contrast(120%);
 }
 
 .href{

@@ -35,7 +35,13 @@ export const preDetectedGender = ( propsGender: string | undefined, storeGender:
 }
 
 
-
+export const recordWithoutNull = (record: any, returnedRecord?: any) => {
+  const newRecord: any = returnedRecord ?? {}
+  Object.entries(record).forEach(([key, value]) => {
+    if (value !== null) newRecord[key] = value
+  })
+  return newRecord
+}
 
 
 

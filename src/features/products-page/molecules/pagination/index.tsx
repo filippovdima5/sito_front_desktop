@@ -1,20 +1,30 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
+import { useStore, useEvent } from 'effector-react/ssr'
+import { $productsInfoStore, $mainState, $setPage } from '../../store'
 import styles from './styles.module.scss'
 
 
-const total_page = 20
+
 
 
 export function Pagination() {
-  const [ currentPage, setCurrentPage ] = useState<number>(0)
+  const { total_pages } = useStore($productsInfoStore)
+  const { page } = useStore($mainState)
+  const setCurrentPage = useEvent($setPage)
+  
+  const currentPage = useMemo(() => {
+    if (page === null) return 1
+    return page
+  }, [page])
+
   
   const handlePrev = useCallback(() => {
-    if (currentPage > 0) setCurrentPage(currentPage - 1)
-  }, [ currentPage ])
+    if (currentPage > 1) setCurrentPage(currentPage - 1)
+  }, [ currentPage, setCurrentPage ])
   
   const handleNext = useCallback(() => {
-    if (currentPage < total_page - 1) setCurrentPage(currentPage + 1)
-  }, [currentPage])
+    if (currentPage < total_pages - 1) setCurrentPage(currentPage + 1)
+  }, [currentPage, total_pages, setCurrentPage])
   
   
 
@@ -27,11 +37,11 @@ export function Pagination() {
         </div>
         
         <div className={`${styles.main} ${styles.cdp}`} data-actpage={currentPage}>
-          {Array.from({ length: total_page }).map((_, i) => (
+          {Array.from({ length: total_pages }).map((_, i) => (
             <span
-              onClick={() => setCurrentPage(i)}
+              onClick={() => setCurrentPage(i+1)}
               data-page = {i}
-              className={`${styles.cdp_i} ${styles.numeric} ${i === currentPage && styles.is_active}`}
+              className={`${styles.cdp_i} ${styles.numeric} ${i+1 === currentPage && styles.is_active}`}
               key={i}
             >
               {i + 1}
