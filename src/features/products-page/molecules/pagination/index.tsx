@@ -4,9 +4,6 @@ import { $productsInfoStore, $mainState, $setPage } from '../../store'
 import styles from './styles.module.scss'
 
 
-
-
-
 export function Pagination() {
   const { total_pages } = useStore($productsInfoStore)
   const { page } = useStore($mainState)
@@ -27,8 +24,7 @@ export function Pagination() {
   }, [currentPage, total_pages, setCurrentPage])
   
   
-
-
+  
   return (
     <div className={styles.Pagination}>
       <div className={styles.inner}>

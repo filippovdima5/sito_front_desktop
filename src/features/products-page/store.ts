@@ -44,6 +44,7 @@ export const filtersState = $mainState.map(({ sexId, categories, brands, sizes, 
   sexId, categories, brands, sizes, colors, price_to, price_from, sale_to, sale_from, favorite
 }))
 
+
 export const productsState = $mainState.map(({ limit, page, sort }) => ({ limit, sort, page }))
 // endregion main_state:
 

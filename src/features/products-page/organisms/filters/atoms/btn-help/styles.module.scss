@@ -1,0 +1,30 @@
+.wrapBtn{
+  margin: 10px 15px;
+  color: rgba(0,0,0,.87);
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: normal;
+  box-sizing: border-box;
+
+  .btn{
+    -webkit-appearance: none;
+    border: 0;
+    border-radius: 4px;
+    position: relative;
+    width: 100%;
+    line-height: 44px;
+    height: 44px;
+    padding: 0 16px;
+    transition: all .12s ease-out;
+    background-color: #e8e8e8;
+
+    .title{
+      font-weight: 400;
+      font-style: normal;
+      font-stretch: normal;
+      font-size: 15px;
+      line-height: 20px;
+      vertical-align: middle;
+    }
+  }
+}
