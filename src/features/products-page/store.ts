@@ -8,7 +8,7 @@ import config from '../../config'
 import { parseQueryProducts, parseSearch } from '../../ssr/lib'
 import { StatusPage, MainState  } from './types'
 import { setItemToArray } from './lib'
-
+import {  ListFilters, ListTranslateFilters } from './organisms/filters/types'
 
 
 //region route_history:
@@ -54,8 +54,12 @@ export const productsState = $mainState.map(({ limit, page, sort }) => ({ limit,
 // region setsSomeFilter:
 export const $setSomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number | boolean | null}>('filters')
 
-$mainState.on($setSomeFilter, (state, { key, value }) => {
+export const $setListFilter = createEvent<{key: ListTranslateFilters | ListFilters, value: string | number}>()
+
+$mainState.on(merge([$setListFilter, $setSomeFilter]), (state, { key, value }) => {
   if (value == null) return ({ ...state, [key] : null })
+  
+  console.log(key, value)
   
   switch (key) {
     case 'categories':
