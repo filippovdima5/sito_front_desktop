@@ -12,8 +12,8 @@ export function Filters () {
     <div className={styles.filters}>
       <div className={styles.container}>
         
-        {Object.values(filtersView).map(({ type, data, name }) => (
-          <Filter key={name.toString()} data={data} indexFilter={name} filterType={type}/>
+        {filtersView.map(filter => (
+          <Filter key={filter.name} {...filter}/>
         ))}
         
       </div>

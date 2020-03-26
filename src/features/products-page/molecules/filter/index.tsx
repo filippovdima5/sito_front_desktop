@@ -1,39 +1,39 @@
-import React from 'react'
-import { filtersName } from '../../constants'
-import { FiltersTypes } from '../../organisms/filters/types'
+import React, { FC } from 'react'
+import { filtersName } from '../../organisms/filters/constants'
+import { ItemFiltersList } from '../../organisms/filters/types'
+import { ListFilter } from '../../organisms/filters/molecules/list-filter'
 import styles from './styles.module.scss'
 
 
-type Props = {
-  indexFilter: keyof typeof filtersName,
-  filterType: FiltersTypes,
-  data: Array<string> | Array<number> | [number, number] | boolean | null,
-}
 
 
-function Filter({ indexFilter }: Props ) {
-  return (
-    <div className={styles.filter}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <span className={styles.title}>{filtersName[indexFilter]}</span>
-        </div>
+const Filter: FC<ItemFiltersList> = (props) => (
+  <div className={styles.filter}>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <span className={styles.title}>{filtersName[props.name]}</span>
+      </div>
         
-        <div className={styles.body}>
-          body
-        </div>
+      <div className={styles.body}>
+        {props.children}
       </div>
     </div>
-  )
-}
+  </div>
+)
 
-function FilterController(props: Props) {
-  if (props.filterType === 'bool') {
-    return(
-      <div>{filtersName[props.indexFilter]}</div>
+function FilterController(props: ItemFiltersList) {
+  switch (props.type) {
+    case 'bool': return(
+      <div>boll</div>
     )
-  } else {
-    return <Filter {...props}/>
+    case 'range': return (
+      <Filter {...props}>Range</Filter>
+    )
+    default: return (
+      <Filter {...props}>
+        <ListFilter nameFilter={props.name} />
+      </Filter>
+    )
   }
 }
 

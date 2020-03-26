@@ -1,0 +1,96 @@
+.filterList::-webkit-scrollbar{width: 6px};
+.filterList::-webkit-scrollbar-track{
+  width: 2px;
+  background-color: rgba(#10181f, .1)
+};
+.filterList::-webkit-scrollbar-thumb{
+  width: 6px;
+  background-color: #cfd1d2
+}
+
+.filterList {
+  max-height: 330px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+
+  .checkbox:last-child {
+    margin-bottom: 0;
+  }
+
+
+
+  .checkbox {
+    color: rgba(60, 37, 37, 1);
+    cursor: pointer;
+    margin-bottom: 12px;
+
+    .label {
+      position: relative;
+      display: inline-flex;
+      width: 100%;
+      align-items: center;
+      text-align: left;
+      margin-bottom: 0;
+
+      .checkboxField {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .checkboxField:checked + .icon:after {
+        opacity: 1;
+      }
+
+      .icon {
+        display: block;
+        -ms-flex: 0 0 19px;
+        flex: 0 0 19px;
+        width: 19px;
+        height: 19px;
+        border: 2px solid #e7e7e8;
+        position: relative;
+      }
+
+      .icon:after {
+        content: '';
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAMAAAC38k/IAAAAAXNSR0IB2cksfwAAAFRQTFRFAAAA5k0z61My7FEy6lMy6lMy6lMy41U56lMy51Ux/1Ur6lMy6lMy6U436lIx6lQy/1VV6lQz7VIu6lMx6VMx6VMy6lMy6lMy6lUy6lMy6lMy51MvfOS9JwAAABx0Uk5TAAq8Qr7/wQnTFQay3Bc+rgOrHMSl4efkJNjHK5NAr/oAAABKSURBVHicVcpJDoAgFAPQqlT4gKI46/3v6RAIsZu+NAVyqropVmyztaKRZOt+9t3TfbAYRvr4jhOdnrl8hhiu3Pb0l6MYiOeVdAN02AJojAAOEQAAAABJRU5ErkJggg==);
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -4px;
+        margin-left: -5px;
+        width: 10px;
+        height: 8px;
+        opacity: 0;
+      }
+
+      .text {
+        display: block;
+        margin-left: 13px;
+        opacity: 0.7;
+        font-size: 14px;
+        line-height: 1;
+      }
+
+    }
+
+  }
+
+  .checkboxUndis{
+    color: rgba(60, 37, 37, 1);
+    cursor: pointer;
+  }
+
+  .checkboxDis{
+    color: rgba(60, 37, 37, 0.4);
+    cursor: default;
+  }
+}
