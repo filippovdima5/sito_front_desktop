@@ -53,7 +53,7 @@ export function ListFilter({ nameFilter }: { nameFilter: ListFilters | ListTrans
     const newData = (storeData as Array<FiltersItemString | FiltersItemNumber>)
       .filter(({ value }) => {
         if (!value) return false
-        return (value as string).includes(searchPhrase)
+        return value.toString().includes(searchPhrase)
       })
     
     setFilteredData(newData)

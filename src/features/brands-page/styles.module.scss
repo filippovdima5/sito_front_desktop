@@ -1,0 +1,25 @@
+.brands{
+  margin: 0 auto;
+  background-color: rgb(242, 242, 242);
+  box-sizing: border-box;
+}
+
+.card{
+  background-color: transparent;
+  // border: 1px dashed #a9a9a9;
+  padding: 15px;
+}
+
+.titleCard{
+  font-size: 30px;
+  font-weight: bold;
+  padding-bottom: 15px;
+  cursor: default;
+}
+
+.item{
+  cursor: pointer;
+  padding: 5px 0;
+  color: #a5a5a5;
+  display: block;
+}

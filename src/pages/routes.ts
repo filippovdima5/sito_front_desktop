@@ -1,6 +1,7 @@
 import { Home } from './home'
 import { NotFound } from './not-found'
 import { Products } from './products'
+import { Brands } from './brands'
 
 
 export const ROUTES = [
@@ -16,6 +17,10 @@ export const ROUTES = [
   {
     path: '/products/:sex?',
     component: Products,
+  },
+  {
+    path: '/brands/:sex?',
+    component: Brands,
   },
   {
     path: '*',
