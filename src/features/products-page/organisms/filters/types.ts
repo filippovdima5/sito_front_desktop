@@ -1,5 +1,8 @@
+import { MainState } from '../../types'
 import { filtersName } from './constants'
 
+
+export type MainRangeFilters = Pick<MainState, 'sale_from' | 'sale_to' | 'price_from' | 'price_to'>
 
 export type RangeFilters = keyof Pick<typeof filtersName, 'prices' | 'sales'>
 export type ListFilters = keyof Pick<typeof filtersName, 'brands' | 'colors' | 'sizes'>

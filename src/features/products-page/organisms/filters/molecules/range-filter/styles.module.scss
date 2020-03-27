@@ -1,0 +1,40 @@
+.header{
+  height: 65px;
+  display: flex;
+  width: 95%;
+  box-sizing: border-box;
+  justify-content: center;
+  background-color: white;
+  margin: -15px auto 0;
+
+  .inputWrap{
+    flex: 1;
+    box-sizing: inherit;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > * { width: 95% }
+  }
+}
+
+.wrapInputCheck{
+  border-bottom:   1px solid rgba(0,0,0,.14);
+  height: 55px;
+  display: flex;
+  align-items: center;
+
+  & > * { width: 100% }
+}
+
+.wrapInputCheck:first-child{
+  margin-top: 10px;
+  border-top:  1px solid rgba(0,0,0,.14);
+}
+
+.wrapInputCheck:last-child{
+  margin-bottom: 10px;
+}
+
+.space{ padding-bottom: 70px }

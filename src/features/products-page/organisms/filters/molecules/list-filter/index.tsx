@@ -59,6 +59,7 @@ export function ListFilter({ nameFilter }: { nameFilter: ListFilters | ListTrans
     setFilteredData(newData)
   }, [searchPhrase])
   
+
   if (genderInfo === null) return null
   
   

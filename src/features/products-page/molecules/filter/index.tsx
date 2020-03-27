@@ -2,9 +2,9 @@ import React, { FC } from 'react'
 import { filtersName } from '../../organisms/filters/constants'
 import { ItemFiltersList } from '../../organisms/filters/types'
 import { ListFilter } from '../../organisms/filters/molecules/list-filter'
+import { CheckFilter } from '../../organisms/filters/atoms/check-filter'
+import { RangeFilter } from '../../organisms/filters/molecules/range-filter'
 import styles from './styles.module.scss'
-
-
 
 
 const Filter: FC<ItemFiltersList> = (props) => (
@@ -24,10 +24,12 @@ const Filter: FC<ItemFiltersList> = (props) => (
 function FilterController(props: ItemFiltersList) {
   switch (props.type) {
     case 'bool': return(
-      <div>boll</div>
+      <CheckFilter title={props.name}/>
     )
     case 'range': return (
-      <Filter {...props}>Range</Filter>
+      <Filter {...props}>
+        <RangeFilter nameFilter={props.name}/>
+      </Filter>
     )
     default: return (
       <Filter {...props}>

@@ -4,16 +4,20 @@
 }
 
 .checkRow{
+  border: 1px solid  rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
   height: auto;
   width: 100%;
-  box-sizing: border-box;
+  cursor: pointer;
 
   position: relative;
-  padding: 12px;
+  padding: 20px 12px;
   background: #fff;
   display: flex;
   -webkit-box-align: center;
   align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
 
 
   .checkbox{
@@ -62,10 +66,6 @@
   }
 }
 
-.checkRow:last-child:after{
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  content: "";
+.checkRow:hover{
+  border: 1px solid  rgba(0, 0, 0, 0.3);
 }

@@ -5,13 +5,13 @@ import { FiltersList } from './types'
 
 
 export const $filtersViewRecordState = filtersState.map(state => ({
-  categories: state.categories,
+  sales: (state.sale_from !== null || state.sale_to !== null) ? [state.sale_from, state.sale_to] : null,
   brands: state.brands,
-  sizes: state.sizes,
-  colors: state.colors,
+  categories: state.categories,
   favorite: state.favorite,
   prices: (state.price_from !== null || state.price_to !== null) ? [state.price_from, state.price_to] : null,
-  sales: (state.sale_from !== null || state.sale_to !== null) ? [state.sale_from, state.sale_to] : null,
+  sizes: state.sizes,
+  colors: state.colors,
 }))
 
 export const $filtersViewRecordStore = $filtersStore.map(state => ({
