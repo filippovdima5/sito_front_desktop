@@ -36,6 +36,8 @@ export const $mainState = createStore<MainState>({
   limit: null,
 })
 
+
+
 export const $toggleSex = createEvent<1 | 2>()
 $mainState.on($toggleSex, (_, sexId) => ({ ...$mainState.defaultState, sexId }))
 
@@ -53,14 +55,11 @@ export const productsState = $mainState.map(({ limit, page, sort }) => ({ limit,
 
 // region setsSomeFilter:
 export const $setSomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number | boolean | null}>('filters')
-
 export const $setListFilter = createEvent<{key: ListTranslateFilters | ListFilters, value: string | number}>()
+export const $skipCurrentFilter = createEvent<{key: ListTranslateFilters | ListFilters}>()
 
 $mainState.on(merge([$setListFilter, $setSomeFilter]), (state, { key, value }) => {
   if (value == null) return ({ ...state, [key] : null })
-  
-  console.log(key, value)
-  
   switch (key) {
     case 'categories':
     case 'brands':
@@ -71,6 +70,17 @@ $mainState.on(merge([$setListFilter, $setSomeFilter]), (state, { key, value }) =
     case 'sale_from':
     case 'sale_to': return { ...state, [key]: Number(value) }
     case 'favorite': return { ...state, [key]: Boolean(value) }
+    default: return undefined
+  }
+})
+
+$mainState.on($skipCurrentFilter, (state, { key }) => {
+  switch (key) {
+    case 'brands':
+    case 'categories':
+    case 'colors':
+    case 'sizes': return { ...state, [key]: null }
+    
     default: return undefined
   }
 })

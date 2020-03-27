@@ -38,6 +38,4 @@ function FilterController(props: ItemFiltersList) {
 }
 
 
-
-
 export { FilterController as Filter }

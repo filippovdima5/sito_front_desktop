@@ -3,6 +3,7 @@ import { filtersName } from './constants'
 import { FiltersList } from './types'
 
 
+
 export const $filtersViewRecordState = filtersState.map(state => ({
   categories: state.categories,
   brands: state.brands,

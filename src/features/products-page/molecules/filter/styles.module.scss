@@ -4,8 +4,10 @@
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 
+
   .container{
-    padding: 27px 35px 26px;
+    padding: 10px 15px 15px;
+    position: relative;
 
 
     .header{
@@ -23,8 +25,10 @@
 
     .body{
       border-top: 1px solid rgba(#10181f, 0.1);
-      margin-top: 15px;
+      margin-top: 10px;
       padding-top: 20px;
+
+
     }
   }
 }
