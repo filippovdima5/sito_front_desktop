@@ -4,7 +4,7 @@ import { HiddenNavigation } from '../menu/hidden-navigation'
 import { Search } from '../search'
 import styles from './styles.module.scss'
 
-import { Logo } from './atoms/logo'
+import { Logo } from '../../commons/atoms/logo'
 
 
 export function HeaderTemplate() {
@@ -13,7 +13,7 @@ export function HeaderTemplate() {
       <div className={styles.headerInner}>
         
         <div className={styles.logo}>
-          <Logo/>
+          <Logo color={'#060a0f'}/>
         </div>
         
         <nav className={styles.nav}>

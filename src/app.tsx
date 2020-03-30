@@ -11,6 +11,7 @@ import config from './config'
 import { $fetchUser, $genderInfo } from './stores/user'
 import { $setUrlInfo, $seo, $setLoadPopularBrands } from './stores/env'
 import { Pages } from './pages'
+import { Footer } from './features/footer'
 
 import { Header } from './features/header'
 import BackToTop from './commons/molecules/back-to-top'
@@ -67,8 +68,7 @@ function Main() {
         </main>
     
         <footer className={styles.footer}>
-          <div className={styles.footerTop}/>
-          <div className={styles.footerBottom}/>
+          <Footer/>
         </footer>
     
         {!config.ssr && <BackToTop/>}
