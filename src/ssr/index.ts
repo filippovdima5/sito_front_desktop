@@ -53,7 +53,7 @@ const setupKoa = () => {
     }
   })
   
-  app.listen(9001, () => {console.log('app started: 9000')})
+  app.listen(9001, () => {console.log('app started: 9001')})
 }
 
 setupKoa()

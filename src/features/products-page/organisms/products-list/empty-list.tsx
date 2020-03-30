@@ -1,11 +1,12 @@
 import React from 'react'
-
+import { useEvent } from 'effector-react/ssr'
+import { $skipAllFilters } from '../../store'
 import { Button } from '../../../../commons/atoms/button'
 import styles from '../../../../media/css/info-page.module.scss'
 
 
 export function EmptyList() {
-
+  const skipAllFilters = useEvent($skipAllFilters)
   
   return (
     <div className={styles.wrap}>
@@ -22,7 +23,9 @@ export function EmptyList() {
           <div className={styles.buttons}>
         
             <div className={styles.link}>
-              <Button title={'Сбросить все фильтры'}/>
+              <Button
+                onClick={() => skipAllFilters()}
+                title={'Сбросить все фильтры'}/>
             </div>
      
           </div>

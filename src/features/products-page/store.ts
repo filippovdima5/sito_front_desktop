@@ -57,6 +57,7 @@ export const productsState = $mainState.map(({ limit, page, sort }) => ({ limit,
 export const $setSomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number | boolean | null}>('filters')
 export const $setListFilter = createEvent<{key: ListTranslateFilters | ListFilters, value: string | number}>()
 export const $skipCurrentFilter = createEvent<{key: ListTranslateFilters | ListFilters}>()
+export const $skipAllFilters = createEvent()
 
 $mainState.on(merge([$setListFilter, $setSomeFilter]), (state, { key, value }) => {
   if (value == null) return ({ ...state, [key] : null })
@@ -84,6 +85,8 @@ $mainState.on($skipCurrentFilter, (state, { key }) => {
     default: return undefined
   }
 })
+
+$mainState.on($skipAllFilters, ({ sexId }) => ({ ...$mainState.defaultState, sexId }))
 
 // endregion setsSomeFilter
 

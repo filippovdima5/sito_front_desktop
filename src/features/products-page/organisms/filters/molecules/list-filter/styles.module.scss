@@ -54,7 +54,6 @@
         flex: 0 0 19px;
         width: 19px;
         height: 19px;
-        border: 2px solid #e7e7e8;
         position: relative;
       }
 
@@ -88,11 +87,20 @@
   .checkboxUndis{
     color: rgba(60, 37, 37, 1);
     cursor: pointer;
+
+    .icon{
+      border: 2px solid #989899;
+    }
   }
 
   .checkboxDis{
-    color: rgba(60, 37, 37, 0.4);
+    color: rgba(60, 37, 37, 0.5);
     cursor: default;
+
+
+    .icon{
+      border: 2px solid #c9c9ca;
+    }
   }
 }
 

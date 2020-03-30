@@ -1,8 +1,14 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
 import { $productsInfoStore, $mainState, $setPage } from '../../store'
+import config from '../../../../config'
 import styles from './styles.module.scss'
 
+
+
+const handleToTop = () => {
+  if (!config.ssr) document.body.scrollTo(0, 0)
+}
 
 export function Pagination() {
   const { total_pages } = useStore($productsInfoStore)
@@ -27,7 +33,7 @@ export function Pagination() {
   
   return (
     <div className={styles.Pagination}>
-      <div className={styles.inner}>
+      <div className={styles.inner} onClick={() => handleToTop()}>
         <div className={styles.left} onClick={handlePrev}>
           <span className={`${styles.arrow} ${styles.prev}`}/>
         </div>

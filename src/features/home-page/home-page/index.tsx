@@ -28,7 +28,7 @@ export function HomePage({ sexId }: Props) {
           <CategoryStand
             height={52}
             sexId={sexId}
-            index={0}
+            index={1}
           />
         </div>
   
@@ -44,7 +44,7 @@ export function HomePage({ sexId }: Props) {
           <CategoryStand
             height={52}
             sexId={sexId}
-            index={0}
+            index={2}
           />
     
           <CategoryStand

@@ -37,7 +37,10 @@ export function GenderDetected({ height }: Props) {
             className={styles.genderWrap}
           >
             <div style={{ paddingTop: `${height}%` }} className={styles.gender}>
-              <img src={`/cdn/mobile/gender-detected/${index}.jpg`} alt={title} className={styles.img}/>
+              <img
+                src={`/cdn/mobile/gender-detected/${index}.jpg`}
+                alt={title} className={styles.img}
+              />
 
               <div className={styles.titleWrap}>
                 <div className={styles.title}>{title}</div>
