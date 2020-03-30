@@ -1,25 +1,53 @@
 .brands{
-  margin: 0 auto;
-  background-color: rgb(242, 242, 242);
+  width: 100%;
+  padding: 2px 10px;
+  margin-right: auto;
+  margin-left: auto;
   box-sizing: border-box;
+
+  .charGroup{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+
+
+    .charGroupContainer{
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.31);
+      padding: 0 10px;
+
+      .titleCard{
+        font-size: 30px;
+        font-weight: bold;
+        padding-bottom: 2px;
+        padding-left: 10px;
+        cursor: default;
+      }
+
+      .item{
+        cursor: pointer;
+        padding: 5px 10px;
+        color: #a5a5a5;
+        display: block;
+      }
+
+      .item:hover{
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
 }
 
-.card{
-  background-color: transparent;
-  // border: 1px dashed #a9a9a9;
-  padding: 15px;
+
+
+.myMasonryGrid {
+  display: flex;
+  margin-left: 0;
+  width: 100%;
+}
+.myMasonryGrid_column {
+  padding-left: 0;
+  background-clip: padding-box;
 }
 
-.titleCard{
-  font-size: 30px;
-  font-weight: bold;
-  padding-bottom: 15px;
-  cursor: default;
-}
 
-.item{
-  cursor: pointer;
-  padding: 5px 0;
-  color: #a5a5a5;
-  display: block;
-}
