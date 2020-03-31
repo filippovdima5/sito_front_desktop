@@ -35,12 +35,10 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "start-dev-client": "react-scripts start",
-    "start-dev-ssr": "node build/server.js ",
-    "build:dev": "REACT_APP_ENV=test REACT_APP_TEST_ENV=true npm run build",
     "build:client": "react-app-rewired build",
-    "build:server": "webpack --config src/ssr/webpack-server.config.js",
-    "build:app": "sh ./src/ssr/utils/scripts/build-app.sh"
+    "build:ssr": "webpack --config src/ssr/webpack-server.config.js",
+    "start:client": "react-scripts start",
+    "start:ssr": "node run build/server.js"
   },
   "proxy": "http://localhost:8080",
   "browserslist": {
