@@ -38,7 +38,7 @@
     "build:client": "react-app-rewired build",
     "build:ssr": "webpack --config src/ssr/webpack-server.config.js",
     "start:client": "react-scripts start",
-    "start:ssr": "node run build/server.js"
+    "start:ssr": "node  build/server.js"
   },
   "proxy": "http://localhost:8080",
   "browserslist": {
