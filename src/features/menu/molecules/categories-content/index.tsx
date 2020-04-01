@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { useEvent } from 'effector-react/ssr'
+import { $goToONlySomeFilter } from '../../../products-page/store'
 import { namesCategory } from '../../../../constants/category-keys'
 import { categoriesGroupBySub } from '../../../../constants/categories-group-by-sub'
 import { sexIdToStr } from '../../../../helpers/lib'
@@ -14,7 +16,7 @@ const subCategories = [
 
 
 export function CategoriesContent({ sexId }: { sexId: 1 | 2 }) {
-  
+  const goToONlySomeFilter = useEvent($goToONlySomeFilter)
   const sexLine = useMemo(() => sexIdToStr(sexId), [sexId])
   
   return (
@@ -27,6 +29,7 @@ export function CategoriesContent({ sexId }: { sexId: 1 | 2 }) {
               {categoriesGroupBySub[sexId][subKey].map((categoryId) => (
                 <li key={`${categoryId}_${sexId}`} className={styles.liLink}>
                   <Link
+                    onClick={() => goToONlySomeFilter({ key: 'categories', value: categoryId })}
                     className={styles.categoryLink}
                     to={`/products/${sexLine}?categories=${categoryId}`}
                   >

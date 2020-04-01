@@ -58,6 +58,7 @@ export const $setSomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | '
 export const $setListFilter = createEvent<{key: ListTranslateFilters | ListFilters, value: string | number}>()
 export const $skipCurrentFilter = createEvent<{key: ListTranslateFilters | ListFilters}>()
 export const $skipAllFilters = createEvent()
+export const $goToONlySomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number }>()
 
 $mainState.on(merge([$setListFilter, $setSomeFilter]), (state, { key, value }) => {
   if (value == null) return ({ ...state, [key] : null })
@@ -87,6 +88,14 @@ $mainState.on($skipCurrentFilter, (state, { key }) => {
 })
 
 $mainState.on($skipAllFilters, ({ sexId }) => ({ ...$mainState.defaultState, sexId }))
+
+$mainState.on($goToONlySomeFilter, (state, { key, value }) => {
+  switch (key) {
+    case 'categories': return { ...state, sexId: state.sexId, categories: [Number(value)] }
+    case 'brands': return { ...state, sexId: state.sexId, brands: [value.toString()]  }
+    default: return
+  }
+})
 
 // endregion setsSomeFilter
 
