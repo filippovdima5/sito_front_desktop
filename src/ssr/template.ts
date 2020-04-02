@@ -57,6 +57,16 @@ export const template = (
     
     
     
+    <!— Google Tag Manager —>
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.paren..;
+        })(window,document,'script','dataLayer','GTM-PVL7KKZ');</script>
+    <!— End Google Tag Manager —>
+    
+    
+    
     <!-- Facebook Pixel Code -->
      <script>
         !function(f,b,e,v,n,t,s)
@@ -95,6 +105,13 @@ export const template = (
         </script>
         <noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3169578;js=na" style="border:0;position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
     <!— //Rating Mail.ru counter —>
+    
+    
+    
+    <!— Google Tag Manager (noscript) —>
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVL7KKZ"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!— End Google Tag Manager (noscript) —>
     
     <noscript>Пожалуйста, включите JavaScript в настройках браузера для корректного отображения контента сайта.</noscript>
     <script>window.INITIAL_STATE = ${JSON.stringify(preloadedState)}</script>
