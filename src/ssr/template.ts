@@ -45,15 +45,7 @@ export const template = (
     <!-- /Yandex.Metrika -->
     
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-141187275-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        tag('js', new Date());
-        gtag('config', 'UA-141187275-1');
-    </script>
-    <!-- /Google Analytics -->
+
     
     
     
