@@ -1,4 +1,4 @@
-import { renderRoutes } from 'react-router-config';
+import { renderRoutes } from 'react-router-config'
 import { ROUTES } from './routes'
 
 

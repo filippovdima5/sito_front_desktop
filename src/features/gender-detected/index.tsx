@@ -36,7 +36,7 @@ export function GenderDetected({ height }: Props) {
             key={index}
             className={styles.genderWrap}
           >
-            <div style={{ paddingTop: `${height}%` }} className={styles.gender}>
+            <div style={{ paddingTop: '66%' }} className={styles.gender}>
               <img
                 src={`/cdn/mobile/gender-detected/${index}.jpg`}
                 alt={title} className={styles.img}

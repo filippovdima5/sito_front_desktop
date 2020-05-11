@@ -1,6 +1,5 @@
 .app{
-
-
+  font-family: 'Raleway', sans-serif;
   display: flex;
   min-height: 100vh;
   margin: 0 auto;
@@ -20,17 +19,19 @@
 
 
   .container{
-    height: calc(100% - 60px);
+    height: calc(100vh - 60px);
     box-sizing: border-box;
+    display: flex;
+    flex-flow: column;
 
 
     .main{
       flex: 1;
       display: flex;
-      margin: 70px auto 50px;
-      padding: 8px 0 18px;
+      margin: 0 auto;
       box-sizing: border-box;
       width: 100%;
+      padding: 0 34px;
 
       max-width: 1400px;
     }

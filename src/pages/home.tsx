@@ -7,7 +7,7 @@ import { sexStrToId, preDetectedGender } from '../helpers/lib'
 import { $genderInfo, $setGender } from '../stores/user'
 
 import { GenderDetected } from '../features/gender-detected'
-import { HomePage } from '../features/home-page/home-page'
+import { HomePage } from '../features/home-page'
 import { useEffectSafe } from '../helpers/hooks/use-effect-safe'
 
 
