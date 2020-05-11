@@ -62,14 +62,17 @@ function Main() {
         <header className={styles.header}>
           <Header/>
         </header>
-    
-        <main className={styles.main}>
-          <Pages/>
-        </main>
-    
-        <footer className={styles.footer}>
-          <Footer/>
-        </footer>
+        
+        
+        <div className={styles.container}>
+          <main className={styles.main}>
+            <Pages/>
+          </main>
+  
+          <footer className={styles.footer}>
+            <Footer/>
+          </footer>
+        </div>
     
         {!config.ssr && <BackToTop/>}
       </div>

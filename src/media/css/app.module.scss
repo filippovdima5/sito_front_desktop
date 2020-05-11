@@ -1,4 +1,6 @@
 .app{
+
+
   display: flex;
   min-height: 100vh;
   margin: 0 auto;
@@ -10,32 +12,34 @@
 
 
   .header {
-    position: fixed;
-    z-index: 999;
-    left: 0;
-    top: 0;
-    right: 0;
     background-color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     height: 60px;
   }
 
-  .main{
-    flex: 1;
-    display: flex;
-    margin: 70px auto 50px;
-    padding: 8px 0 18px;
+
+  .container{
+    height: calc(100% - 60px);
     box-sizing: border-box;
-    width: 100%;
-
-    max-width: 1400px;
-  }
 
 
-  .footer{
-    margin-top: auto;
-    width: 100%;
-    box-sizing: border-box;
+    .main{
+      flex: 1;
+      display: flex;
+      margin: 70px auto 50px;
+      padding: 8px 0 18px;
+      box-sizing: border-box;
+      width: 100%;
+
+      max-width: 1400px;
+    }
+
+
+    .footer{
+      margin-top: auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 }

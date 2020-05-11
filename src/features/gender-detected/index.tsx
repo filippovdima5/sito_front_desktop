@@ -24,7 +24,7 @@ type Props = {
 export function GenderDetected({ height }: Props) {
   const {  linkParams: { baseRoute, search } } = useStore($baseLink)
   const setGender = useEvent($setGender)
-  
+
   
   return (
     <div className={styles.main}>
