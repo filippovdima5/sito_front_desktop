@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useEffectSafe } from '../../helpers/hooks/use-effect-safe'
-import { Arrow } from '../../assets/svg'
+import {Arrow, Search} from '../../assets/svg'
 import { Props } from './index'
 
 
@@ -16,17 +16,39 @@ function SelectLabel({ active, labels, handleOk, isEmpty, title }:
 }
 
 
-function SelectSearch() {
-  const placeholder = useRef('Ведите бренд')
-  const [ focus, setFocus ] = useState(true)
+function SelectSearch({ handleOk, title, onChange, labels }:
+{ title?: string, handleOk?: () => void, onChange?: (value: string) => void, labels: string }) {
+  
+  const placeholderRef = useRef(title)
+  const [ focus, setFocus ] = useState(false)
+  const [ value, setValue ] = useState('')
+  
+  const placeholder = useMemo(() => {
+    if (focus) return value
+    if (!focus) {
+      if (labels) return labels
+      if (!value) return placeholderRef.current
+      return value
+    }
+  }, [focus, value, labels])
   
   
   return (
-    <S.Search>
+    <S.Search onClick={() => {
+      handleOk && handleOk()
+    }}>
+      <Search className='search-icon'/>
+      
       <input
-        value={placeholder.current}
+        onChange={event => {
+          onChange && onChange(event.target.value)
+          setValue(event.target.value)
+        }}
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
+        value={placeholder}
         className='input'
-        type={'text'}
+        type='text'
         autoComplete='off'
       />
     </S.Search>
@@ -37,12 +59,11 @@ function SelectSearch() {
 
 export const BlurSelect: FC<Props> = (props) => {
   const [ active, setActive ] = useState(false)
-  
+  const [ selectedKeys, setSelectedKeys ] = useState<Array<string | number>>([])
   
   const [ isEmpty, setIsEmpty ] = useState(true)
   const [ labels, setLabels ] = useState<string>('')
   
-  const [ selectedKeys, setSelectedKeys ] = useState<Array<string | number>>([])
   
   
   useEffect(() => {
@@ -84,7 +105,7 @@ export const BlurSelect: FC<Props> = (props) => {
     <S.Wrap active={active}>
       
       { props.search ?
-        <SelectSearch/>
+        <SelectSearch {...{ handleOk, title: props.title, labels } }/>
         :
         <>
           <SelectLabel { ...{ isEmpty, handleOk, labels, active, title: props.title } }/>
@@ -96,7 +117,7 @@ export const BlurSelect: FC<Props> = (props) => {
         </>
       }
       
-      { active && props.options &&
+      { active && props.options && props.options.length !== 0 &&
         <S.OptionContainer>
           <ul className='inner'>
             { props.options.map(option => (
@@ -126,6 +147,7 @@ export const BlurSelect: FC<Props> = (props) => {
 type PropsSelect = {
   active?: boolean,
   activeOption?: boolean,
+  focusInput?: boolean,
 }
 
 const S = {
@@ -164,10 +186,10 @@ const S = {
     }
 `,
   
-  Search: styled.div`
+  Search: styled.div<PropsSelect>`
     padding: 8px 20px 10px 50px;
     
-    
+    position: relative;
     margin: 0 5px;
     box-sizing: border-box;
     width: 216px;
@@ -175,14 +197,21 @@ const S = {
     border-radius: 5px;
     background-color: rgba(5,9,18,0.5);
    
+   
+   & .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+   };
     
     & .input {
       background-color: transparent;
       width: 100%;
       font-size: 14px;
       line-height: 16px;
-      color: white;
       text-transform: uppercase;
+      
+      color: ${({ focusInput }) => focusInput ? 'rgba(39,39,39,0.8)' : 'rgba(255,255,255,0.5)'};
     }
     
     & .input {

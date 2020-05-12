@@ -11,6 +11,7 @@ export type Props = {
   
   options?: Array<{ key: string | number, label: string | number }>,
   onSelect?: (keys: Array<string | number>) => void,
+  onChange?: (value: string) => void,
 }
 
 

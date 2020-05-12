@@ -21,12 +21,8 @@ export function MainBanner() {
           </S.Title>
           
           <S.ButtonsContainer>
-            <Button
-              title={'Мужчины'}
-            />
-            <Button
-              title={'Женщины'}
-            />
+            <Button  title={'Мужчины'}/>
+            <Button title={'Женщины'}/>
             
             <Select
               multi
@@ -42,6 +38,10 @@ export function MainBanner() {
             />
             
           </S.ButtonsContainer>
+          
+          <Button className='black-button' type={'black'}>
+            Искать скидки
+          </Button>
         
         </S.Inner>
       </S.Container>
@@ -86,6 +86,15 @@ const S = {
     width: 100%;
     height: 100%;
     position: relative;
+    
+    & .black-button{
+      position: absolute;
+      bottom: 24.137931%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-transform: uppercase;
+      border-radius: 5px;
+    }
 `,
   
   Title: styled.h1`

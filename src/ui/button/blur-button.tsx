@@ -1,12 +1,14 @@
-import React, { useState, FC } from 'react'
+import React, {useState, FC, useEffect} from 'react'
 import styled from 'styled-components'
-import { Arrow } from '../../assets/svg'
 import { Props } from './index'
 
 
 export const BlurButton: FC<Props> = (props) => {
-  const [ active, setActive ] = useState(false)
+  const [ active, setActive ] = useState(Boolean(props.active))
   
+  useEffect(() => {
+    setActive(Boolean(props.active))
+  }, [props.active])
   
   return (
     <S.Button
