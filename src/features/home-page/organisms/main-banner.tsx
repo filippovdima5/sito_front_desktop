@@ -29,8 +29,18 @@ export function MainBanner() {
             />
             
             <Select
+              multi
+              options={[{ key: 1, label: 'sko' }]}
               title={'Все категории'}
             />
+            
+            <Select
+              search
+              multi
+              options={[{ key: 1, label: 'sko' }]}
+              title={'Введите бренд'}
+            />
+            
           </S.ButtonsContainer>
         
         </S.Inner>
