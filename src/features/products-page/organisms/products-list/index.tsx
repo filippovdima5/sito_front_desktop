@@ -25,6 +25,8 @@ function ProductsList() {
   )
 }
 
+//      
+
 function Controller({ status, loading }: { status: StatusPage, loading: boolean }) {
   switch (status) {
     case 'EMPTY': return (<EmptyList/>)

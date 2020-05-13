@@ -54,6 +54,7 @@ export function MainBanner() {
 
 const S = {
   Wrap: styled.div`
+    user-select: none;
     padding-bottom: 33.1540013%;
     box-sizing: border-box;
     position: relative;
@@ -108,6 +109,7 @@ const S = {
     text-align: center;
     position: absolute;
     top: 24.94929%;
+    user-select: none;
 `,
   
   ButtonsContainer: styled.div`

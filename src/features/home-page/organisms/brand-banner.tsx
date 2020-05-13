@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import {Button} from '../../../ui/button'
 
 
 const banner = {
@@ -19,6 +20,7 @@ export function BrandBanner() {
       
       <S.Container>
         <S.Inner>
+          <Button className='button'>Бренды</Button>
           <S.InfoContainer>
             <S.Title>{banner.title}</S.Title>
             <S.Description>
@@ -38,6 +40,7 @@ export function BrandBanner() {
 
 const S = {
   Wrap: styled.div`
+    user-select: none;
     cursor: pointer;
     padding-bottom: 33.2885%;
     box-sizing: border-box;
@@ -72,6 +75,12 @@ const S = {
     width: 100%;
     height: 100%;
     position: relative;
+    
+    & .button{
+      position: absolute;
+      left: 30px;
+      top: 33px;
+    }
 `,
   
   

@@ -1,7 +1,7 @@
 import React from 'react'
 import { SexId } from '../../types'
 import styles from './styles.module.scss'
-import { MainBanner, BrandBanner } from './organisms'
+import { MainBanner, BrandBanner, SaleBanners } from './organisms'
 
 
 export function HomePage({ sexId }: { sexId: SexId }) {
@@ -11,6 +11,7 @@ export function HomePage({ sexId }: { sexId: SexId }) {
       <div className={styles.container}>
         <MainBanner/>
         <BrandBanner/>
+        <SaleBanners/>
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Skeleton } from '../../atoms/skeleton/Skeleton'
+import { Skeleton } from '../../atoms/skeleton/skeleton'
 import styles from './styles.module.scss'
 
 

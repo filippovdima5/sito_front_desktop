@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react'
-import { Skeleton } from '../../../atoms/skeleton/Skeleton'
-import styles from './ProductImage.module.scss'
+import { Skeleton } from '../../../atoms/skeleton/skeleton'
 import config from '../../../../config'
+import styles from './ProductImage.module.scss'
 
 // todo Надо думать как высчитывать всю хуйню на сервере
 // решение: Сделать компонент для сервера без данной фичи!
@@ -37,7 +37,7 @@ function ProductImage({ src, alt, wrapHeight }) {
       <div style={{ height: `${heightSpace}px` }}/>
 
       <img
-          itemProp={"image"}
+        itemProp={'image'}
         ref = {imgRef}
         style={{ display: loadedImage || config.ssr ? 'block' : 'none' }}
         className={styles.ProductImage}

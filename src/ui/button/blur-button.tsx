@@ -12,6 +12,7 @@ export const BlurButton: FC<Props> = (props) => {
   
   return (
     <S.Button
+      className = {props.className}
       activeClick={active}
       onClick={() => {
         if (props.onClick) props.onClick()
@@ -41,6 +42,10 @@ const S = {
     box-sizing: border-box;
     width: 172px;
     height: 40px;
+    
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 `
 }
 

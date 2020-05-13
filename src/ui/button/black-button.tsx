@@ -30,7 +30,7 @@ const S = {
     font-weight: bold;
     font-size: 18px;
     line-height: 21px;
-    padding: 15px 30px 16px;
+    padding: 16px 30px 15px;
     color: #FFFFFF;
 `
 }
