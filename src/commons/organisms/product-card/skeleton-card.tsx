@@ -1,42 +1,33 @@
 import React from 'react'
 import { Skeleton } from '../../atoms/skeleton/skeleton'
-import styles from './styles.module.scss'
+import { styledProductCard as S } from './styled'
+import { CardImage } from './molecules'
 
 
 
 export function SkeletonCard() {
   return (
-    <div className={styles.card}>
-      <div>
-
-        <div className={styles.wrapImg}>
-          <span>
-            <Skeleton  customStyle={{ paddingBottom: 'calc(125% + 30px)' }}/>
-          </span>
-        </div>
-
-        <div className={styles.footer}>
-          <div className={styles.brand}>
-            <Skeleton customStyle={{ height: 14 }}/>
-          </div>
-
-          <div className={styles.title}>
-            <Skeleton customStyle={{ height: 14 }}/>
-          </div>
-
-          <div className={styles.cost}>
-            <del className={styles.old_price}>
-              <Skeleton customStyle={{ height: 14, width: 40 }}/>
-            </del>
-            <span className={styles.price}>
-              <Skeleton customStyle={{ height: 14, width: 40 }}/>
-            </span>
-          </div>
-
-          <div className={styles.sale}/>
-        </div>
-
-      </div>
-    </div>
+    <S.CardWrap itemScope itemType={'http://schema.org/Product'}>
+      <S.CardContainer isLike={false}>
+        
+        <S.CardInner>
+          <S.ImageWrap>
+            <CardImage skeleton={true} src={''} title={''}/>
+          </S.ImageWrap>
+        
+          <S.MetaInfoWrap>
+            <S.Brand className='meta-item meta-span'><Skeleton customStyle={{ height: 18 }}/></S.Brand>
+            <S.Title className='meta-item meta-span'><Skeleton customStyle={{ height: 14 }}/></S.Title>
+          
+          
+            <S.PriceInfo className='meta-item'>
+              <span style={{ width: '40%' }} className='old-price'><Skeleton customStyle={{ height: 18 }}/></span>
+              <span style={{ width: '40%' }} className='price'><Skeleton customStyle={{ height: 18 }}/></span>
+            </S.PriceInfo>
+            
+          </S.MetaInfoWrap>
+        </S.CardInner>
+      </S.CardContainer>
+    </S.CardWrap>
   )
 }

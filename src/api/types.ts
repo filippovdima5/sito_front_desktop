@@ -23,7 +23,7 @@ export interface ShortProduct {
   price: number,
   oldprice: number,
   sale: number,
-  sizes: Array<string>
+  sizes: Array<string>,
 }
 
 export interface PaginateInfo {

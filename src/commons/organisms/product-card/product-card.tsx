@@ -1,13 +1,12 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useMemo } from 'react'
+import { useEvent, useStore } from 'effector-react/ssr'
 import { ShortProduct } from '../../../api/types'
 import { Heart } from '../../../assets/svg'
+import { $likes, $setLike } from '../../../stores/user'
 import { CardImage } from './molecules'
+import { styledProductCard as S } from './styled'
 
 
-interface ProductsCardProps extends ShortProduct{
-  showLike: boolean,
-}
 
 const viewCost = (cost: number): string => {
   const first = cost/1000
@@ -17,12 +16,19 @@ const viewCost = (cost: number): string => {
 }
 
 
-export function ProductCard({ id, brand, img, oldprice, price, sale, title, url, showLike, sizes  }: ProductsCardProps) {
+export function ProductCard({ id, brand, img, oldprice, price, sale, title, sizes  }: ShortProduct) {
+  const likeIds = useStore($likes)
+  const setLike = useEvent($setLike)
+  
+  
+  const isLike = useMemo(() => likeIds.includes(id), [likeIds, id])
+  
+  
   return (
     <S.CardWrap itemScope itemType={'http://schema.org/Product'}>
-      <S.CardContainer>
+      <S.CardContainer isLike={isLike}>
         <div className='sale flag'>-{sale}%</div>
-        <div className='like flag'>
+        <div onClick={() => setLike(id)} className='like flag'>
           <div className='like-container'>
             <Heart className='svg-heart'/>
           </div>
@@ -58,171 +64,6 @@ export function ProductCard({ id, brand, img, oldprice, price, sale, title, url,
   )
 }
 
-
-const S = {
-  CardWrap: styled.div`
-    // Потом можно прокидывать через пропсы размер отступов для разных мест расположения карточки!
-    padding: 7.5px;
-
-    box-sizing: border-box;
-    width: 25%;
-    user-select: none;
-    cursor: pointer;
-`,
-  
-  CardContainer: styled.div`
-    width: 100%;
-    padding-bottom: 187.965616%;
-    position: relative;
-    
-    & .flag {
-      position: absolute;
-      width: 44px;
-      height: 30px;
-      right: 0;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    & .sale {
-      font-family: 'Open Sans', sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 1;
-      text-align: center;
-      background-color: #ED6C50;
-      color: #FFFFFF;
-      top: 0;
-    }
-    
-    & .like {
-      background-color: rgba(0,0,0,0.4);
-      top: 40px;
-      
-      & .like-container {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        
-        
-      }
-    }
-    
-`,
-  
-  CardInner: styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFFFF;
-`,
-  
-  ImageWrap: styled.div`
-    flex: 0.67682927;
-`,
-  
-  MetaInfoWrap: styled.div`
-    flex: 0.32317073;
-
-    & .meta-item {
-       font-family: 'Open Sans', sans-serif;
-       font-style: normal;
-       text-align: center;
-       //width: 62.464183%;
-       //left: 50%;
-       //transform: translateX(-50%);
-       color:  #272727;
-    }
-`,
-  
-  Brand: styled.div`
-    font-size: 18px;
-    line-height: 25px;
-    margin: 2.730659% auto 0;
-    
-    width: 80%;
-    
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  
-`,
-  
-  Title: styled.div`
-    font-size: 14px;
-    line-height: 19px;
-    margin: 1.146132% auto 0;
-    
-    width: 90%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    
-    opacity: 0.8;
-    &:first-letter {
-      text-transform: uppercase;
-    }
-`,
-  
-  Sizes: styled.div`
-    width: 95%;
-    margin: 4% auto 0;
-    text-align: center;
-    display: inline-flex;
-    flex-flow: wrap;
-    justify-content: center;
-    white-space: normal;
-    opacity: 0.8;
-    
-    & .size {
-      font-size: 14px;
-      display: inline;
-      padding: 0 2px;
-      text-transform: uppercase;
-    }
-    
-    
-`,
-
-  PriceInfo: styled.div`
-    width: 100%;
-    margin: 6% auto 0;
-    text-align: center;
-    font-size: 18px;
-    line-height: 25px;
-    display: flex;
-    justify-content: center;
-    flex-flow: nowrap;
-    box-sizing: border-box;
-    
-    & .price, & .old-price {
-      //width: 50%;
-      box-sizing: border-box;
-    }
-    
-    & .old-price {
-      text-decoration: line-through;
-      opacity: 0.8;
-      margin-right: 8px;
-      
-    }
-    
-    & .price {
-    margin-left: 8px;
-      font-weight: bold;
-      color: #ED6C50;
-    }
-    
-`
-}
 
 
 

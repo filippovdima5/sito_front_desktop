@@ -19,7 +19,7 @@ function ProductsList() {
   return (
     <>
       {data.map(item => (
-        <ProductCard showLike={true} key={item.id} {...item}/>
+        <ProductCard key={item.id} {...item}/>
       ))}
     </>
   )

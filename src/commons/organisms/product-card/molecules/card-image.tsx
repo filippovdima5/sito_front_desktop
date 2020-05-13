@@ -7,12 +7,19 @@ import config from '../../../../config'
 type Props = {
   title: string,
   src: string,
+  skeleton?: boolean,
   
 }
 
-export function CardImage({ title, src }: Props) {
+export function CardImage({ title, src, skeleton }: Props) {
   const [ isLoad, setIsLoad ] = useState<'ok' | 'loading' | 'error'>(config.ssr ? 'ok' : 'loading')
   
+  
+  if (skeleton) return (
+    <S.Wrap loading={true}>
+      <Skeleton className='skeleton-load-image-card'/>
+    </S.Wrap>
+  )
   
   
   return (
