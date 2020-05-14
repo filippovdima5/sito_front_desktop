@@ -110,7 +110,7 @@ export const BlurSelect: FC<Props> = (props) => {
         <>
           <SelectLabel { ...{ isEmpty, handleOk, labels, active, title: props.title } }/>
           <Arrow
-            color={active ? 'rgba(39,39,39,0.8)' : 'white'}
+            //color={active ? 'rgba(39,39,39,0.8)' : 'white'}
             rotate={active ? 180 : 0}
             className={'arrow'}
           />
