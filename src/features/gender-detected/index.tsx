@@ -1,40 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useStore, useEvent } from 'effector-react/ssr'
-import { sexIdToStr } from '../../lib'
-
-import { $setGender } from '../../stores/user'
-import { $baseLink } from '../../stores/env'
-
-
 import styles from './styles.module.scss'
 
 
 const data = [
-  { index: 2, title: 'Для женщин' },
-  { index: 1, title: 'Для мужчин' },
+  { index: 'women', title: 'Для женщин', url: '/women/home' },
+  { index: 'men', title: 'Для мужчин', url: '/men/home' },
 ] as const
 
 
-
 export function GenderDetected() {
-  const {  linkParams: { baseRoute, search } } = useStore($baseLink)
-  const setGender = useEvent($setGender)
-
   
   return (
     <div className={styles.main}>
       <div className={styles.wrap}>
-        {data.map(({ index, title }) => (
+        {data.map(({ index, title, url }) => (
           <Link
-            onClick={() => setGender(index)}
-            to={`/${baseRoute}/${sexIdToStr(index)}${search ? `?${search}` : ''}`}
+            to={url}
             key={index}
             className={styles.genderWrap}
           >
-            <div style={{ paddingTop: '66%' }} className={styles.gender}>
+            <div className={styles.gender}>
               <img
-                src={`/cdn/mobile/gender-detected/${index}.jpg`}
+                src={`/assets/gender-${index}.jpg`}
                 alt={title} className={styles.img}
               />
 
