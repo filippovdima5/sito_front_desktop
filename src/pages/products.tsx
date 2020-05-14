@@ -33,7 +33,7 @@ export function Products({ match }: RouteComponentProps<RParams>) {
   switch (gender) {
     case 'men':
     case 'women': return <UseSex sexId={sexStrToId(gender)}/>
-    default: return <GenderDetected height={66}/>
+    default: return <GenderDetected />
   }
 }
 

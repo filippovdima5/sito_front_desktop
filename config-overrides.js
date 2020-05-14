@@ -22,8 +22,6 @@ const addBabelPlugin = (config, name, { prepend } = {}) => {
 
 
 
-
-
 const enableLoadable = (config) => {
   config.plugins = config.plugins || []
   config.plugins.push(new LoadablePlugin())

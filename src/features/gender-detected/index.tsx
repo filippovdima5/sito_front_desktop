@@ -16,12 +16,8 @@ const data = [
 ] as const
 
 
-type Props = {
-  height: number,
-}
 
-
-export function GenderDetected({ height }: Props) {
+export function GenderDetected() {
   const {  linkParams: { baseRoute, search } } = useStore($baseLink)
   const setGender = useEvent($setGender)
 
