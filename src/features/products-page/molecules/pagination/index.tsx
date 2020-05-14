@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
 import { $productsInfoStore, $mainState, $setPage } from '../../store'
 import config from '../../../../config'
+import { Arrow } from '../../../../assets/svg'
 import styles from './styles.module.scss'
-
 
 
 const handleToTop = () => {
@@ -35,7 +35,9 @@ export function Pagination() {
     <div className={styles.Pagination}>
       <div className={styles.inner} onClick={() => handleToTop()}>
         <div className={styles.left} onClick={handlePrev}>
-          <span className={`${styles.arrow} ${styles.prev}`}/>
+          <span className={`${styles.arrow} ${styles.prev}`}>
+            <Arrow className={styles.arrowSvg} rotate={90}/>
+          </span>
         </div>
         
         <div className={`${styles.main} ${styles.cdp}`} data-actpage={currentPage}>
@@ -52,7 +54,9 @@ export function Pagination() {
         </div>
       
         <div className={styles.right} onClick={handleNext}>
-          <span className={`${styles.arrow} ${styles.next}`}/>
+          <span className={`${styles.arrow} ${styles.next}`}>
+            <Arrow className={styles.arrowSvg} rotate={270}/>
+          </span>
         </div>
       </div>
     </div>

@@ -1,6 +1,4 @@
 .Pagination{
-  border: 1px solid red;
-
   margin-top: 30px;
   height: 100%;
   box-sizing: border-box;
@@ -30,28 +28,32 @@
     }
 
     .arrow{
-      background-color: #ffffff;
-      width: 50px;
+      width: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100%;
       cursor: pointer;
       box-sizing: border-box;
+      position: relative;
+      background-color: white;
+
+      .arrowSvg{
+        position: absolute;
+        left: 50%;
+        fill: rgba(0, 0, 0, 0.9);
+      }
     }
-    .arrow:hover{
-      border: 1px solid rgba(39, 39, 39, 0.41);
+
+    .arrow:hover {
+      background-color: #272727;
+
+      .arrowSvg{
+        fill: white;
+      }
     }
-    .arrow:after{
-      content: '';
-      display: block;
-      width: 8px;
-      height: 8px;
-      border-top: 1px solid #272727;
-      border-left: 1px solid #272727;
-    }
+
     .numeric{
-      //display: flex;
       align-items: center;
       justify-content: center;
       width: 41px;
@@ -74,22 +76,15 @@
     .numeric.is_active, .numeric:hover{
       text-decoration: none;
       color: #272727;
-      background-color: #f2f2f2;
-      border-color: #f2f2f2;
+      background-color: #F2F2F2
     }
 
-    .prev{
-      left: 0;
+    .numeric:hover {
+      border: 1px solid #000000;
     }
-    .prev:after{
-      transform: rotate(-45deg)
-    }
-    .next{
-      right: 0;
-    }
-    .next:after{
-      transform: rotate(135deg)
-    }
+
+    .prev{ left: 0 }
+    .next{ right: 0 }
   }
 }
 

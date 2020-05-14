@@ -33,7 +33,7 @@ export const $mainState = createStore<MainState>({
   favorite: null,
   page: 1,
   sort: 'update_up',
-  limit: 36,
+  limit: 4,
 })
 
 

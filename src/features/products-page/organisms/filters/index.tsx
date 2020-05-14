@@ -1,22 +1,41 @@
 import React from 'react'
-import { useStore } from 'effector-react/ssr'
-import { Filter } from '../../molecules/filter'
-import styles from './styles.module.scss'
-import { $filtersView } from './store'
+import styled from 'styled-components'
+import { FilterCurtain } from './templates'
 
 
 export function Filters () {
-  const filtersView = useStore($filtersView)
-  
+
   return (
-    <div className={styles.filters}>
-      <div className={styles.container}>
+    <S.Wrap >
+      <S.Container>
+        <FilterCurtain title={'Бренды'}/>
         
-        {filtersView.map(filter => (
-          <Filter key={filter.name} {...filter}/>
-        ))}
+        <FilterCurtain title={'Категории'}/>
         
-      </div>
-    </div>
+        <FilterCurtain title={'Цена'}/>
+        
+        <FilterCurtain title={'Размеры'}/>
+        
+        <FilterCurtain title={'Скидка'}/>
+        
+      </S.Container>
+    </S.Wrap>
   )
+}
+
+
+
+const S = {
+  Wrap: styled.div`
+    height: 100%;
+    padding-right: 30px;
+`,
+  
+  Container: styled.div`
+    width: 100%;
+    box-shadow: 0 0 10px rgba(189, 189, 189, 0.25);
+
+`,
+  
+
 }

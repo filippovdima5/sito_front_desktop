@@ -14,7 +14,7 @@ const sortes = ['По цене', 'По новизне', ' По скидке', '�
 export function Sorters() {
   const [ data, setData ] = useState(data1)
   
-  const [ showSort, setShowSort ] = useState(true)
+  const [ showSort, setShowSort ] = useState(false)
   
   useInterval(() => {
     const arr: Array<string> = []
@@ -44,7 +44,7 @@ export function Sorters() {
             { showSort && (
               <S.SortOptionsContainer>
                 { sortes.map(sort => (
-                  <div key={sort} className='sort-option'>{sort}</div>
+                  <div key={Math.random().toString()} className='sort-option'>{sort}</div>
                 )) }
               </S.SortOptionsContainer>
             ) }
@@ -57,10 +57,10 @@ export function Sorters() {
           <div className='filters-scroll'>
             { data.map((item, i) => {
               // eslint-disable-next-line max-len
-              if  (i % 2 === 0) return <S.FilterButton onClick={() => handleClose(item)} key={item}>Размер: Adidas <Close className='close-svg'/></S.FilterButton>
+              if  (i % 2 === 0) return <S.FilterButton onClick={() => handleClose(item)} key={Math.random().toString()}>Размер: Adidas <Close className='close-svg'/></S.FilterButton>
               // eslint-disable-next-line max-len
-              if (i % 3 === 0 ) return <S.FilterButton onClick={() => handleClose(item)} key={item}>Бренд: Goochi <Close className='close-svg'/></S.FilterButton>
-              return <S.FilterButton onClick={() => handleClose(item)} key={item}>Це: 3045<Close className='close-svg'/></S.FilterButton>
+              if (i % 3 === 0 ) return <S.FilterButton onClick={() => handleClose(item)} key={Math.random().toString()}>Бренд: Goochi <Close className='close-svg'/></S.FilterButton>
+              return <S.FilterButton onClick={() => handleClose(item)} key={Math.random().toString()}>Це: 3045<Close className='close-svg'/></S.FilterButton>
             }) }
           </div>
         </S.FiltersContainer>
@@ -196,6 +196,10 @@ const S = {
       position: absolute;
       top: 50%;
       right: 10px;
+    }
+    
+    &:hover {
+      background: #E6E6E6;
     }
     
     &:hover .close-svg {
