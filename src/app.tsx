@@ -4,7 +4,7 @@ import { Scope } from 'effector/fork'
 import { Provider , useEvent, useStore } from 'effector-react/ssr'
 import { useLocation } from 'react-router'
 import { Helmet } from 'react-helmet'
-import { useEffectSafe } from './helpers/hooks/use-effect-safe'
+import { useEffectSafe } from './hooks/use-effect-safe'
 
 
 import config from './config'

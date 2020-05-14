@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState, useMemo } from 'react'
 import styled from 'styled-components'
-import { useEffectSafe } from '../../helpers/hooks/use-effect-safe'
+import { useEffectSafe } from '../../hooks/use-effect-safe'
 import {Arrow, Search} from '../../assets/svg'
 import { Props } from './index'
 

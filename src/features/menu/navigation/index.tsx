@@ -5,7 +5,7 @@ import { $setNavActive, $setMenuContent, $setForceClose } from '../store'
 import { $genderInfo, $setGender } from '../../../stores/user'
 import { $baseRoute } from '../../../stores/env'
 import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
-import { sexIdToStr } from '../../../helpers/lib'
+import { sexIdToStr } from '../../../lib'
 import styles from './styles.module.scss'
 
 

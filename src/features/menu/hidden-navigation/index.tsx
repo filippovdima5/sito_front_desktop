@@ -2,10 +2,10 @@ import React  from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { $setMenuActive, $showMenu, $menuContent, $setShowMenu, $setForceClose, $forceCloseState } from '../store'
-import { useTransitionNames } from '../../../helpers/hooks/use-transition-names'
+import { useTransitionNames } from '../../../hooks/use-transition-names'
 import { BrandsContent } from '../molecules/brands-content'
 import { CategoriesContent } from '../molecules/categories-content'
-import { useEffectSafe } from '../../../helpers/hooks/use-effect-safe'
+import { useEffectSafe } from '../../../hooks/use-effect-safe'
 import styles from './styles.module.scss'
 
 

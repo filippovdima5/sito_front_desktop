@@ -1,6 +1,6 @@
 import React, { useState, useRef }  from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { useEffectSafe } from '../../../../../../helpers/hooks/use-effect-safe'
+import { useEffectSafe } from '../../../../../../hooks/use-effect-safe'
 import { FiltersItemNumber, FiltersItemString } from '../../../../../../api/types'
 import { ListFilters, ListTranslateFilters } from '../../types'
 import { $filtersViewRecordState, $filtersViewRecordStore } from '../../store'

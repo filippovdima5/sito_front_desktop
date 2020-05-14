@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useInterval } from '../../../../helpers/hooks/use-interval'
+import { useInterval } from '../../../../hooks/use-interval'
 import { Close, Arrow } from '../../../../assets/svg'
 
 

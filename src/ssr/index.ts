@@ -6,7 +6,7 @@ import logger from 'koa-logger'
 import proxy from 'koa-proxy'
 import LRU from 'lru'
 import { api } from '../api'
-import { findSexLine } from '../helpers/lib'
+import { findSexLine } from '../lib'
 import { render } from './render'
 import { createCache } from './utils/create-cache'
 

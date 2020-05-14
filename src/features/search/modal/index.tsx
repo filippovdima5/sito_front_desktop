@@ -2,7 +2,7 @@ import React, {  useMemo, useRef } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useHistory } from 'react-router'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { useTransitionNames } from '../../../helpers/hooks/use-transition-names'
+import { useTransitionNames } from '../../../hooks/use-transition-names'
 import { $searchResult, $showResults, $setModSearch } from '../store'
 import { $genderInfo } from '../../../stores/user'
 

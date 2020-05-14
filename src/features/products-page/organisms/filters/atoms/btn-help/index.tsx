@@ -1,6 +1,6 @@
 import React from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { useTransitionNames } from '../../../../../../helpers/hooks/use-transition-names'
+import { useTransitionNames } from '../../../../../../hooks/use-transition-names'
 import styles from './styles.module.scss'
 
 

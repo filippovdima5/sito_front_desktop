@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useHistory } from 'react-router'
 import {  useEvent } from 'effector-react/ssr'
-import { useEffectSafe } from '../../helpers/hooks/use-effect-safe'
+import { useEffectSafe } from '../../hooks/use-effect-safe'
 import styles from './styles.module.scss'
 import {  $toggleSex, $initRouteHistory } from './store'
 import { Sorters } from './molecules/sorters'

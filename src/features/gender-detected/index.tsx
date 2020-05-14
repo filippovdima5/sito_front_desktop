@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { sexIdToStr } from '../../helpers/lib'
+import { sexIdToStr } from '../../lib'
 
 import { $setGender } from '../../stores/user'
 import { $baseLink } from '../../stores/env'

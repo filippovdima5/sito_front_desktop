@@ -1,14 +1,14 @@
 import React from 'react'
 import { Redirect, RouteComponentProps } from 'react-router'
 import { useEvent, useStore } from 'effector-react/ssr'
-import { useBodyScrollTop } from '../helpers/hooks/use-body-scroll-top'
-import { sexStrToId, preDetectedGender } from '../helpers/lib'
+import { useBodyScrollTop } from '../hooks/use-body-scroll-top'
+import { sexStrToId, preDetectedGender } from '../lib'
 
 import { $genderInfo, $setGender } from '../stores/user'
 
 import { GenderDetected } from '../features/gender-detected'
 import { HomePage } from '../features/home-page'
-import { useEffectSafe } from '../helpers/hooks/use-effect-safe'
+import { useEffectSafe } from '../hooks/use-effect-safe'
 
 
 

@@ -4,7 +4,7 @@ import { useEvent } from 'effector-react/ssr'
 import { $goToONlySomeFilter } from '../../../products-page/store'
 import { namesCategory } from '../../../../constants/category-keys'
 import { categoriesGroupBySub } from '../../../../constants/categories-group-by-sub'
-import { sexIdToStr } from '../../../../helpers/lib'
+import { sexIdToStr } from '../../../../lib'
 import styles from './styles.module.scss'
 
 

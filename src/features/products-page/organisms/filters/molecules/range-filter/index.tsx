@@ -1,6 +1,6 @@
 import React, { useCallback,  useState }  from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { useEffectSafe } from '../../../../../../helpers/hooks/use-effect-safe'
+import { useEffectSafe } from '../../../../../../hooks/use-effect-safe'
 import { Input } from '../../../../../../commons/atoms/input'
 import { RangeFilters } from '../../types'
 import { $filtersViewRecordState, $filtersViewRecordStore } from '../../store'
