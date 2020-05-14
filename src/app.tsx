@@ -8,7 +8,7 @@ import { useEffectSafe } from './hooks/use-effect-safe'
 
 
 import config from './config'
-import { $fetchUser, $genderInfo } from './stores/user'
+import {  $genderInfo } from './stores/user'
 import { $setUrlInfo, $seo, $setLoadPopularBrands } from './stores/env'
 import { Pages } from './pages'
 import { Footer } from './features/footer'
@@ -28,7 +28,6 @@ function Main() {
   const { pathname, search } = useLocation()
   const { title, description } = useStore($seo)
   const genderInfo = useStore($genderInfo)
-  const fetchUser = useEvent($fetchUser)
   const setUrlInfo = useEvent($setUrlInfo)
   const setLoadPopularBrands = useEvent($setLoadPopularBrands)
   
@@ -36,11 +35,7 @@ function Main() {
     setLoadPopularBrands({ sexId: genderInfo === null ? null : genderInfo.sexId })
   }, [genderInfo])
   
-  useEffectSafe(() => {
-    if (config.local) {
-      fetchUser()
-    }
-  }, [])
+
   
   useEffectSafe(() => {
     setUrlInfo({ path: pathname, search })
