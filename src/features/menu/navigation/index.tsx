@@ -44,7 +44,9 @@ export function Navigation() {
           Бренды
         </Link>
         
-        <ActiveBorder active={pathname.includes('/brands')}/>
+        <S.ActiveBorder
+          hover={menuContent === 'BRANDS'}
+          active={pathname.includes('/brands')}/>
       </li>
   
   
@@ -63,6 +65,7 @@ export function Navigation() {
         </Link>
   
         <S.ActiveBorder
+          hover = {menuContent === 'MEN_CATEGORIES'}
           active={pathname.includes('/men/products') && !pathname.includes('/women/products')}/>
       </li>
         
@@ -82,7 +85,7 @@ export function Navigation() {
         </Link>
   
         <S.ActiveBorder
-          hover = {}
+          hover = {menuContent === 'WOMEN_CATEGORIES'}
           active={pathname.includes('/women/products')}/>
       </li>
       
