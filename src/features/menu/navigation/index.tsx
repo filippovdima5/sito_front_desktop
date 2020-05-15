@@ -1,18 +1,16 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Link , useLocation } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { $setNavActive, $setMenuContent, $setForceClose, $menuContent } from '../store'
-import { $genderInfo, $setGender } from '../../../stores/user'
-import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
-import { sexIdToStr } from '../../../lib'
-import styles from './styles.module.scss'
 import styled from 'styled-components'
+import { $setNavActive, $setMenuContent, $setForceClose, $menuContent } from '../store'
+import { $setGender } from '../../../stores/user'
+import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
+import styles from './styles.module.scss'
 
 
 
 export function Navigation() {
   useMouseOpenMenu(200)
-  const genderInfo = useStore($genderInfo)
   const setNavActive = useEvent($setNavActive)
   const setMenuContent = useEvent($setMenuContent)
   const setGender = useEvent($setGender)
@@ -20,11 +18,6 @@ export function Navigation() {
   const menuContent  = useStore($menuContent)
   const { pathname } = useLocation()
   
-  
-  const sexId = useMemo(() => {
-    if (genderInfo === null) return null
-    return genderInfo.sexId
-  }, [genderInfo])
   
 
   
@@ -38,7 +31,7 @@ export function Navigation() {
         className={styles.navItem}>
         <Link
           onClick={() => setForceClose(true)}
-          to={`/brands/${sexId !== null ? sexIdToStr(sexId) : ''}`}
+          to={'/brands'}
           className={styles.navLink}
         >
           Бренды
@@ -95,6 +88,21 @@ export function Navigation() {
 
 
 const S = {
+  Navigation: styled.div`
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      box-sizing: border-box;
+`,
+  
+  
+  NavItem: styled.div`
+    position: relative;
+    margin-right: 52px;
+    box-sizing: border-box;
+`,
+  
+  
   ActiveBorder: styled.div<{ active: boolean, hover: boolean }>`
     position: absolute;
     bottom: 0;
