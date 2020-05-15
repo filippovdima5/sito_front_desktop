@@ -1,27 +1,24 @@
 import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link , useLocation } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { $setNavActive, $setMenuContent, $setForceClose } from '../store'
+import { $setNavActive, $setMenuContent, $setForceClose, $menuContent } from '../store'
 import { $genderInfo, $setGender } from '../../../stores/user'
-import { $baseRoute } from '../../../stores/env'
 import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
 import { sexIdToStr } from '../../../lib'
 import styles from './styles.module.scss'
+import styled from 'styled-components'
 
 
-function ActiveBorder({ active }: { active: boolean }) {
-  if (!active) return null
-  return (<div className={styles.activeBorder}/>)
-}
 
 export function Navigation() {
   useMouseOpenMenu(200)
   const genderInfo = useStore($genderInfo)
-  const baseRoute = useStore($baseRoute)
   const setNavActive = useEvent($setNavActive)
   const setMenuContent = useEvent($setMenuContent)
   const setGender = useEvent($setGender)
   const setForceClose = useEvent($setForceClose)
+  const menuContent  = useStore($menuContent)
+  const { pathname } = useLocation()
   
   
   const sexId = useMemo(() => {
@@ -47,7 +44,7 @@ export function Navigation() {
           Бренды
         </Link>
         
-        <ActiveBorder active={baseRoute === 'brands'}/>
+        <ActiveBorder active={pathname.includes('/brands')}/>
       </li>
   
   
@@ -65,8 +62,8 @@ export function Navigation() {
             Мужское
         </Link>
   
-        <ActiveBorder
-          active={((baseRoute === 'products') && (sexId === 1))}/>
+        <S.ActiveBorder
+          active={pathname.includes('/men/products') && !pathname.includes('/women/products')}/>
       </li>
         
         
@@ -84,10 +81,24 @@ export function Navigation() {
             Женское
         </Link>
   
-        <ActiveBorder
-          active={((baseRoute === 'products') && (sexId === 2))}/>
+        <S.ActiveBorder
+          hover = {}
+          active={pathname.includes('/women/products')}/>
       </li>
       
     </ul>
   )
+}
+
+
+const S = {
+  ActiveBorder: styled.div<{ active: boolean, hover: boolean }>`
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    left: 0;
+    right: 0;
+    background-color: rgba(6, 10, 15, 1);
+`
 }

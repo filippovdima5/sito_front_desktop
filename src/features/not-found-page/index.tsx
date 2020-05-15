@@ -1,13 +1,7 @@
 import React  from 'react'
-import { Link } from 'react-router-dom'
-import t from '../../assets/img/svg/telegram.png'
-import i from '../../assets/img/svg/instagram.svg'
-import v from '../../assets/img/svg/vk.svg'
-import y from '../../assets/img/svg/youtube.svg'
 import { useBodyScrollTop } from '../../hooks/use-body-scroll-top'
+import { Button } from '../../ui/button'
 import styles from './styles.module.scss'
-import imgNot from './404.png'
-
 
 
 export function NotFound() {
@@ -17,7 +11,7 @@ export function NotFound() {
 
       <div className={styles.notFound}>
         <div className={styles.wrapImg}>
-          <img src={imgNot} alt={'not-found'} className={styles.img}/>
+          <img src='/assets/404.svg' alt={'not-found'} className={styles.img}/>
         </div>
       </div>
 
@@ -25,32 +19,14 @@ export function NotFound() {
         Что-то пошло не так! Попробуйте лучше:
       </h1>
 
-      <div className={styles.btns}>
-        <Link className={styles.a} to={'/'}>Перейти на главную</Link>
+      <div className={styles.buttons}>
+        <Button className={styles.button} type={'black'} title={'Перейти на главную'}/>
+        <Button className={styles.button} type={'black'} title={'Перейти в каталог товаров'}/>
       </div>
 
-      <span className={styles.span}>
+      <div className={styles.span}>
         Присоединяйтесь к нам в соц.сети. Мы открыты для общения!
-      </span>
-
-
-      <div className={styles.socials}>
-        <div className={styles.socialList}>
-          <a className={styles.soc} target={'_blank'} href={'/'} rel="noopener noreferrer" >
-            <img className={styles.img} src={t} alt={'d'}/>
-          </a>
-          <a className={styles.soc} target={'_blank'} href={'/'} rel="noopener noreferrer" >
-            <img className={styles.img} src={i} alt={'d'}/>
-          </a>
-          <a className={styles.soc} target={'_blank'} href={'/'} rel="noopener noreferrer" >
-            <img className={styles.img} src={v} alt={'d'}/>
-          </a>
-          <a className={styles.soc} target={'_blank'} href={'/'} rel="noopener noreferrer" >
-            <img className={styles.img} src={y} alt={'d'}/>
-          </a>
-        </div>
       </div>
-
     </div>
   )
 }

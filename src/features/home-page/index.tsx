@@ -8,7 +8,7 @@ export function HomePage({ sexId }: { sexId: SexId }) {
   
   return (
     <S.Wrap>
-      <div className='container'>
+      <div>
         <MainBanner/>
         <BrandBanner/>
         <SaleBanners/>
@@ -22,9 +22,5 @@ const S = {
   Wrap: styled.div`
     width: 100%;
     box-sizing: border-box;
-    
-    & .container {
-      margin: 37px 0 33px;
-    }
 `
 }
