@@ -66,7 +66,9 @@ $mainState.on(merge([$setListFilter, $setSomeFilter]), (state, { key, value }) =
     case 'categories':
     case 'brands':
     case 'sizes':
-    case 'colors': return { ...state, [key]: setItemToArray(state[key], value) }
+    case 'colors':
+      // @ts-ignore
+      return { ...state, [key]: setItemToArray(state[key], value) }
     case 'price_from':
     case 'price_to':
     case 'sale_from':
