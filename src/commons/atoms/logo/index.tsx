@@ -1,20 +1,21 @@
 import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom'
-import { useStore } from 'effector-react/ssr'
-import { $genderInfo } from '../../../stores/user'
+import { Link , useLocation } from 'react-router-dom'
+import { findSexInPath } from '../../../lib'
 import styles from './styles.module.scss'
 
 
 export function Logo({ color }: { color: string }) {
-  const genderInfo = useStore($genderInfo)
-  const sexLine = useMemo(() => {
-    if (genderInfo === null) return ''
-    return genderInfo.sexLine
-  }, [genderInfo])
+  const { pathname } = useLocation()
+  
+  const url = useMemo(() => {
+    const sex = findSexInPath(pathname)
+    if (sex === null) return '/'
+    return `/${sex}/home`
+  }, [pathname])
   
   
   return (
-    <Link style={{ color }} className={styles.logo} to={`/home/${sexLine}`}>
+    <Link style={{ color }} className={styles.logo} to={url}>
       <span className={styles.text}>
         Sito
       </span>

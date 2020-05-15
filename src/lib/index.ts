@@ -1,15 +1,3 @@
-// export const sortRecord = function sortRecord <T>(obj: T): T {
-//   return (
-//     Object.fromEntries(
-//       Object.entries(obj).sort((a: any, b: any) => (a[0] as any - b[0] as any))
-//     )
-//   )
-// }
-
-// export const compareRecord = function compareRecord (obj1: any, obj2: any): boolean {
-//   return (JSON.stringify(sortRecord(obj1)) === JSON.stringify(sortRecord(obj2)))
-// }
-
 export const sexIdToStr = function sexIdToStr (sexId: 1 | 2 | 0): 'men' | 'women' {
   if (sexId === 1) return 'men'
   return 'women'
@@ -26,14 +14,12 @@ export const findSexLine = ( url: string ): 1 | 2 | null => {
   return 1
 }
 
-export const preDetectedGender = ( propsGender: string | undefined, storeGender: 'men' | 'women' | undefined ): 'men' | 'women' | null => {
-  switch (propsGender) {
-    case 'men': return 'men'
-    case 'women': return 'women'
-    default: return storeGender ?? null
-  }
-}
 
+export const findSexInPath = (pathname: string): 'men' | 'women' | null => {
+  if (pathname.includes('/women')) return 'women'
+  if (pathname.includes('/men')) return 'men'
+  return null
+}
 
 export const recordWithoutNull = (record: any, returnedRecord?: any) => {
   const newRecord: any = returnedRecord ?? {}
