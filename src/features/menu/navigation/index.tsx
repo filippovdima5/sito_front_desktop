@@ -103,5 +103,7 @@ const S = {
     left: 0;
     right: 0;
     background-color: rgba(6, 10, 15, 1);
+    
+    visibility: ${({ active, hover }) => (!active && !hover) ? 'hidden' : 'visible'};
 `
 }
