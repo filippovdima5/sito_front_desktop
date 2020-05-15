@@ -1,5 +1,5 @@
 import React from 'react'
-import { SearchIcon } from '../../../media/img/svg/icons'
+import { SearchIcon } from '../../../assets/img/svg/icons'
 import styles from './styles.module.scss'
 
 

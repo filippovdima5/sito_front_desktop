@@ -2,7 +2,7 @@ import React from 'react'
 import { useEvent } from 'effector-react/ssr'
 import { $skipAllFilters } from '../../store'
 import { Button } from '../../../../commons/atoms/button'
-import styles from '../../../../media/css/info-page.module.scss'
+import styles from '../../../../assets/styles/info-page.module.scss'
 
 
 export function EmptyList() {

@@ -3,7 +3,7 @@ import { Scope } from 'effector/fork'
 import { Provider } from 'effector-react/ssr'
 import { AppTemplate } from './features/app-template'
 import { MetaTags } from './features/meta-tags'
-import './media/css/reset.module.scss'
+import './assets/styles/reset.module.scss'
 
 
 

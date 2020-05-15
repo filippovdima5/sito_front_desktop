@@ -59,7 +59,7 @@ export function Navigation() {
             setGender(1)
             setForceClose(true)
           }}
-          to={'/products/men'}
+          to={'/men/products'}
           className={styles.navLink}
         >
             Мужское
@@ -78,7 +78,7 @@ export function Navigation() {
             setGender(2)
             setForceClose(true)
           }}
-          to={'/products/women'}
+          to={'/women/products'}
           className={styles.navLink}
         >
             Женское

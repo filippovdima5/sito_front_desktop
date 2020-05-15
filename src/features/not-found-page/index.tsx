@@ -1,12 +1,12 @@
 import React  from 'react'
 import { Link } from 'react-router-dom'
-import t from '../../media/img/svg/telegram.png'
-import i from '../../media/img/svg/instagram.svg'
-import v from '../../media/img/svg/vk.svg'
-import y from '../../media/img/svg/youtube.svg'
+import t from '../../assets/img/svg/telegram.png'
+import i from '../../assets/img/svg/instagram.svg'
+import v from '../../assets/img/svg/vk.svg'
+import y from '../../assets/img/svg/youtube.svg'
+import { useBodyScrollTop } from '../../hooks/use-body-scroll-top'
 import styles from './styles.module.scss'
 import imgNot from './404.png'
-import {useBodyScrollTop} from '../../hooks/use-body-scroll-top'
 
 
 

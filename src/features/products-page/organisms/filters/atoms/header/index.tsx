@@ -1,5 +1,5 @@
 import React from 'react'
-import { Close, Arrow } from '../../../../../../media/img/svg/icons'
+import { Close, Arrow } from '../../../../../../assets/img/svg/icons'
 import styles from './styles.module.scss'
 
 
