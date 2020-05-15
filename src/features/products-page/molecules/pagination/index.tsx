@@ -30,6 +30,8 @@ export function Pagination() {
   }, [currentPage, total_pages, setCurrentPage])
   
   
+  if (total_pages <= 1) return null
+  
   
   return (
     <div className={styles.Pagination}>
