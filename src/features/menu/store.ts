@@ -21,3 +21,7 @@ export const $forceCloseState = createStore(false)
 $forceCloseState.on($setForceClose, (_, payload) => payload)
 $showMenu.on($setForceClose, () => false)
 
+
+$menuContent.on($showMenu.updates, (_, payload) => {
+  if (!payload) return null
+})
