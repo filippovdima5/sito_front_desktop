@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import {namesCategory} from '../../../constants/category-keys'
-import {Button} from '../../../ui/button'
+import { namesCategory } from '../../../constants/category-keys'
+import { Button } from '../../../ui/button'
 
 
 const saleBanners = [

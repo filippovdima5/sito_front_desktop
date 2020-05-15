@@ -2,13 +2,11 @@ import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useEvent , useStore } from 'effector-react/ssr'
 import { $goToONlySomeFilter } from '../../../products-page/store'
-import { $popularBrands } from '../../../../stores/env'
 import { $genderInfo } from '../../../../stores/user'
 import styles from './styles.module.scss'
 
 
 export function BrandsContent() {
-  const brands = useStore($popularBrands)
   const genderInfo = useStore($genderInfo)
   const goToONlySomeFilter = useEvent($goToONlySomeFilter)
   
@@ -20,7 +18,7 @@ export function BrandsContent() {
   
   return (
     <div  className={styles.brandsContent}>
-      {brands.map((item, index) => (
+      {[].map((item, index) => (
         <Link
           onClick={() => goToONlySomeFilter({ key: 'brands', value: item })}
           key={index} to={`/products/${sexLine}?brands=${item}`} className={styles.brand}>

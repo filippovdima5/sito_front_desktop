@@ -1,7 +1,4 @@
-import { createStore, createEvent,  combine, createEffect, guard, merge } from 'lib/effector'
-import { sexStrToId } from '../lib'
-import { SeoReqParams, SeoRequest } from '../api/types'
-import { api } from '../api'
+import { createStore, createEvent,  combine } from 'lib/effector'
 import { $sexLine } from './user'
 
 
@@ -42,51 +39,4 @@ export const $baseLink = combine({ $search, $baseRoute, $sexLine }, ({ $search, 
 })
 
 
-// region Seo:
-export const $seo = createStore<SeoRequest>({
-  title: 'SITO - сайт выгодных скидок. Каталог акций в интернет-магазинах.',
-  description: 'Все скидки рунета на SITO: поиск выгодных цен на одежду, обувь и аксессуары в интернет-магазинах. Агрегатор скидок – акции от 50%'
-})
-const fetchSeo = createEffect({
-  handler: (params: SeoReqParams) => api.seo.getSeo(params)
-})
-$seo.on(fetchSeo.done, (state, { result: { data } }) => data)
-
-
-const seoParams =  $baseLink.map(clock => {
-  const sexId = clock.linkParams.sexLine !== null ? sexStrToId(clock.linkParams.sexLine) : null
-  const path = clock.linkParams.baseRoute as string
-  const { search } = clock.linkParams
-  
-  return ({ sexId, path, search })
-})
-
-guard({
-  source: seoParams,
-  filter: () => true,
-  target: fetchSeo
-})
-// endregion Seo
-
-
-// region PopularChamps:
-export const $popularBrands = createStore<Array<string>>([])
-export const $setLoadPopularBrands = createEvent<{ sexId: 1 | 2 | null }>()
-export const $loadingPopularBrands = createStore<boolean>(false)
-
-const fetchPopularBrands = createEffect({
-  handler: (params: { sexId: 1 | 2 | null }) => api.simple.popularBrands(params)
-})
-
-$popularBrands.on(fetchPopularBrands.done, (_, { result: { data } }) => data)
-$loadingPopularBrands.on(fetchPopularBrands.pending, () => true)
-$loadingPopularBrands.on(merge([fetchPopularBrands.done, fetchPopularBrands.fail]), () => false)
-
-
-guard({
-  source: $setLoadPopularBrands.map(payload => payload),
-  filter: () => true,
-  target: fetchPopularBrands
-})
-// endregion PopularChamps
 
