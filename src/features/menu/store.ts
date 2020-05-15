@@ -1,7 +1,7 @@
 import { restore, createEvent, createStore } from 'lib/effector'
 
 
-type MenuContent = 'BRANDS' | 'MEN_CATEGORIES' | 'WOMEN_CATEGORIES'
+export type MenuContent = 'BRANDS' | 'MEN_CATEGORIES' | 'WOMEN_CATEGORIES'
 
 
 export const $setShowMenu = createEvent<boolean>()
