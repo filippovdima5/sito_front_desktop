@@ -1,13 +1,16 @@
 .brands{
   width: 100%;
-  margin-right: auto;
-  margin-left: auto;
   box-sizing: border-box;
+
+  .ul{
+    margin: -5px;
+  }
 
   .charGroup{
     width: 100%;
     box-sizing: border-box;
     padding: 5px;
+
 
 
     .charGroupContainer{

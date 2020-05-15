@@ -56,7 +56,7 @@ export function BrandsPage({ sexId }: {sexId: 1 | 2} ) {
       
       <div className={styles.brands}>
         {loader && <Loader/>}
-        <ul>
+        <ul className={styles.ul}>
           <Masonry
             breakpointCols={4}
             className={styles.myMasonryGrid}
@@ -81,7 +81,6 @@ export function BrandsPage({ sexId }: {sexId: 1 | 2} ) {
 const S = {
   Wrap: styled.div`
     width: 100%;
-    margin: 30px 0 60px;
     
 `,
   
