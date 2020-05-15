@@ -1,90 +1,76 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import { Link , useLocation } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
 import styled from 'styled-components'
-import {$setNavActive, $setMenuContent, $setForceClose, $menuContent, MenuContent} from '../store'
-import { $setGender } from '../../../stores/user'
+import { $setNavActive, $setMenuContent, $setForceClose, $menuContent, MenuContent } from '../store'
 import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
 
 
 const config: Array<{ title: string, content: MenuContent, url: string }> = [
-  { title: 'Бренды', content: 'BRANDS', url: '/brands' },
   { title: 'Мужское', content: 'MEN_CATEGORIES', url: '/men/products' },
   { title: 'Женское', content: 'WOMEN_CATEGORIES', url: '/women/products' }
 ]
+
+
+function BrandItem({ pathname }: { pathname: string }) {
+  const menuContent  = useStore($menuContent)
+  const setMenuContent = useEvent($setMenuContent)
+  const setForceClose = useEvent($setForceClose)
+  
+  
+  const sex = useMemo(() => {
+    if (pathname.includes('/men')) return 'men'
+    if (pathname.includes('/women')) return  'women'
+    return null
+  }, [ pathname ])
+  
+  
+  const url = useMemo(() => `/${sex}/brands`, [sex])
+  
+  if (sex === null) return null
+  
+  return (
+    <S.NavItem onMouseOver={() => setMenuContent('BRANDS')}>
+      <Link onClick={() => setForceClose(true)} className='link' to={url}>
+        Бренды
+      </Link>
+      <S.ActiveBorder
+        hover={menuContent === 'BRANDS'}
+        active={pathname === url}
+      />
+    </S.NavItem>
+  )
+}
 
 
 export function Navigation() {
   useMouseOpenMenu(200)
   const setNavActive = useEvent($setNavActive)
   const setMenuContent = useEvent($setMenuContent)
-  const setGender = useEvent($setGender)
   const setForceClose = useEvent($setForceClose)
   const menuContent  = useStore($menuContent)
   const { pathname } = useLocation()
   
   
-
-  
   return (
     <S.Navigation
       onMouseOver={() => setNavActive(true)}
       onMouseOut={() => setNavActive(false)}>
-      <S.NavItem
-        onMouseOver={() => setMenuContent('BRANDS')}>
-        <Link
-          onClick={() => setForceClose(true)}
-          to={'/brands'}
-          className='link'
-        >
-          Бренды
-        </Link>
-        
-        <S.ActiveBorder
-          hover={menuContent === 'BRANDS'}
-          active={pathname.includes('/brands')}/>
-      </S.NavItem>
-  
-  
-      <li
-        onMouseOver={() => setMenuContent('MEN_CATEGORIES')}
-        className={styles.navItem}>
-        <Link
-          onClick={() => {
-            setGender(1)
-            setForceClose(true)
-          }}
-          to={'/men/products'}
-          className={styles.navLink}
-        >
-            Мужское
-        </Link>
-  
-        <S.ActiveBorder
-          hover = {menuContent === 'MEN_CATEGORIES'}
-          active={pathname.includes('/men/products') && !pathname.includes('/women/products')}/>
-      </li>
-        
-        
-      <li
-        onMouseOver={() => setMenuContent('WOMEN_CATEGORIES')}
-        className={styles.navItem}>
-        <Link
-          onClick={() => {
-            setGender(2)
-            setForceClose(true)
-          }}
-          to={'/women/products'}
-          className={styles.navLink}
-        >
-            Женское
-        </Link>
-  
-        <S.ActiveBorder
-          hover = {menuContent === 'WOMEN_CATEGORIES'}
-          active={pathname.includes('/women/products')}/>
-      </li>
       
+      
+      <BrandItem pathname={pathname}/>
+      
+      {config.map(({ title, url, content }) => (
+        <S.NavItem key={title} onMouseOver={() => setMenuContent(content)}>
+          <Link onClick={() => setForceClose(true)} className='link' to={url}>
+            {title}
+          </Link>
+          <S.ActiveBorder
+            hover={menuContent === content}
+            active={pathname === url}
+          />
+        </S.NavItem>
+      ))}
     </S.Navigation>
   )
 }
