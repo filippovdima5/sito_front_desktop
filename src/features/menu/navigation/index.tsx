@@ -1,93 +1,123 @@
-import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import React, {useMemo} from 'react'
+import { Link , useLocation } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { $setNavActive, $setMenuContent, $setForceClose } from '../store'
-import { $genderInfo, $setGender } from '../../../stores/user'
-import { $baseRoute } from '../../../stores/env'
+import styled from 'styled-components'
+import { $setNavActive, $setMenuContent, $setForceClose, $menuContent, MenuContent } from '../store'
 import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
-import { sexIdToStr } from '../../../helpers/lib'
-import styles from './styles.module.scss'
 
 
-function ActiveBorder({ active }: { active: boolean }) {
-  if (!active) return null
-  return (<div className={styles.activeBorder}/>)
-}
+const config: Array<{ title: string, content: MenuContent, url: string }> = [
+  { title: 'Мужское', content: 'MEN_CATEGORIES', url: '/men/products' },
+  { title: 'Женское', content: 'WOMEN_CATEGORIES', url: '/women/products' }
+]
 
-export function Navigation() {
-  useMouseOpenMenu(200)
-  const genderInfo = useStore($genderInfo)
-  const baseRoute = useStore($baseRoute)
-  const setNavActive = useEvent($setNavActive)
+
+function BrandItem({ pathname }: { pathname: string }) {
+  const menuContent  = useStore($menuContent)
   const setMenuContent = useEvent($setMenuContent)
-  const setGender = useEvent($setGender)
   const setForceClose = useEvent($setForceClose)
   
   
-  const sexId = useMemo(() => {
-    if (genderInfo === null) return null
-    return genderInfo.sexId
-  }, [genderInfo])
+  const sex = useMemo(() => {
+    if (pathname.includes('/men')) return 'men'
+    if (pathname.includes('/women')) return  'women'
+    return null
+  }, [ pathname ])
   
-
+  
+  const url = useMemo(() => `/${sex}/brands`, [sex])
+  
+  if (sex === null) return null
   
   return (
-    <ul
-      onMouseOver={() => setNavActive(true)}
-      onMouseOut={() => setNavActive(false)}
-      className={styles.navigation}>
-      <li
-        onMouseOver={() => setMenuContent('BRANDS')}
-        className={styles.navItem}>
-        <Link
-          onClick={() => setForceClose(true)}
-          to={`/brands/${sexId !== null ? sexIdToStr(sexId) : ''}`}
-          className={styles.navLink}
-        >
-          Бренды
-        </Link>
-        
-        <ActiveBorder active={baseRoute === 'brands'}/>
-      </li>
-  
-  
-      <li
-        onMouseOver={() => setMenuContent('MEN_CATEGORIES')}
-        className={styles.navItem}>
-        <Link
-          onClick={() => {
-            setGender(1)
-            setForceClose(true)
-          }}
-          to={'/products/men'}
-          className={styles.navLink}
-        >
-            Мужское
-        </Link>
-  
-        <ActiveBorder
-          active={((baseRoute === 'products') && (sexId === 1))}/>
-      </li>
-        
-        
-      <li
-        onMouseOver={() => setMenuContent('WOMEN_CATEGORIES')}
-        className={styles.navItem}>
-        <Link
-          onClick={() => {
-            setGender(2)
-            setForceClose(true)
-          }}
-          to={'/products/women'}
-          className={styles.navLink}
-        >
-            Женское
-        </Link>
-  
-        <ActiveBorder
-          active={((baseRoute === 'products') && (sexId === 2))}/>
-      </li>
-      
-    </ul>
+    <S.NavItem onMouseOver={() => setMenuContent('BRANDS')}>
+      <Link onClick={() => setForceClose(true)} className='link' to={url}>
+        Бренды
+      </Link>
+      <S.ActiveBorder
+        hover={menuContent === 'BRANDS'}
+        active={pathname === url}
+      />
+    </S.NavItem>
   )
+}
+
+
+export function Navigation() {
+  useMouseOpenMenu(200)
+  const setNavActive = useEvent($setNavActive)
+  const setMenuContent = useEvent($setMenuContent)
+  const setForceClose = useEvent($setForceClose)
+  const menuContent  = useStore($menuContent)
+  const { pathname } = useLocation()
+  
+  
+  return (
+    <S.Navigation
+      onMouseOver={() => setNavActive(true)}
+      onMouseOut={() => setNavActive(false)}>
+      
+      
+      <BrandItem pathname={pathname}/>
+      
+      {config.map(({ title, url, content }) => (
+        <S.NavItem key={title} onMouseOver={() => setMenuContent(content)}>
+          <Link onClick={() => setForceClose(true)} className='link' to={url}>
+            {title}
+          </Link>
+          <S.ActiveBorder
+            hover={menuContent === content}
+            active={pathname === url}
+          />
+        </S.NavItem>
+      ))}
+    </S.Navigation>
+  )
+}
+
+
+const S = {
+  Navigation: styled.ul`
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      box-sizing: border-box;
+      
+      & .link {
+      height: 100%;
+      box-sizing: border-box;
+      color: #272727;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.67;
+      text-transform: uppercase;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      text-decoration: none;
+      padding: 0 17px;
+      }
+`,
+  
+  
+  NavItem: styled.li`
+    position: relative;
+    margin-right: 52px;
+    box-sizing: border-box;
+`,
+  
+  ActiveBorder: styled.div<{ active: boolean, hover: boolean }>`
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    left: 0;
+    right: 0;
+    background-color: ${({ active }) => active ? 'rgba(6, 10, 15, 1)' : 'rgba(6, 10, 15, 0.3)'};
+    visibility: ${({ active, hover }) => (!active && !hover) ? 'hidden' : 'visible'};
+`
 }
