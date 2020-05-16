@@ -2,7 +2,6 @@ import { createGlobalStyle } from 'styled-components'
 
 
 export function fontFace(name: string, src: string, fontWeight: string | number = 'normal', fontStyle = 'normal'){
-  /* eslint-disable */
   return `
       @font-face{
           font-family: "${name}";
@@ -13,13 +12,28 @@ export function fontFace(name: string, src: string, fontWeight: string | number 
           font-style: ${fontStyle};
           font-weight: ${fontWeight};
       }
-  `;
+  `
 }
 
 
 export const GlobalStyle = createGlobalStyle`
+    // RALEWAY:
     ${fontFace('Raleway', 'raleway/ralewaythin', 100, 'normal')}
+    
+    
     ${fontFace('Raleway', 'raleway/ralewayregular', 400, 'normal')}
     ${fontFace('Raleway', 'raleway/ralewaymedium', 500, 'normal')}
     ${fontFace('Raleway', 'raleway/ralewaybold', 600, 'normal')}
+    
+    // CIRCE:
+    ${fontFace('Circe', 'сirce/Circe-Thin', 100, 'normal')}
+    
+    ${fontFace('Circe', 'сirce/Circe-Light', 300, 'normal')}
+    ${fontFace('Circe', 'сirce/Circe-Regular', 400, 'normal')}
+    ${fontFace('Circe', 'сirce/Circe-ExtraBold', 600, 'normal')}
+    
+    // open-sans:
+    ${fontFace('Circe', 'open-sans/OpenSans-Light', 300, 'normal')}
+    ${fontFace('Circe', 'open-sans/OpenSans-Regular', 400, 'normal')}
+    ${fontFace('Circe', 'open-sans/OpenSans-Bold', 600, 'normal')}
 `

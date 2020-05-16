@@ -181,7 +181,7 @@ const S = {
     box-sizing: border-box;
     border-radius: 5px;
     background-color: transparent;
-    font-family:  sans-serif;
+    font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;

@@ -92,7 +92,7 @@ const S = {
 `,
   
   Title: styled.h2`
-    font-family: 'Abhaya Libre', serif;
+    font-family: 'Circe', sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 70px;

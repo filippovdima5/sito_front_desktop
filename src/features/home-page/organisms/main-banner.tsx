@@ -99,10 +99,10 @@ const S = {
 `,
   
   Title: styled.h1`
-    font-family: 'Abhaya Libre', serif;
+    font-family: 'Circe', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 48px;
+    font-size: 50px;
     line-height: 42px;
     width: 100%;
     color: #FFFFFF;

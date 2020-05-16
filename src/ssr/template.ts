@@ -26,17 +26,9 @@ export const template = (
     <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#818890">
     
     
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500;600;700&display=swap" rel="stylesheet">
-
-    
     ${styleTags}
     
-    
-
-    
-    
+   
     <!— Google Tag Manager —>
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
