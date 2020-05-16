@@ -1,42 +1,59 @@
 .brandsContent{
-  padding: 5px 15px 0;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  font-size: 1rem;
-  font-weight: 400;
   display: flex;
+
+  padding: 5px 15px 0;
   flex-direction: column;
   flex-wrap: wrap;
 
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  color: rgba(0, 0, 0, 0.8);
 
+
+
+  // text item:
   .brand{
+    margin: 1px 0;
+    height: 30px;
+    line-height: 30px;
+    display: table;
+    box-sizing: border-box;
+
+
     cursor: pointer;
     width: 15%;
-    height: 28px;
-    line-height: 28px;
     text-align: left;
     flex-grow: 1;
-    display: table;
     white-space: nowrap;
     padding-left: 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .brand:hover{
     background-color: rgba(0, 0, 0, 0.05);
   }
 
+  // Жирный текст:
   .allBrand{
-    cursor: pointer;
-    display: table;
-    width: 140px;
-    height: 18px;
-    line-height: 18px;
-    text-align: center;
-    flex-grow: 1;
+    box-sizing: border-box;
     font-weight: bold;
     font-size: 18px;
+    line-height: 45px;
+    height: 45px;
+
+    cursor: pointer;
+    padding-left: 7px;
+
+    display: table;
+    flex-grow: 1;
     padding-top: 10px;
-    border-bottom: 1px dashed rgb(217, 218, 218);
+    text-decoration: underline;
   }
 }

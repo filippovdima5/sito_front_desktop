@@ -4,7 +4,7 @@ import { apiV2 } from '../api'
 import { SexId } from '../types'
 
 
-const limit = 48
+const limit = 45
 
 export const $popularBrands = createStore<Array<string>>([])
 export const $fetchPopularBrands = createEvent<{ sexId: SexId }>()
