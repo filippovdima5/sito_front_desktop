@@ -1,6 +1,6 @@
 import { createStore, createEffect,  guard,  createEvent, merge, sample } from 'lib/effector'
-import { UserRequest} from '../api/types'
-import { api } from '../api'
+import { UserRequest} from '../api/v1/types'
+import { api } from '../api/v1'
 import config from '../config'
 
 

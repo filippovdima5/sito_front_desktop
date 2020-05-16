@@ -6,12 +6,18 @@ function getApiEndpoint() {
   return '/api/'
 }
 
+function getApiV2Endpoint() {
+  if (SERVER) return ''
+  return '/api/v2/'
+}
+
 
 export default {
   ssr: SERVER,
   api: {
     main: {
-      endpoint: getApiEndpoint()
+      endpoint: getApiEndpoint(),
+      v2: getApiV2Endpoint()
     }
   }
 }

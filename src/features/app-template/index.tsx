@@ -5,27 +5,31 @@ import { Pages } from '../../pages'
 import { Footer } from '../footer'
 import config from '../../config'
 import BackToTop from '../../commons/molecules/back-to-top'
+import { GlobalStyle } from '../../assets/styles/global-styled'
 
 
 export function AppTemplate() {
   return (
-    <div className={styles.app}>
-      <header className={styles.header}>
-        <Header/>
-      </header>
+    <>
+      <GlobalStyle/>
+      <div className={styles.app}>
+        <header className={styles.header}>
+          <Header/>
+        </header>
     
     
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <Pages/>
-        </main>
+        <div className={styles.container}>
+          <main className={styles.main}>
+            <Pages/>
+          </main>
       
-        <footer className={styles.footer}>
-          <Footer/>
-        </footer>
-      </div>
+          <footer className={styles.footer}>
+            <Footer/>
+          </footer>
+        </div>
     
-      {!config.ssr && <BackToTop/>}
-    </div>
+        {!config.ssr && <BackToTop/>}
+      </div>
+    </>
   )
 }

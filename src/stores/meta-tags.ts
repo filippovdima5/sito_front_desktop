@@ -1,6 +1,6 @@
 import { createEffect, createStore } from 'lib/effector'
-import { SeoReqParams } from '../api/types'
-import { api } from '../api'
+import { SeoReqParams } from '../api/v1/types'
+import { api } from '../api/v1'
 
 
 export const $metaTags = createStore({

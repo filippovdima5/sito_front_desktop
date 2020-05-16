@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useEvent, useStore } from 'effector-react/ssr'
-import { ShortProduct } from '../../../api/types'
+import { ShortProduct } from '../../../api/v1/types'
 import { Heart } from '../../../assets/svg'
 import { $likes, $setLike } from '../../../stores/user'
 import { CardImage } from './molecules'

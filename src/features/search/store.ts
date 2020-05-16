@@ -1,6 +1,6 @@
 import { combine, createEffect, createEvent, createStore, guard, restore } from 'lib/effector'
-import { api } from '../../api'
-import { MainSearchResultItem, MainSearchReqParams } from '../../api/types'
+import { api } from '../../api/v1'
+import { MainSearchResultItem, MainSearchReqParams } from '../../api/v1/types'
 import { $sexId } from '../../stores/user'
 
 

@@ -1,28 +1,26 @@
 import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom'
-import { useEvent , useStore } from 'effector-react/ssr'
-import { $goToONlySomeFilter } from '../../../products-page/store'
-import { $genderInfo } from '../../../../stores/user'
+import { Link , useLocation } from 'react-router-dom'
+import {  useStore } from 'effector-react/ssr'
+import { $popularBrands } from '../../../../stores/popular-brands'
+import { findSexInPath } from '../../../../lib'
 import styles from './styles.module.scss'
 
 
 export function BrandsContent() {
-  const genderInfo = useStore($genderInfo)
-  const goToONlySomeFilter = useEvent($goToONlySomeFilter)
+  const { pathname } = useLocation()
+  const sex = useMemo(() => findSexInPath(pathname), [pathname])
+  const brands = useStore($popularBrands)
   
-  const sexLine = useMemo(() => {
-    if (genderInfo === null) return ''
-    return genderInfo.sexLine ?? ''
-  }, [genderInfo])
-  
+  // todo: Дизайн: Нужна заглушка
+  if (sex === null) return (
+    <div>Нет информации</div>
+  )
   
   return (
     <div  className={styles.brandsContent}>
-      {[].map((item, index) => (
-        <Link
-          onClick={() => goToONlySomeFilter({ key: 'brands', value: item })}
-          key={index} to={`/products/${sexLine}?brands=${item}`} className={styles.brand}>
-          {item}
+      {brands.map(brand => (
+        <Link key={brand} to={`/${sex}/products/?brands='${brand}'`} className={styles.brand}>
+          {brand}
         </Link>
       ))}
       <Link to={'/brands'} className={styles.allBrand}>Показать все бренды</Link>

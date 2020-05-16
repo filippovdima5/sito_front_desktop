@@ -42,7 +42,7 @@
     "start:client": "react-scripts start",
     "start:ssr": "node  build/server.js"
   },
-  "proxy": "https://sito.store",
+  "proxy": "http://localhost:8080",
   "browserslist": {
     "production": [
       ">0.2%",

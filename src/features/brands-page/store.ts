@@ -1,6 +1,6 @@
 import {  createEffect, createEvent, createStore, merge, guard, sample } from 'lib/effector'
-import { AllBrandsRequest } from '../../api/types'
-import { api } from '../../api'
+import { AllBrandsRequest } from '../../api/v1/types'
+import { api } from '../../api/v1'
 import { $sexId } from '../../stores/user'
 
 

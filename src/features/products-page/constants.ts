@@ -1,4 +1,4 @@
-import { TypesSortProducts } from '../../api/types'
+import { TypesSortProducts } from '../../api/v1/types'
 
 
 export const sortersName = {
