@@ -20,18 +20,14 @@ $sexId.on($setPathname, (sex, pathname) => {
 })
 
 
-// При ресете пола нужно подгружать инфу для нужного пола:
-// На сервере это сработает один раз, когда мы установим пол,
-// собственно это и нужно
 // а на клиенте ничего не загрузится, так как стор уже будет задан,
-// а как раз при смене пола на клиенте все подгрузится
-$sexId.updates.watch(payload => console.log(payload, 'RESET_SEX'))
+const $resetSexEvent = $sexId.updates
 
 
 
 // region events by update sexId:
 guard({
-  source: $sexId.updates.map(sexId => ({ sexId })),
+  source: $resetSexEvent.map(sexId => ({ sexId })),
   filter: $sexId.map(sexId => sexId !== null),
   target: $fetchPopularBrands,
 })

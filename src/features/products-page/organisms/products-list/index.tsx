@@ -1,6 +1,6 @@
 import React  from 'react'
 import { useStore } from 'effector-react/ssr'
-import { $productsStore, $loadingProducts, $statusPageProducts } from '../../store'
+import { $loading, $statusPageProducts, $products } from '../../new-store'
 import { ProductCard, SkeletonCard } from '../../../../commons/organisms/product-card'
 import config from '../../../../config'
 import { StatusPage } from '../../types'
@@ -15,7 +15,7 @@ function SkeletonsList({ length }: { length: number }) {
 }
 
 function ProductsList() {
-  const data = useStore($productsStore)
+  const data = useStore($products)
   return (
     <>
       {data.map(item => (
@@ -42,7 +42,7 @@ function Controller({ status, loading }: { status: StatusPage, loading: boolean 
 
 function List() {
   const status = useStore($statusPageProducts)
-  const loading = useStore($loadingProducts)
+  const loading = useStore($loading)
 
   
   return (

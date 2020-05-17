@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useEvent, useStore } from 'effector-react/ssr'
-import { ShortProduct } from '../../../api/v1/types'
+import { ShortProduct } from '../../../api/v2/types'
 import { Heart } from '../../../assets/svg'
 import { $likes, $setLike } from '../../../stores/user'
 import { CardImage } from './molecules'
@@ -16,7 +16,7 @@ const viewCost = (cost: number): string => {
 }
 
 
-export function ProductCard({ id, brand, img, oldprice, price, sale, title, sizes  }: ShortProduct) {
+export function ProductCard({ id, brand, images, oldPrice, price, sale, title, sizes  }: ShortProduct) {
   const likeIds = useStore($likes)
   const setLike = useEvent($setLike)
   
@@ -36,7 +36,7 @@ export function ProductCard({ id, brand, img, oldprice, price, sale, title, size
         
         <S.CardInner>
           <S.ImageWrap>
-            <CardImage src={img[0]} title={title}/>
+            <CardImage src={images[0]} title={title}/>
           </S.ImageWrap>
           
           <S.MetaInfoWrap>
@@ -45,7 +45,7 @@ export function ProductCard({ id, brand, img, oldprice, price, sale, title, size
 
             
             <S.PriceInfo className='meta-item'>
-              <span className='old-price'>{viewCost(oldprice)} RUB</span>
+              <span className='old-price'>{viewCost(oldPrice)} RUB</span>
               <span className='price'>{viewCost(price)} RUB</span>
             </S.PriceInfo>
             

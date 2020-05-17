@@ -1,6 +1,7 @@
 import axios, { AxiosPromise } from 'axios'
 import config from '../../config'
-import { PopularBrandsParams } from './types'
+import { GetProductsParams, PaginateResponse, PopularBrandsParams, ShortProduct } from './types'
+import { formQueryGetProductsList } from './lib'
 
 
 export const request = axios.create({
@@ -14,7 +15,10 @@ export const request = axios.create({
 
 export const api = {
   getPopularBrands: (params: PopularBrandsParams): AxiosPromise<Array<string>> => request
-    .get(`/popular-brands?sex_id=${params.sexId}&limit=${params.limit}`)
+    .get(`/popular-brands?sex_id=${params.sexId}&limit=${params.limit}`),
+  
+  getProductsList: (params: GetProductsParams): AxiosPromise<PaginateResponse<ShortProduct>> => request
+    .get(`/products${formQueryGetProductsList(params)}`)
 }
 
 
