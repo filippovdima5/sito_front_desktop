@@ -1,15 +1,13 @@
-import { TypesSortProducts } from '../../api/v1/types'
 import { categoryKeys, unisexCategoryKeys } from '../../constants'
 import { SexId } from '../../types'
 
 
 export const sortTypes = {
-  'sale_up' : 'Сначала большие скидки',
-  'create_up': 'Сначала новые',
-  'price_up': 'Сначала подешевле',
-  'sale_down' : 'Сначала скидки поменьше',
-  'price_down': 'Сначала подороже',
-  //'create_down': { createdAt: -1 },
+  sale_up : 'Сначала большие скидки',
+  create_up: 'Сначала новые',
+  price_up: 'Сначала подешевле',
+  sale_down : 'Сначала скидки поменьше',
+  price_down: 'Сначала подороже',
 } as const
 
 
@@ -27,14 +25,6 @@ export const defaultFields = {
   sale_to: 99
 } as const
 
-
-
-
-export const sortersName = {
-  update_up: 'По новизне',
-  price_up: 'По цене',
-  sale_up: 'По скидке'
-} as Record<TypesSortProducts, string>
 
 
 

@@ -1,13 +1,10 @@
-import { createStore, createEvent, guard, restore } from 'lib/effector'
+import { createStore, createEvent, guard } from 'lib/effector'
 import { SexId } from '../types'
 import { findSexIdInPath } from '../lib'
 import { $fetchPopularBrands } from './popular-brands'
 
 
 // region mainState:
-export const $setPush = createEvent<any>()
-export const $push = restore($setPush, (url: string) => { console.info(url) })
-
 export const $setPathname = createEvent<string>()
 //const $pathname = restore($setPathname, '/')
 

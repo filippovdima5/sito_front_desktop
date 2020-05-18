@@ -1,10 +1,11 @@
 import { createStore, createEvent, sample, createEffect, guard, forward, merge } from 'lib/effector'
 import { createThrottle } from 'effector-throttle'
+import { createDebounce } from 'effector-debounce'
 import { GetProductsParams, ShortProduct } from '../../api/v2/types'
 import config from '../../config'
 import { apiV2 } from '../../api'
 import { SexId } from '../../types'
-import {  parseUrl } from './lib'
+import { encodeProductsUrl, parseUrl } from './lib'
 import { QueryFields, StatusPage } from './types'
 import { defaultFields, sortTypes, valuesOfFilterButtons } from './constants'
 
@@ -19,6 +20,7 @@ $allFields.on($setFields, (state, payload) => {
 
 
 // endregion
+
 
 
 // region stores with data:
@@ -69,11 +71,25 @@ $statusPageProducts.on(fetchProductsList.done, (_, { result: { data: { items } }
 
 
 // region pushToUrlString:
+export const $setReplace = createEvent<any>()
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const $replace = createStore<any>(() => {})
+$replace.on($setReplace, (_, p) => p)
+
+
+const $setPushUrl = createEvent<QueryFields>()
+const $debouncePushUrl = createDebounce($setPushUrl, 2000)
+
+sample($replace, $debouncePushUrl, (replace, query) => ({ query, replace }))
+  .watch(({ query, replace }) => {
+    if (config.ssr) return
+    const url = encodeProductsUrl(query)
+    replace(url)
+  })
 // endregion
 
 
 
-/** События, которые генерируют push, fetch or setFields */
 // region mountPage:
 const $mountInServer = createStore<boolean>(false)
 export const $mountProductsPage = createEvent<{ pathname: string, search: string }>()
@@ -94,8 +110,6 @@ $paramsForMount.on($eventForMount, (state, urlParams) => {
 
 forward({ from: $paramsForMount.updates, to: [$setFetchProducts, $setFields] })
 // endregion
-
-
 
 
 
@@ -156,8 +170,12 @@ $viewFilterButtons.on($filtersFields, (state, payload) => {
 
 
 
+// region addFilterValue
+// endregion
 
-// region
+
+
+// region deleteFilterValue:
 export const $deleteOneFilterValue = createEvent<{ key: keyof QueryFields, value: string | number | boolean}>()
 forward({
   from: sample($allFields, $deleteOneFilterValue, (query, { key, value }) => {
@@ -172,7 +190,7 @@ forward({
       default: return null
     }
   }),
-  to: [ $setFields, $throttleFetchProducts ]
+  to: [ $setFields, $throttleFetchProducts, $setPushUrl ]
 })
 // endregion
 
@@ -194,33 +212,4 @@ forward({
 
 
 
-
-
-
-// const $sexId = createStore<SexId>(defaultFields['sex_id'])
-// const $limit = createStore<number>(defaultFields['limit'])
-// const $sort = createStore<keyof typeof sortTypes>(defaultFields['sort'])
-// const $page = createStore<number>(defaultFields['page'])
-// const $categories = createStore<Array<keyof typeof unisexCategoryKeys> | Array<number>>(defaultFields['categories'])
-// const $brands = createStore<Array<string>>(defaultFields['brands'])
-// const $sizes = createStore<Array<string>>(defaultFields['sizes'])
-// const $priceFrom = createStore<number>(defaultFields['price_from'])
-// const $priceTo = createStore<number>(defaultFields['price_to'])
-// const $saleFrom = createStore<number>(defaultFields['sale_from'])
-// const $saleTo = createStore<number>(defaultFields['sale_to'])
-
-
-// const $allFields = createStore<QueryFields>({})
-// $allFields
-//   .on($sexId.updates, (state, sex_id) => ({ ...state, sex_id }))
-//   .on($limit.updates, (state, limit) => ({ ...state, limit }))
-//   .on($sort.updates, (state, sort) => ({ ...state, sort }))
-//   .on($page.updates, (state, page) => ({ ...state, page }))
-//   .on($categories.updates, (state, categories) => ({ ...state, categories }))
-//   .on($brands.updates, (state, brands) => ({ ...state, brands }))
-//   .on($sizes.updates, (state, sizes) => ({ ...state, sizes }))
-//   .on($priceFrom.updates, (state, price_from) => ({ ...state, price_from }))
-//   .on($priceTo.updates, (state, price_to) => ({ ...state, price_to }))
-//   .on($saleFrom.updates, (state, sale_from) => ({ ...state, sale_from }))
-//   .on($saleTo.updates, (state, sale_to) => ({ ...state, sale_to }))
 

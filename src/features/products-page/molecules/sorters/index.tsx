@@ -43,7 +43,7 @@ export function Sorters() {
         <S.FiltersContainer>
           <div className='filters-scroll'>
             { filterButtons.map(({ value, key, label }) => (
-              <S.FilterButton onClick={() => deleteOneFilterValue({ key, value })} key={key}>
+              <S.FilterButton onClick={() => deleteOneFilterValue({ key, value })} key={label}>
                 {label}
                 <Close className='close-svg'/>
               </S.FilterButton>
