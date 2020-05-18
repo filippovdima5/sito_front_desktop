@@ -1,42 +1,10 @@
-import { SexId } from '../../types'
-import {  unisexCategoryKeys } from '../../constants'
-import { findSexIdInPath } from '../../lib'
-import { sortTypes } from './constants'
+import { findSexIdInPath, sexIdToStr } from '../../lib'
+import { encodeNumberArray, encodeStringArray } from '../../api/v2/lib'
+import { defaultFields, sortTypes } from './constants'
+import { QueryFields } from './types'
 
 
-// region
-type QueryFields = {
-  sex_id?: SexId,
-  price_from?: number,
-  price_to?: number,
-  sale_from?: number,
-  sale_to?: number,
-  page?: number,
-  limit?: number,
-  brands?: Array<string>,
-  sizes?: Array<string>,
-  categories?: Array<keyof typeof unisexCategoryKeys>,
-  sort?: keyof typeof sortTypes,
-}
-
-
-export const defaultFields = {
-  sex_id: (1 as SexId),
-  limit: 36,
-  sort: ('create_up' as keyof typeof sortTypes),
-  page: 1,
-  categories: ([] as Array<keyof typeof unisexCategoryKeys> | Array<number>),
-  brands: ([] as Array<string>),
-  sizes: ([] as Array<string>),
-  price_from: 1,
-  price_to: 30000,
-  sale_from: 30,
-  sale_to: 99
-} as const
-// endregion
-
-
-// region
+// region parse uri:
 function parseNumber(key: string, value: string, query: any): void {
   if (!isNaN(Number(value))) query[key as keyof QueryFields] = Number(value)
 }
@@ -54,10 +22,8 @@ function parseArrayString(key: string, value: string, query: any): void {
     if (res.length > 0) query[key as keyof QueryFields] = res
   }
 }
-// endregion
 
 
-// region parse:
 export const parseUrl = (pathname: string, search: string ): QueryFields => {
   const query: QueryFields = { sex_id: findSexIdInPath(pathname) }
   
@@ -96,6 +62,49 @@ export const parseUrl = (pathname: string, search: string ): QueryFields => {
   })
   
   return query
+}
+// endregion
+
+
+
+// region encode uri:
+const encodeNumber = (key: string, value?: number): string | '' => {
+  if (!value) return ''
+  if (defaultFields[key as keyof QueryFields] === value) return ''
+  return `${key}=${value.toString()}&`
+}
+
+const encodeString = (key: string, value?: string): string | '' => {
+  if (!value) return ''
+  if (defaultFields[key as keyof QueryFields] === value) return ''
+  return `${key}=${value}&`
+}
+
+
+
+export const encodeProductsUrl = (params: QueryFields): string | null => {
+  if (!params['sex_id']) return null
+  const pathname = `/${sexIdToStr(params['sex_id'])}/products`
+  
+  let search = ''
+  Object.entries(params).forEach(([key, value]) => {
+    switch (key) {
+      case 'price_from':
+      case 'price_to':
+      case 'sale_from':
+      case 'sale_to':
+      case 'page':
+      case 'limit': return (search = search + encodeNumber(key, value as number))
+      case 'brands':
+      case 'sizes': return (search = search + encodeStringArray(key, value as Array<string>))
+      case 'categories': return (search = search + encodeNumberArray(key, value as Array<number>))
+      default: return (search = search + encodeString(key, value as string))
+    }
+  })
+  
+  if (!search) return pathname
+  search = search.slice(0, -1)
+  return `${pathname}?${search}`
 }
 // endregion
 

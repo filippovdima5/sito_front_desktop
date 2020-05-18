@@ -1,13 +1,6 @@
 import { TypesSortProducts } from '../../api/v1/types'
-import {categoryKeys, unisexCategoryKeys} from '../../constants'
-import {SexId} from '../../types'
-
-
-export const sortersName = {
-  update_up: 'По новизне',
-  price_up: 'По цене',
-  sale_up: 'По скидке'
-} as Record<TypesSortProducts, string>
+import { categoryKeys, unisexCategoryKeys } from '../../constants'
+import { SexId } from '../../types'
 
 
 export const sortTypes = {
@@ -18,6 +11,31 @@ export const sortTypes = {
   'price_down': 'Сначала подороже',
   //'create_down': { createdAt: -1 },
 } as const
+
+
+export const defaultFields = {
+  sex_id: (1 as SexId),
+  limit: 36,
+  sort: ('create_up' as keyof typeof sortTypes),
+  page: 1,
+  categories: ([] as Array<keyof typeof unisexCategoryKeys> | Array<number>),
+  brands: ([] as Array<string>),
+  sizes: ([] as Array<string>),
+  price_from: 1,
+  price_to: 30000,
+  sale_from: 30,
+  sale_to: 99
+} as const
+
+
+
+
+export const sortersName = {
+  update_up: 'По новизне',
+  price_up: 'По цене',
+  sale_up: 'По скидке'
+} as Record<TypesSortProducts, string>
+
 
 
 export const valuesOfFilterButtons = {

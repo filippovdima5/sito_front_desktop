@@ -1,32 +1,19 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useInterval } from '../../../../hooks/use-interval'
+import { useStore, useEvent } from 'effector-react/ssr'
 import { Close, Arrow } from '../../../../assets/svg'
+import { $viewFilterButtons, $deleteOneFilterValue } from '../../new-store'
 
 
-const data1: Array<string> = []
-for (let i = 0; i < 0; i++) {
-  data1.push(i.toString())
-}
 const sortes = ['По цене', 'По новизне', ' По скидке', 'По цене', 'По новизне', ' По скидке']
 
 
 export function Sorters() {
-  const [ data, setData ] = useState(data1)
+  const filterButtons = useStore($viewFilterButtons)
+  const deleteOneFilterValue = useEvent($deleteOneFilterValue)
   
   const [ showSort, setShowSort ] = useState(false)
   
-  useInterval(() => {
-    const arr: Array<string> = []
-    for (let i = 0; i < 20; i++) {
-      arr.push(i.toString())
-    }
-    setData(arr)
-  }, 5000)
-  
-  const handleClose = (key: string) => {
-    setData(data.filter(item => item !== key))
-  }
   
   return (
     <S.Wrap>
@@ -52,16 +39,15 @@ export function Sorters() {
         </S.Sort>
       </S.HeaderContainer>
       
-      { data && data.length > 0 && (
+      { filterButtons && filterButtons.length > 0 && (
         <S.FiltersContainer>
           <div className='filters-scroll'>
-            { data.map((item, i) => {
-              // eslint-disable-next-line max-len
-              if  (i % 2 === 0) return <S.FilterButton onClick={() => handleClose(item)} key={Math.random().toString()}>Размер: Adidas <Close className='close-svg'/></S.FilterButton>
-              // eslint-disable-next-line max-len
-              if (i % 3 === 0 ) return <S.FilterButton onClick={() => handleClose(item)} key={Math.random().toString()}>Бренд: Goochi <Close className='close-svg'/></S.FilterButton>
-              return <S.FilterButton onClick={() => handleClose(item)} key={Math.random().toString()}>Це: 3045<Close className='close-svg'/></S.FilterButton>
-            }) }
+            { filterButtons.map(({ value, key, label }) => (
+              <S.FilterButton onClick={() => deleteOneFilterValue({ key, value })} key={key}>
+                {label}
+                <Close className='close-svg'/>
+              </S.FilterButton>
+            )) }
           </div>
         </S.FiltersContainer>
       ) }
