@@ -12,13 +12,11 @@ import { defaultFields, sortTypes, valuesOfFilterButtons } from './constants'
 
 
 // region Fields:
-const $allFields = createStore<Required<QueryFields>>(defaultFields)
+export const $allFields = createStore<Required<QueryFields>>(defaultFields)
 const $setFields = createEvent<QueryFields | null>()
 $allFields.on($setFields, (state, payload) => {
   if (payload !== null) return ({ ...state, ...payload })
 })
-
-
 // endregion
 
 
@@ -196,9 +194,25 @@ forward({
 
 
 
+// region set sort:
+export const $setSort = createEvent<keyof typeof sortTypes>()
+
+forward({
+  from: sample($allFields, $setSort, (query, typeSort) => ({ ...query, sort: typeSort })),
+  to: [ $setFetchProducts, $setFields, $setPushUrl ]
+})
+// endregion
 
 
 
+// region set page
+export const $setPage = createEvent<number>()
+
+forward({
+  from: sample($allFields, $setPage, (query, page) => ({ ...query, page })),
+  to: [ $setFetchProducts, $setFields, $setPushUrl ]
+})
+// endregion
 
 
 

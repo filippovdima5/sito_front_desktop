@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
-import {  $mainState, $setPage } from '../../store'
-import { $totalPages } from '../../new-store'
+import { $totalPages, $allFields, $setPage } from '../../new-store'
 import config from '../../../../config'
 import { Arrow } from '../../../../assets/svg'
 import styles from './styles.module.scss'
@@ -13,7 +12,7 @@ const handleToTop = () => {
 
 export function Pagination() {
   const totalPages = useStore($totalPages)
-  const { page } = useStore($mainState)
+  const { page } = useStore($allFields)
   const setCurrentPage = useEvent($setPage)
   
   const currentPage = useMemo(() => {

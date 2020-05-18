@@ -3,11 +3,11 @@ import { SexId } from '../../types'
 
 
 export const sortTypes = {
-  sale_up : 'Сначала большие скидки',
   create_up: 'Сначала новые',
-  price_up: 'Сначала подешевле',
+  sale_up : 'Сначала большие скидки',
+  price_down: 'Сначала подешевле',
+  price_up: 'Сначала подороже',
   sale_down : 'Сначала скидки поменьше',
-  price_down: 'Сначала подороже',
 } as const
 
 

@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useStore, useEvent } from 'effector-react/ssr'
 import { Close, Arrow } from '../../../../assets/svg'
-import { $viewFilterButtons, $deleteOneFilterValue } from '../../new-store'
+import { sortTypes } from '../../constants'
+import { $viewFilterButtons, $deleteOneFilterValue, $setSort, $allFields } from '../../new-store'
 
 
 const sortes = ['По цене', 'По новизне', ' По скидке', 'По цене', 'По новизне', ' По скидке']
@@ -10,7 +11,9 @@ const sortes = ['По цене', 'По новизне', ' По скидке', '�
 
 export function Sorters() {
   const filterButtons = useStore($viewFilterButtons)
+  const { sort } = useStore($allFields)
   const deleteOneFilterValue = useEvent($deleteOneFilterValue)
+  const setSort = useEvent($setSort)
   
   const [ showSort, setShowSort ] = useState(false)
   
@@ -30,8 +33,18 @@ export function Sorters() {
             
             { showSort && (
               <S.SortOptionsContainer>
-                { sortes.map(sort => (
-                  <div key={Math.random().toString()} className='sort-option'>{sort}</div>
+                { Object.entries(sortTypes).map(([key, value]) => (
+                  <S.SortOption
+                    active={key === sort}
+                    onClick={() => {
+                      setSort(key as keyof typeof sortTypes)
+                      setShowSort(false)
+                    }}
+                    key={key}
+                    className='sort-option'
+                  >
+                    {value}
+                  </S.SortOption>
                 )) }
               </S.SortOptionsContainer>
             ) }
@@ -93,7 +106,7 @@ const S = {
        position: absolute;
        right: 0;
        top: 10px;
-       min-width: 200px;
+       min-width: 250px;
        min-height: 40px;
     }
    
@@ -129,9 +142,9 @@ const S = {
     flex-direction: column;
     align-items: flex-end;
     box-sizing: border-box;
-    
-    
-    & .sort-option {
+`,
+  
+  SortOption: styled.div<{ active: boolean }>`
       width: 100%;
       cursor: pointer;
       padding: 12px 20px 13px;
@@ -141,12 +154,8 @@ const S = {
       font-size: 14px;
       line-height: 17px;
       text-align: right;
-    }
-    
-    & .sort-option:nth-child(2) {
-      background: #E6E6E6;
-    }
-    
+      
+      background-color: ${({ active }) => active ? '#E6E6E6' : 'transparent'};
 `,
   
   FiltersContainer: styled.div`
