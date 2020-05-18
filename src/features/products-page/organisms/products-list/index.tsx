@@ -1,6 +1,6 @@
 import React  from 'react'
 import { useStore } from 'effector-react/ssr'
-import { $loading, $statusPageProducts, $products } from '../../new-store'
+import { $loading, $statusPageProducts, $products , $allFields } from '../../new-store'
 import { ProductCard, SkeletonCard } from '../../../../commons/organisms/product-card'
 import config from '../../../../config'
 import { StatusPage } from '../../types'
@@ -28,13 +28,14 @@ function ProductsList() {
 //      
 
 function Controller({ status, loading }: { status: StatusPage, loading: boolean }) {
+  const { limit } = useStore($allFields)
   switch (status) {
     case 'EMPTY': return (<EmptyList/>)
     case 'FAIL': return (<div>ОШИБКА</div>)
     default: return (
       <div className={styles.productsList}>
-        <ProductsList/>
-        {(loading || status === 'START') && !config.ssr && <SkeletonsList length={20}/>}
+        { !loading  && <ProductsList/> }
+        {(loading || status === 'START') && !config.ssr && <SkeletonsList length={limit}/>}
       </div>
     )
   }

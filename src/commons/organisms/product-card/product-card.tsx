@@ -49,7 +49,7 @@ export function ProductCard({ id, brand, images, oldPrice, price, sale, title, s
               <span className='price'>{viewCost(price)} RUB</span>
             </S.PriceInfo>
             
-            { sizes && sizes.length !== null && (
+            { sizes && sizes.length > 0 && (
               <S.Sizes className='meta-item'>
                 {sizes.map(size => (
                   <span key={size} className='size'>{size}</span>

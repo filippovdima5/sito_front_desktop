@@ -40,7 +40,7 @@ const $paramsForFetchProducts = createStore<GetProductsParams | null>(null)
 $paramsForFetchProducts.on(
   sample($allFields, merge([
     $setFetchProducts,
-    createThrottle($throttleFetchProducts, 2000)
+    createThrottle($throttleFetchProducts, 1000)
   ]), (fields, newState) => ({ fields, newState })),
   // @ts-ignore
   (_, payload) => { if (payload) return ({ ...payload.fields, ...payload.newState }) }
