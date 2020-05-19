@@ -23,6 +23,13 @@ function parseArrayString(key: string, value: string, query: any): void {
   }
 }
 
+function parseBoolean(key: string, value: string, query: any): void {
+  switch (value) {
+    case 'true': query[key as keyof QueryFields] = true; break
+    case 'false': query[key as keyof QueryFields] = false
+  }
+}
+
 
 export const parseUrl = (pathname: string, search: string ): QueryFields => {
   const query: QueryFields = { sex_id: findSexIdInPath(pathname) }
@@ -57,7 +64,9 @@ export const parseUrl = (pathname: string, search: string ): QueryFields => {
         if (value && sortTypes[value as keyof typeof sortTypes]) {
           query['sort'] = value as keyof typeof sortTypes
         }
+        break
       }
+      case 'not_size': return parseBoolean(key, value as string, query)
     }
   })
   
@@ -111,8 +120,24 @@ export const encodeProductsUrl = (params: QueryFields): string | null => {
 
 
 
+// region
+const c = (char: string): number => {
+  if (!isNaN(Number(char.charAt(0)))) return 2e4 + Number(char.charAt(0))
+  return char.toLowerCase().charCodeAt(0)
+}
+export const sortBrands = (arr: Array<string>): Array<string> => arr.sort((a, b) => c(a) - c(b))
+// endregion
 
 
+// region
+const sizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXL', 'XXXL', '4XL' ]
+const getIndex = (str: string): number => {
+  const index = sizes.findIndex(size => size === str)
+  if (index === -1) return c(str)
+  return index
+}
+export const sortSizes = (arr: Array<string>): Array<string> => arr.sort((a, b) => getIndex(a) - getIndex(b))
+// endregion
 
 
 

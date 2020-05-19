@@ -1,7 +1,7 @@
 import { TypesSortProducts } from '../../api/v1/types'
-import {SexId} from '../../types'
-import {unisexCategoryKeys} from '../../constants'
-import {sortTypes} from './constants'
+import { SexId } from '../../types'
+import { unisexCategoryKeys } from '../../constants'
+import { sortTypes } from './constants'
 
 
 export type StatusPage = 'START' | 'EMPTY' | 'READY' | 'FAIL'
@@ -20,6 +20,7 @@ export interface QueryFields  {
   sizes?: Array<string>,
   categories?: Array<keyof typeof unisexCategoryKeys> | Array<number>,
   sort?: keyof typeof sortTypes,
+  not_size?: boolean,
 }
 
 export interface QueryFieldGetFilters extends QueryFields{

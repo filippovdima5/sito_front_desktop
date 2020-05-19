@@ -22,7 +22,8 @@ export const defaultFields = {
   price_from: 1,
   price_to: 30000,
   sale_from: 30,
-  sale_to: 99
+  sale_to: 99,
+  not_size: false
 } as const
 
 
@@ -36,4 +37,5 @@ export const valuesOfFilterButtons = {
   price_to: (value: number) => `Цена: до ${value} RUB`,
   sale_from: (value: number) => `Скидка: от ${value}%`,
   sale_to: (value: number) => `Скидка: до ${value}%`,
+  
 }

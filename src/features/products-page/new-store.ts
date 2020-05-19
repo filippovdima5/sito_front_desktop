@@ -6,7 +6,7 @@ import config from '../../config'
 import { apiV2 } from '../../api'
 import { SexId } from '../../types'
 import { categoryKeys } from '../../constants'
-import { encodeProductsUrl, parseUrl } from './lib'
+import { encodeProductsUrl, parseUrl, sortBrands, sortSizes } from './lib'
 import { QueryFields, StatusPage } from './types'
 import { defaultFields, sortTypes, valuesOfFilterButtons } from './constants'
 
@@ -119,12 +119,12 @@ $categoryFilters.on(
   (state, payload) => Object.entries(categoryKeys[payload.sex_id as 1 | 2])
     // @ts-ignore
     .map(([key, value]) => ({ key: Number(key), available: payload.categories.includes(Number(key)), label: value as string }))
+    .filter(({ key }) => ![1000, 2000, 3000].includes(key))
 )
 
-$brandFilters.on(fetchFacetFilters.done, (state, { result: { data: { brands } } }) => brands)
-$sizeFilters.on(fetchFacetFilters.done, (state, { result: { data: { sizes } } }) => sizes)
+$brandFilters.on(fetchFacetFilters.done, (state, { result: { data: { brands } } }) => sortBrands(brands))
+$sizeFilters.on(fetchFacetFilters.done, (state, { result: { data: { sizes } } }) => sortSizes(sizes))
 $loadingFilters.on(fetchFacetFilters.pending, (_, p) => p)
-
 // endregion
 
 $categoryFilters.watch(state => console.log(state))
