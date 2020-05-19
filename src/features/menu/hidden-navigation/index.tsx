@@ -23,9 +23,11 @@ function MenuContent() {
 
 
 function HiddenNavigation() {
+  const menuContent = useStore($menuContent)
   const setMenuActive = useEvent($setMenuActive)
   const setShowMenu = useEvent($setShowMenu)
 
+  if (menuContent === null) return null
   
   return (
     <div onClick={() => setShowMenu(false)} className={styles.template}>
