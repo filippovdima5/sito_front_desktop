@@ -6,9 +6,6 @@ import { sortTypes } from '../../constants'
 import { $viewFilterButtons, $deleteOneFilterValue, $setSort, $allFields } from '../../new-store'
 
 
-const sortes = ['По цене', 'По новизне', ' По скидке', 'По цене', 'По новизне', ' По скидке']
-
-
 export function Sorters() {
   const filterButtons = useStore($viewFilterButtons)
   const { sort } = useStore($allFields)

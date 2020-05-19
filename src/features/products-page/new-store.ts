@@ -14,6 +14,13 @@ import { defaultFields, sortTypes, valuesOfFilterButtons } from './constants'
 // region Fields:
 export const $allFields = createStore<Required<QueryFields>>(defaultFields)
 const $setFields = createEvent<QueryFields | null>()
+const $setFieldsWithReset = createEvent<QueryFields | null>()
+
+$allFields.on($setFieldsWithReset, ((state, payload) => {
+  if (payload === null) return $allFields.defaultState
+  return ({ ...$allFields.defaultState, ...payload })
+}))
+
 $allFields.on($setFields, (state, payload) => {
   if (payload !== null) return ({ ...state, ...payload })
 })
@@ -106,7 +113,7 @@ $paramsForMount.on($eventForMount, (state, urlParams) => {
   return parseUrl(urlParams.pathname, urlParams.search)
 })
 
-forward({ from: $paramsForMount.updates, to: [$setFetchProducts, $setFields] })
+forward({ from: $paramsForMount.updates, to: [$setFetchProducts, $setFieldsWithReset] })
 // endregion
 
 
