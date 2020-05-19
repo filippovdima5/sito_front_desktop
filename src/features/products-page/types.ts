@@ -8,7 +8,7 @@ export type StatusPage = 'START' | 'EMPTY' | 'READY' | 'FAIL'
 
 
 
-export type QueryFields = {
+export interface QueryFields  {
   sex_id?: SexId,
   price_from?: number,
   price_to?: number,
@@ -20,6 +20,11 @@ export type QueryFields = {
   sizes?: Array<string>,
   categories?: Array<keyof typeof unisexCategoryKeys> | Array<number>,
   sort?: keyof typeof sortTypes,
+}
+
+export interface QueryFieldGetFilters extends QueryFields{
+  brand_search?: string,
+  brand_all?: boolean,
 }
 
 

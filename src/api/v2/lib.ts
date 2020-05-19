@@ -1,4 +1,4 @@
-import { GetProductsParams } from './types'
+import {GetFiltersParams, GetProductsParams} from './types'
 
 
 const encodeNumber = (key: string, value?: number): string | '' => {
@@ -34,6 +34,28 @@ export const formQueryGetProductsList = (params: GetProductsParams): string => {
       case 'sale_to':
       case 'page':
       case 'limit': return (search = search + encodeNumber(key, value as number))
+      case 'brands':
+      case 'sizes': return (search = search + encodeStringArray(key, value as Array<string>))
+      case 'categories': return (search = search + encodeNumberArray(key, value as Array<number>))
+      default: return (search = search + encodeString(key, value as string))
+    }
+  })
+  
+  return search.slice(0, -1)
+}
+// endregion
+
+
+// region
+export const formQueryGetFilters = (params: GetFiltersParams): string => {
+  let search = '?'
+  Object.entries(params).forEach(([key, value]) => {
+    switch (key) {
+      case 'sex_id':
+      case 'price_from':
+      case 'price_to':
+      case 'sale_from':
+      case 'sale_to': return (search = search + encodeNumber(key, value as number))
       case 'brands':
       case 'sizes': return (search = search + encodeStringArray(key, value as Array<string>))
       case 'categories': return (search = search + encodeNumberArray(key, value as Array<number>))

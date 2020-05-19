@@ -1,10 +1,11 @@
 import { createStore, createEvent, sample, createEffect, guard, forward, merge } from 'lib/effector'
 import { createThrottle } from 'effector-throttle'
 import { createDebounce } from 'effector-debounce'
-import { GetProductsParams, ShortProduct } from '../../api/v2/types'
+import { GetFiltersParams, GetProductsParams, ShortProduct } from '../../api/v2/types'
 import config from '../../config'
 import { apiV2 } from '../../api'
 import { SexId } from '../../types'
+import { categoryKeys } from '../../constants'
 import { encodeProductsUrl, parseUrl } from './lib'
 import { QueryFields, StatusPage } from './types'
 import { defaultFields, sortTypes, valuesOfFilterButtons } from './constants'
@@ -33,6 +34,12 @@ export const $statusPageProducts = createStore<StatusPage>('START')
 export const $products = createStore<Array<ShortProduct>>([])
 export const $totalPages = createStore<number>(0)
 export const $loading = createStore<boolean>(false)
+
+export const $brandFilters = createStore<Array<string>>([])
+export const $categoryFilters = createStore<Array<{ key: number, available: boolean, label: string }>>([])
+export const $sizeFilters = createStore<Array<string>>([])
+export const $loadingFilters = createStore<boolean>(false)
+export const $loadingBrandFilters = createStore<boolean>(false)
 // endregion
 
 
@@ -75,6 +82,58 @@ $statusPageProducts.on(fetchProductsList.done, (_, { result: { data: { items } }
 
 
 
+
+// region fetch filters:
+/** FILTERS*/
+const $debounceFetchFilters = createEvent<QueryFields | null>()
+
+const $extraFields = createStore({
+  brand_search: '',
+  brand_all: false,
+})
+
+const $paramsForFetchFilters = createStore<null | GetFiltersParams>(null)
+const $eventFetchFilters = sample(
+  $allFields,
+  createDebounce($debounceFetchFilters, 500),
+  (fields, newState) => ({ fields, newState })
+)
+$paramsForFetchFilters.on(
+  sample($extraFields, $eventFetchFilters, ((extraFields, clock) => ({ ...clock, extraFields }))),
+  (_, payload) => { if (payload) { // @ts-ignore
+    return ({ ...payload.fields, ...payload.newState, ...payload.extraFields })
+  } }
+)
+
+const fetchFacetFilters = createEffect({ handler: (params: GetFiltersParams) => apiV2.filters.facet(params) })
+guard({
+  source: $paramsForFetchFilters.updates,
+  filter: $paramsForFetchFilters.map(state => (state !== null && !config.ssr)),
+  target: fetchFacetFilters
+})
+
+
+$categoryFilters.on(
+  sample($allFields, fetchFacetFilters.done, ({ sex_id }, { result: { data: { categories } } }) => ({ sex_id, categories })),
+  // @ts-ignore
+  (state, payload) => Object.entries(categoryKeys[payload.sex_id as 1 | 2])
+    // @ts-ignore
+    .map(([key, value]) => ({ key: Number(key), available: payload.categories.includes(Number(key)), label: value as string }))
+)
+
+$brandFilters.on(fetchFacetFilters.done, (state, { result: { data: { brands } } }) => brands)
+$sizeFilters.on(fetchFacetFilters.done, (state, { result: { data: { sizes } } }) => sizes)
+$loadingFilters.on(fetchFacetFilters.pending, (_, p) => p)
+
+// endregion
+
+$categoryFilters.watch(state => console.log(state))
+$brandFilters.watch(state => console.log(state))
+$sizeFilters.watch(state => console.log(state))
+/** END_FILTERS*/
+
+
+
 // region pushToUrlString:
 export const $setReplace = createEvent<any>()
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -113,7 +172,17 @@ $paramsForMount.on($eventForMount, (state, urlParams) => {
   return parseUrl(urlParams.pathname, urlParams.search)
 })
 
-forward({ from: $paramsForMount.updates, to: [$setFetchProducts, $setFieldsWithReset] })
+forward({ from: $paramsForMount.updates, to: [$setFetchProducts, $setFieldsWithReset, $debounceFetchFilters] })
+
+
+// Фильтры на сервере не отрендерятся, поэтому нужно вызвать этот евент на клиенте в любом случае:
+const $paramsForMountFilters = createStore<QueryFields | null>(null)
+$paramsForMountFilters.on(sample($mountInServer, $mountProductsPage, (inServer, urlParams) => ({ inServer, urlParams })), (state, payload) => {
+  // @ts-ignore
+  if (payload.inServer && !config.ssr) return parseUrl(payload.urlParams.pathname, payload.urlParams.search)
+  return null
+})
+forward({ from: $paramsForMountFilters.updates, to: $debounceFetchFilters })
 // endregion
 
 
@@ -195,7 +264,7 @@ forward({
       default: return null
     }
   }),
-  to: [ $setFields, $throttleFetchProducts, $setPushUrl ]
+  to: [ $setFields, $throttleFetchProducts, $setPushUrl, $debounceFetchFilters ]
 })
 // endregion
 
@@ -211,7 +280,6 @@ forward({
 // endregion
 
 
-
 // region set page
 export const $setPage = createEvent<number>()
 
@@ -220,8 +288,6 @@ forward({
   to: [ $setFetchProducts, $setFields, $setPushUrl ]
 })
 // endregion
-
-
 
 
 

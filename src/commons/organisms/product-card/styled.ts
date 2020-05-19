@@ -9,13 +9,13 @@ export const styledProductCard = {
     box-sizing: border-box;
     width: 25%;
     user-select: none;
-    cursor: pointer;
 `,
   
   CardContainer: styled.div<{ isLike: boolean }>`
     width: 100%;
     padding-bottom: 187.965616%;
     position: relative;
+    cursor: pointer;
     
     & .flag {
       position: absolute;

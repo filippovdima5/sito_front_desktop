@@ -44,7 +44,7 @@ export interface ShortProduct {
 
 
 // region getProductsList:
-export type GetProductsParams = {
+export interface GetProductsParams{
   sex_id: SexId,
   limit: number,
   sort: keyof typeof sortTypes,
@@ -56,5 +56,19 @@ export type GetProductsParams = {
   price_to?: number,
   sale_from?: number,
   sale_to?: number,
+}
+// endregion
+
+
+// region Filters:
+export interface GetFiltersParams extends GetProductsParams {
+  brand_search?: string,
+  brand_all?: boolean,
+}
+
+export type FacetFilters = {
+  categories: Array<keyof typeof unisexCategoryKeys> | Array<number>,
+  brands: Array<string>,
+  sizes: Array<string>,
 }
 // endregion
