@@ -38,8 +38,9 @@ export const $loading = createStore<boolean>(false)
 export const $brandFilters = createStore<Array<string>>([])
 export const $categoryFilters = createStore<Array<{ key: number, available: boolean, label: string }>>([])
 export const $sizeFilters = createStore<Array<string>>([])
-export const $loadingFilters = createStore<boolean>(false)
+export const $loadingCategoryFilters = createStore<boolean>(false)
 export const $loadingBrandFilters = createStore<boolean>(false)
+export const $loadingSizeFilters = createStore<boolean>(false)
 // endregion
 
 
@@ -83,11 +84,12 @@ $statusPageProducts.on(fetchProductsList.done, (_, { result: { data: { items } }
 
 
 
-// region fetch filters:
+
 /** FILTERS*/
+// region fetch facet:
 const $debounceFetchFilters = createEvent<QueryFields | null>()
 
-const $extraFields = createStore({
+export const $extraFields = createStore({
   brand_search: '',
   brand_all: false,
 })
@@ -122,14 +124,73 @@ $categoryFilters.on(
     .filter(({ key }) => ![1000, 2000, 3000].includes(key))
 )
 
+//const doneFetchFacetFilters = fetchFacetFilters.done.map(({ result: { data } }) => data)
 $brandFilters.on(fetchFacetFilters.done, (state, { result: { data: { brands } } }) => sortBrands(brands))
 $sizeFilters.on(fetchFacetFilters.done, (state, { result: { data: { sizes } } }) => sortSizes(sizes))
-$loadingFilters.on(fetchFacetFilters.pending, (_, p) => p)
+$loadingBrandFilters.on(fetchFacetFilters.pending, (_, p) => { if (!p) return p })
 // endregion
 
-$categoryFilters.watch(state => console.log(state))
-$brandFilters.watch(state => console.log(state))
-$sizeFilters.watch(state => console.log(state))
+
+// region fetch brand filters
+const $throttleFetchBrandFilters = createEvent<QueryFields | null>()
+const $fetchBrandFilters = createEvent<QueryFields | null>()
+
+const $paramsForFetchBrandFilters = createStore<null | GetFiltersParams>(null)
+
+const $eventFetchBrandFilters = sample(
+  $allFields,
+  merge([createThrottle($throttleFetchBrandFilters, 1000), $fetchBrandFilters]),
+  (fields, newState) => ({ fields, newState })
+)
+
+$paramsForFetchBrandFilters.on(
+  sample($extraFields, $eventFetchBrandFilters, ((extraFields, clock) => ({ ...clock, extraFields }))),
+  (_, payload) => { if (payload) { // @ts-ignore
+    return ({ ...payload.fields, ...payload.newState, ...payload.extraFields })
+  } }
+)
+
+const fetchBrandFilters = createEffect({ handler: (params: GetFiltersParams) => apiV2.filters.brands(params) })
+guard({
+  source: $paramsForFetchBrandFilters.updates,
+  filter: $paramsForFetchBrandFilters.map(state => (state !== null && !config.ssr)),
+  target: fetchBrandFilters
+})
+
+$brandFilters.on(fetchBrandFilters.done, (_, { result: { data } }) => sortBrands(data))
+// endregion
+
+
+// region
+export const $setSearchBrands = createEvent<string>()
+$extraFields.on($setSearchBrands, (_, brand_search) => ({ brand_search, brand_all: false }))
+forward({
+  from: sample(
+    $paramsForFetchFilters,
+    $setSearchBrands,
+    (params, phrase) => {
+      if (!params) return null
+      return ({ ...params, brand_all: false, brand_search: phrase })
+    }
+  ),
+  to: $throttleFetchBrandFilters
+})
+
+export const $setShowAllBrands = createEvent()
+$extraFields.on($setShowAllBrands, state => ({ ...state, brand_all: true }))
+forward({
+  from: sample(
+    $paramsForFetchFilters,
+    $setShowAllBrands,
+    (params) => {
+      if (!params) return null
+      return ({ ...params, brand_all: true })
+    }
+  ),
+  to: $fetchBrandFilters
+})
+
+// endregion
 /** END_FILTERS*/
 
 

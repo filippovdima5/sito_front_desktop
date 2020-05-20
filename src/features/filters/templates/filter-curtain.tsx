@@ -69,8 +69,6 @@ const S = {
   
   SearchContainer: styled.div`
     margin-bottom: 20px;
-    
-    border: 1px solid green;
 `,
   
   ScrollContainer: styled.div`
