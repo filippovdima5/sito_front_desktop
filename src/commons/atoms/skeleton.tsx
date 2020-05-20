@@ -1,4 +1,24 @@
-.Skeleton{
+import React from 'react'
+import styled from 'styled-components'
+
+
+type Props = {
+  className?: string,
+  style?: React.CSSProperties,
+}
+
+export function Skeleton({ className, style }: Props) {
+  return (
+    <S.Skeleton
+      {...!!style && { style: style }}
+      className={`${className ?? ''}`}
+    />
+  )
+}
+
+
+const S = {
+  Skeleton: styled.div`
   display: inline-block;
   height: 100%;
   width: 100%;
@@ -13,4 +33,6 @@
       background-position: -135% 0%;
     }
   }
+`
 }
+

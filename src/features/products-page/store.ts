@@ -6,9 +6,9 @@ import { $baseLink } from '../../stores/env'
 import { recordWithoutNull , sexIdToStr, sexStrToId } from '../../lib'
 import config from '../../config'
 import { parseQueryProducts, parseSearch } from '../../ssr/lib'
+import {  ListFilters, ListTranslateFilters } from '../filters/types'
 import { StatusPage, MainState  } from './types'
 import { setItemToArray } from './lib'
-import {  ListFilters, ListTranslateFilters } from './organisms/filters/types'
 
 
 //region route_history:

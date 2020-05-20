@@ -1,4 +1,4 @@
-import { MainState } from '../../types'
+import { MainState } from '../products-page/types'
 import { filtersName } from './constants'
 
 

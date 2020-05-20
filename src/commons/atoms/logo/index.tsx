@@ -22,4 +22,3 @@ export function Logo({ color }: { color: string }) {
     </Link>
   )
 }
-

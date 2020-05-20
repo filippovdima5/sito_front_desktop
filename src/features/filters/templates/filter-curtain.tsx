@@ -1,10 +1,11 @@
-import React, {FC, useState} from 'react'
+import React, { FC, useState } from 'react'
 import styled from 'styled-components'
-import { Arrow } from '../../../../../assets/svg'
+import { Arrow } from '../../../assets/svg'
 
 
 type Props = {
   title: string,
+  search?: React.ReactNode,
 }
 
 export const FilterCurtain: FC<Props> = (props) => {
@@ -20,9 +21,9 @@ export const FilterCurtain: FC<Props> = (props) => {
       </S.Header>
       {active && (
         <S.Body>
+          { props.search && <S.SearchContainer>{props.search}</S.SearchContainer> }
           <S.ScrollContainer>
-            {props.children}
-            <div style={{ height: 500 }}/>
+            <ul>{props.children}</ul>
           </S.ScrollContainer>
           <div className='space'/>
         </S.Body>
@@ -64,6 +65,12 @@ const S = {
     & .space {
       padding-bottom: 20px;
     }
+`,
+  
+  SearchContainer: styled.div`
+    margin-bottom: 20px;
+    
+    border: 1px solid green;
 `,
   
   ScrollContainer: styled.div`

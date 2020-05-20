@@ -1,4 +1,4 @@
-import { filtersState, $filtersStore } from '../../store'
+import { filtersState, $filtersStore } from '../products-page/store'
 import { filtersName } from './constants'
 import { FiltersList } from './types'
 

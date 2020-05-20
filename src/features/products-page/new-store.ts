@@ -245,6 +245,22 @@ $viewFilterButtons.on($filtersFields, (state, payload) => {
 
 
 // region addFilterValue
+export const $addOneFilterValue = createEvent<{ key: keyof QueryFields, value: string | number | boolean}>()
+forward({
+  from: sample($allFields, $addOneFilterValue, (query, { key, value }) => {
+    switch (key) {
+      case 'price_from':
+      case 'price_to':
+      case 'sale_from':
+      case 'sale_to': return ({ ...query, [key]: value })
+      case 'brands':
+      case 'sizes': return ({ ...query, [key]: [...query[key], value] })
+      case 'categories': return ({ ...query, [key]: [...query[key], value as number ] })
+      default: return null
+    }
+  }),
+  to: [$setFields, $throttleFetchProducts, $setPushUrl, $debounceFetchFilters]
+})
 // endregion
 
 

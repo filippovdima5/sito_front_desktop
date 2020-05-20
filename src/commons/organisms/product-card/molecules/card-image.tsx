@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import { Skeleton } from '../../../atoms/skeleton/skeleton'
+import { Skeleton } from '../../../atoms/skeleton'
 import config from '../../../../config'
 
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { FilterCurtain } from './templates'
+import { BrandsFilter, CategoriesFilter } from './organisms'
 
 
 export function Filters () {
@@ -8,9 +9,9 @@ export function Filters () {
   return (
     <S.Wrap >
       <S.Container>
-        <FilterCurtain title={'Бренды'}/>
+        <BrandsFilter/>
         
-        <FilterCurtain title={'Категории'}/>
+        <CategoriesFilter/>
         
         <FilterCurtain title={'Цена'}/>
         

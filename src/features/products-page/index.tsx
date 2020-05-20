@@ -3,11 +3,11 @@ import { useLocation } from 'react-router'
 import { useEvent } from 'effector-react/ssr'
 import { SexId } from '../../types'
 import { useEffectSafe } from '../../hooks/use-effect-safe'
+import { Filters } from '../filters'
 import styles from './styles.module.scss'
 import { Sorters } from './molecules/sorters'
 import { Pagination } from './molecules/pagination'
 import { ProductsList } from './organisms/products-list'
-import { Filters } from './organisms/filters'
 import { $mountProductsPage } from './new-store'
 
 
