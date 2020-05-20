@@ -8,6 +8,7 @@ import { sexIdToStr } from '../../lib'
 import { BrandItem } from '../../api/v1/types'
 import { Loader } from '../../commons/templates/loader'
 import { Button } from '../../ui/button'
+import { SexId } from '../../types'
 import { $filteredBrands, $fetchBrands, $loadingBrands } from './store'
 import styles from './styles.module.scss'
 import { SearchInput } from './search-input'
@@ -32,7 +33,7 @@ function BrandsGroup({ brands, sexId }: {brands: Array<BrandItem>, sexId: 1 | 2}
 }
 
 
-export function BrandsPage({ sexId }: {sexId: 1 | 2} ) {
+export function BrandsPage({ sexId }: {sexId: SexId} ) {
   const loader = useStore($loadingBrands)
   const charGroups = useStore($filteredBrands)
   const fetchBrands = useEvent($fetchBrands)

@@ -9,7 +9,7 @@ export function HomePage({ sexId }: { sexId: SexId }) {
   return (
     <S.Wrap>
       <div>
-        <MainBanner/>
+        <MainBanner sexId={sexId}/>
         <BrandBanner/>
         <SaleBanners/>
       </div>

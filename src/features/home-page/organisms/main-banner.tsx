@@ -2,9 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { Button } from '../../../ui/button'
 import { Select } from '../../../ui/select'
+import { SexId } from '../../../types'
+import { Button1 } from '../../../commons/atoms'
+import { Link } from 'react-router-dom'
 
 
-export function MainBanner() {
+export function MainBanner({ sexId }: { sexId: SexId }) {
   return(
     <S.Wrap>
       <img
@@ -16,11 +19,13 @@ export function MainBanner() {
       <S.Container>
         <S.Inner>
         
-          <S.Title>
-            Все скидки в одном месте
-          </S.Title>
+          <S.Title>Все скидки в одном месте</S.Title>
           
           <S.ButtonsContainer>
+            <S.WrapItemForm>
+              <Button1 href={'/'} className='button' borderRad={5}>Мужчины</Button1>
+            </S.WrapItemForm>
+            
             <Button  title={'Мужчины'}/>
             <Button title={'Женщины'}/>
             
@@ -66,6 +71,18 @@ const S = {
       left: 0;
       width: 100%;
       display: block ;
+    }
+`,
+  
+  WrapItemForm: styled.div`
+    margin: 0 5px;
+    
+    & .button {
+      background-color: rgba(5,9,18,0.5);
+      border: 1px solid transparent;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      width: 170px;
     }
 `,
   

@@ -12,11 +12,14 @@ export const ROUTES = [
   // Редирект на /home, если станет известен пол ( нужно разобраться с редиректом на SSR )
   { path: '/', exact: true, component: GenderDetected },
   
-  { path: '/:sex/home', exact: true, component: Home },
+  { path: '/men/home', exact: true, component: Home },
+  { path: '/women/home', exact: true, component: Home },
   
-  { path: '/:sex/products', exact: true, component: Products },
+  { path: '/men/products', exact: true, component: Products },
+  { path: '/women/products', exact: true, component: Products },
   
-  { path: '/:sex/brands', exact: true, component: Brands },
+  { path: '/men/brands', exact: true, component: Brands },
+  { path: '/women/brands', exact: true, component: Brands },
   
   { path: '*', exact: true, component: NotFound },
 ]

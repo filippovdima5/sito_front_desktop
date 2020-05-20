@@ -1,17 +1,17 @@
 import React  from 'react'
-import { RouteComponentProps } from 'react-router'
+import { useLocation } from 'react-router'
 import { useBodyScrollTop } from '../hooks/use-body-scroll-top'
-import { sexStrToId } from '../lib'
+import { findSexIdInPath } from '../lib'
 import { $mountBrandsPage } from '../features/brands-page/store'
 import { BrandsPage } from '../features/brands-page'
 import { START } from '../lib/effector'
-import { PathParamsSex } from './routes'
 
 
 
-export function Brands({ match: { params: { sex } } }: RouteComponentProps<PathParamsSex>) {
+export function Brands() {
   useBodyScrollTop()
-  return <BrandsPage sexId={sexStrToId(sex)}/>
+  const { pathname } = useLocation()
+  return <BrandsPage sexId={findSexIdInPath(pathname)}/>
 }
 
 // !!! SSR
