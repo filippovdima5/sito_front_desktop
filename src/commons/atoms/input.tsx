@@ -9,11 +9,14 @@ type Props = {
   search?: boolean,
   value?: string,
   onChange?: (value: string) => void,
+  className?: string,
+  notBorderRad?: boolean,
 }
 
 export function Input(props: Props) {
   const [ inValue, setInValue ] = useState('')
   const [ focus, setFocus ] = useState(false)
+  
   
   const currentValue = useMemo(() => {
     if (!props.value) return inValue
@@ -34,6 +37,8 @@ export function Input(props: Props) {
       )}
       
       <S.Input
+        notBorderRad = {props.notBorderRad ?? false}
+        className={props.className ?? ''}
         focus={focus}
         search={props.search ?? false}
         type={props.type ?? 'text'}
@@ -67,12 +72,12 @@ const S = {
     }
 `,
   
-  Input: styled.input<{ search: boolean, focus: boolean }>`
+  Input: styled.input<{ search: boolean, focus: boolean, notBorderRad: boolean }>`
     background-color: transparent;
     width: 100%;
     border: 1px solid #CBCBCB;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: ${({ notBorderRad }) => notBorderRad ? '0' : '5px'};
     height: 40px;
     padding-left: ${({ search }) => search ? '40px' : '20px'};
     font-weight: 500;

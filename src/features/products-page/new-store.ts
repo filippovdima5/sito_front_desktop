@@ -1,5 +1,4 @@
 import { createStore, createEvent, sample, createEffect, guard, forward, merge } from 'lib/effector'
-import { createThrottle } from 'effector-throttle'
 import { createDebounce } from 'effector-debounce'
 import { GetFiltersParams, GetProductsParams, ShortProduct } from '../../api/v2/types'
 import config from '../../config'
@@ -38,9 +37,9 @@ export const $loading = createStore<boolean>(false)
 export const $brandFilters = createStore<Array<string>>([])
 export const $categoryFilters = createStore<Array<{ key: number, available: boolean, label: string }>>([])
 export const $sizeFilters = createStore<Array<string>>([])
-export const $loadingCategoryFilters = createStore<boolean>(false)
+//export const $loadingCategoryFilters = createStore<boolean>(false)
 export const $loadingBrandFilters = createStore<boolean>(false)
-export const $loadingSizeFilters = createStore<boolean>(false)
+//export const $loadingSizeFilters = createStore<boolean>(false)
 // endregion
 
 
@@ -48,14 +47,14 @@ export const $loadingSizeFilters = createStore<boolean>(false)
 // region fetchProducts:
 /**При передачи любого поля будет загрузка:*/
 const $setFetchProducts = createEvent<QueryFields | null>()
-const $throttleFetchProducts = createEvent<QueryFields | null>()
+const $debounceFetchProducts = createEvent<QueryFields | null>()
 
 const $paramsForFetchProducts = createStore<GetProductsParams | null>(null)
 
 $paramsForFetchProducts.on(
   sample($allFields, merge([
     $setFetchProducts,
-    createThrottle($throttleFetchProducts, 1000)
+    createDebounce($debounceFetchProducts, 1000)
   ]), (fields, newState) => ({ fields, newState })),
   // @ts-ignore
   (_, payload) => { if (payload) return ({ ...payload.fields, ...payload.newState }) }
@@ -157,14 +156,14 @@ $loadingBrandFilters.on(fetchFacetFilters.pending, (_, p) => { if (!p) return p 
 
 
 // region fetch brand filters
-const $throttleFetchBrandFilters = createEvent<QueryFields | null>()
+const $debounceFetchBrandFilters = createEvent<QueryFields | null>()
 const $fetchBrandFilters = createEvent<QueryFields | null>()
 
 const $paramsForFetchBrandFilters = createStore<null | GetFiltersParams>(null)
 
 const $eventFetchBrandFilters = sample(
   $allFields,
-  merge([createThrottle($throttleFetchBrandFilters, 1000), $fetchBrandFilters]),
+  merge([createDebounce($debounceFetchBrandFilters, 1000), $fetchBrandFilters]),
   (fields, newState) => ({ fields, newState })
 )
 
@@ -200,7 +199,7 @@ forward({
       return ({ ...params, brand_all: false, brand_search: phrase })
     }
   ),
-  to: $throttleFetchBrandFilters
+  to: $debounceFetchBrandFilters
 })
 
 export const $setShowAllBrands = createEvent()
@@ -240,7 +239,7 @@ $sizeFilters.on(
 export const $setNotSize = createEvent()
 forward({
   from: sample($allFields, $setNotSize, (fields) => ({ ...fields, not_size: !fields.not_size })),
-  to: [$setFields, $throttleFetchProducts, $setPushUrl, $debounceFetchFilters]
+  to: [$setFields, $debounceFetchProducts, $setPushUrl, $debounceFetchFilters]
 })
 // endregion
 /** END_FILTERS*/
@@ -354,7 +353,7 @@ forward({
       default: return null
     }
   }),
-  to: [$setFields, $throttleFetchProducts, $setPushUrl, $debounceFetchFilters]
+  to: [$setFields, $debounceFetchProducts, $setPushUrl, $debounceFetchFilters]
 })
 // endregion
 
@@ -375,7 +374,7 @@ forward({
       default: return null
     }
   }),
-  to: [ $setFields, $throttleFetchProducts, $setPushUrl, $debounceFetchFilters ]
+  to: [ $setFields, $debounceFetchProducts, $setPushUrl, $debounceFetchFilters ]
 })
 // endregion
 

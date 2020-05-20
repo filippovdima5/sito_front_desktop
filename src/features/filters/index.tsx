@@ -1,11 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import { FilterCurtain } from './templates'
-import {BrandsFilter, CategoriesFilter, SizesFilter} from './organisms'
+import { useStore } from 'effector-react/ssr'
+import { $allFields } from '../products-page/new-store'
+import { BrandsFilter, CategoriesFilter, SizesFilter, RangeFilter } from './organisms'
 
 
 export function Filters () {
-
+  const { price_from, price_to, sale_to, sale_from } = useStore($allFields)
+  
+  
   return (
     <S.Wrap >
       <S.Container>
@@ -13,9 +16,9 @@ export function Filters () {
         
         <CategoriesFilter/>
         
-        <FilterCurtain title={'Цена'}/>
-        
-        <FilterCurtain title={'Скидка'}/>
+        <RangeFilter title={'Цена'} range_key={['price_from', 'price_to']} value={[price_from, price_to]}/>
+  
+        <RangeFilter title={'Скидка'} range_key={['sale_from', 'sale_to']} value={[sale_from, sale_to]}/>
         
         <SizesFilter/>
       </S.Container>

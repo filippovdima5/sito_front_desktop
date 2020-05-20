@@ -9,7 +9,7 @@ import {
   $setSearchSize,
   $size_search,
   $allFields,
-  $setNotSize,
+  $setNotSize
 } from '../../products-page/new-store'
 
 
