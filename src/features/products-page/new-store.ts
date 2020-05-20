@@ -85,6 +85,31 @@ $statusPageProducts.on(fetchProductsList.done, (_, { result: { data: { items } }
 
 
 
+
+
+
+
+// region pushToUrlString:
+export const $setReplace = createEvent<any>()
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const $replace = createStore<any>(() => {})
+$replace.on($setReplace, (_, p) => p)
+
+
+const $setPushUrl = createEvent<QueryFields>()
+const $debouncePushUrl = createDebounce($setPushUrl, 2000)
+
+sample($replace, $debouncePushUrl, (replace, query) => ({ query, replace }))
+  .watch(({ query, replace }) => {
+    if (config.ssr) return
+    const url = encodeProductsUrl(query)
+    replace(url)
+  })
+// endregion
+
+
+
+
 /** FILTERS*/
 // region fetch facet:
 const $debounceFetchFilters = createEvent<QueryFields | null>()
@@ -124,7 +149,7 @@ $categoryFilters.on(
     .filter(({ key }) => ![1000, 2000, 3000].includes(key))
 )
 
-//const doneFetchFacetFilters = fetchFacetFilters.done.map(({ result: { data } }) => data)
+const doneFetchFacetFilters = fetchFacetFilters.done.map(({ result: { data } }) => data)
 $brandFilters.on(fetchFacetFilters.done, (state, { result: { data: { brands } } }) => sortBrands(brands))
 $sizeFilters.on(fetchFacetFilters.done, (state, { result: { data: { sizes } } }) => sortSizes(sizes))
 $loadingBrandFilters.on(fetchFacetFilters.pending, (_, p) => { if (!p) return p })
@@ -161,6 +186,8 @@ $brandFilters.on(fetchBrandFilters.done, (_, { result: { data } }) => sortBrands
 // endregion
 
 
+
+
 // region
 export const $setSearchBrands = createEvent<string>()
 $extraFields.on($setSearchBrands, (_, brand_search) => ({ brand_search, brand_all: false }))
@@ -191,27 +218,34 @@ forward({
 })
 
 // endregion
+
+// region search sizes
+export const $size_search = createStore<string>('')
+export const $setSearchSize = createEvent<string>()
+const $bufferSizesFilters = createStore<Array<string>>([])
+$bufferSizesFilters.on(doneFetchFacetFilters, (state, { sizes }) => sizes)
+
+$sizeFilters.on(
+  sample($bufferSizesFilters, $setSearchSize, (sizes, phrase) => ({ sizes, phrase })),
+  (_, payload) => {
+    if (!payload) { // @ts-ignore
+      return sortSizes(payload.sizes)
+    }
+    // @ts-ignore
+    return sortSizes(payload.sizes.filter(item => item.toLowerCase().includes((payload.phrase as string).toLowerCase())))
+  })
+// endregion
+
+// region
+export const $setNotSize = createEvent()
+forward({
+  from: sample($allFields, $setNotSize, (fields) => ({ ...fields, not_size: !fields.not_size })),
+  to: [$setFields, $throttleFetchProducts, $setPushUrl, $debounceFetchFilters]
+})
+// endregion
 /** END_FILTERS*/
 
 
-
-// region pushToUrlString:
-export const $setReplace = createEvent<any>()
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export const $replace = createStore<any>(() => {})
-$replace.on($setReplace, (_, p) => p)
-
-
-const $setPushUrl = createEvent<QueryFields>()
-const $debouncePushUrl = createDebounce($setPushUrl, 2000)
-
-sample($replace, $debouncePushUrl, (replace, query) => ({ query, replace }))
-  .watch(({ query, replace }) => {
-    if (config.ssr) return
-    const url = encodeProductsUrl(query)
-    replace(url)
-  })
-// endregion
 
 
 
