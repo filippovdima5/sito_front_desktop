@@ -4,7 +4,7 @@ import { Button } from '../../../ui/button'
 import { Select } from '../../../ui/select'
 import { SexId } from '../../../types'
 import { Button1 } from '../../../commons/atoms'
-import { Link } from 'react-router-dom'
+
 
 
 export function MainBanner({ sexId }: { sexId: SexId }) {
@@ -22,12 +22,13 @@ export function MainBanner({ sexId }: { sexId: SexId }) {
           <S.Title>Все скидки в одном месте</S.Title>
           
           <S.ButtonsContainer>
-            <S.WrapItemForm>
-              <Button1 href={'/'} className='button' borderRad={5}>Мужчины</Button1>
+            <S.WrapItemForm active={sexId === 1}>
+              <Button1 href={'/men/home'} className='button' borderRad={5}>Мужчины</Button1>
             </S.WrapItemForm>
-            
-            <Button  title={'Мужчины'}/>
-            <Button title={'Женщины'}/>
+  
+            <S.WrapItemForm active={sexId === 2}>
+              <Button1 href={'/women/home'} className='button' borderRad={5}>Женщины</Button1>
+            </S.WrapItemForm>
             
             <Select
               multi
@@ -74,14 +75,16 @@ const S = {
     }
 `,
   
-  WrapItemForm: styled.div`
+  WrapItemForm: styled.div<{ active: boolean}>`
     margin: 0 5px;
     
     & .button {
-      background-color: rgba(5,9,18,0.5);
+      background-color: ${({ active }) => active ? 'white' : 'rgba(5,9,18,0.5)'};
+      color: ${({ active }) => active ? 'black' : 'rgba(255,255,255,0.8)' };
+      
       border: 1px solid transparent;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.8);
+
       width: 170px;
     }
 `,
