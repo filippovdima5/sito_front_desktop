@@ -1,8 +1,15 @@
 import React from 'react'
-import styles from './styles.module.scss'
 import config from '../../../config'
+import styles from './styles.module.scss'
 
-export function Loader() {
+
+type Props = {
+  classNameRing?: string,
+  classNameBall?: string,
+}
+
+
+export function Loader(props: Props) {
   if (config.ssr) return null
   
   return(
@@ -10,8 +17,8 @@ export function Loader() {
       <div className={styles.filter}/>
       
       <div className={styles.wrap}>
-        <div className={styles.ring}>
-          <div className={styles.ballHolder}>
+        <div className={`${styles.ring} ${props.classNameRing ?? ''}`}>
+          <div className={`${styles.ballHolder} ${props.classNameBall ?? ''}`}>
             <div className={styles.ball}/>
           </div>
         </div>

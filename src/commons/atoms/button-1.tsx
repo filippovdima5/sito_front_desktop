@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 
 
 type Props = {
+  type?: 'small' | 'middle' | 'large',
   icon?: { icon: FC<{ className: string }>, pos: 'left' | 'right' },
   onClick?: () => void,
   className?: string,
   borderRad?: number,
-  href?: string,
+  href?: string | null,
   target?: string,
 }
 
@@ -19,8 +20,18 @@ export const Button1: FC<Props> = (props) => {
     return props.icon.pos
   }, [props.icon])
   
+  const height = useMemo(() => {
+    switch (props.type) {
+      case 'small': return 30
+      case 'middle': return 40
+      case 'large': return 50
+      default: return 40
+    }
+  }, [props.type])
+  
   if (props.href) return (
     <S.Link
+      height={height}
       to={props.href}
       target={props.target}
       borderRad={props.borderRad}
@@ -77,14 +88,14 @@ const S = {
     }
 `,
   
-  Link: styled(Link)<{ posIcon: null | 'right' | 'left', icon: boolean, borderRad?: number }>`
+  Link: styled(Link)<{ posIcon: null | 'right' | 'left', icon: boolean, borderRad?: number, height: number }>`
     display: flex;
     align-items: center;
     justify-content: center;
 
+    height: ${({ height }) => `${height}px`};
 
     position: relative;
-    height: 40px;
     color: rgba(39,39,39,0.8);
     font-size: 16px;
     line-height: 19px;

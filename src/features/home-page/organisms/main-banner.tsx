@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { Button } from '../../../ui/button'
-import { Select } from '../../../ui/select'
 import { SexId } from '../../../types'
 import { Button1 } from '../../../commons/atoms'
+import { useEffectSafe } from '../../../hooks/use-effect-safe'
+import { encodeProductsUrl } from '../../products-page/lib'
+import { SelectCategory, SearchBrands } from '../molecules'
 
 
 
 export function MainBanner({ sexId }: { sexId: SexId }) {
+  const [sex_id, setSexId] = useState(sexId)
+  const [ categories, setCategories ] = useState<Array<number>>([])
+  const [brands, setBrands] = useState<Array<string>>([])
+  
+  useEffectSafe(() => { setSexId(sexId) }, [sexId])
+  const urlSearchSale = useMemo(() => encodeProductsUrl({ sex_id, categories, brands }), [sex_id, categories, brands])
+  
+  
   return(
     <S.Wrap>
       <img
@@ -30,24 +39,29 @@ export function MainBanner({ sexId }: { sexId: SexId }) {
               <Button1 href={'/women/home'} className='button' borderRad={5}>Женщины</Button1>
             </S.WrapItemForm>
             
-            <Select
-              multi
-              options={[{ key: 1, label: 'sko' }]}
-              title={'Все категории'}
-            />
+            <S.WrapItemForm>
+              <SelectCategory
+                setCategory={(cats: Array<number>) => setCategories(cats)}
+                sexId={sex_id}
+                categories={categories}
+              />
+            </S.WrapItemForm>
             
-            <Select
-              search
-              multi
-              options={[{ key: 1, label: 'sko' }]}
-              title={'Введите бренд'}
-            />
+            
+            <S.WrapItemForm>
+              <SearchBrands
+                setBrands={setBrands}
+                selectedBrands={brands}
+                categories={categories}
+                sexId={sex_id}
+              />
+            </S.WrapItemForm>
             
           </S.ButtonsContainer>
           
-          <Button className='black-button' type={'black'}>
+          <Button1 type={'large'} href={urlSearchSale} className='black-button'>
             Искать скидки
-          </Button>
+          </Button1>
         
         </S.Inner>
       </S.Container>
@@ -75,18 +89,30 @@ const S = {
     }
 `,
   
-  WrapItemForm: styled.div<{ active: boolean}>`
+  WrapItemForm: styled.div<{ active?: boolean}>`
     margin: 0 5px;
     
     & .button {
-      background-color: ${({ active }) => active ? 'white' : 'rgba(5,9,18,0.5)'};
-      color: ${({ active }) => active ? 'black' : 'rgba(255,255,255,0.8)' };
+      background-color: ${({ active }) => active ? '#FFFFFF' : 'rgba(5,9,18,0.5)'};
+      color: ${({ active }) => active ? 'rgba(39,39,39,0.8)' : 'rgba(255,255,255,0.8)' };
       
       border: 1px solid transparent;
       text-transform: uppercase;
+      font-size: 14px;
+      line-height: 16px;
 
       width: 170px;
     }
+    
+    & .search-brand {
+       width: 216px;
+       border: transparent;
+       
+       background-color: ${({ active }) => active ? '#FFFFFF' : 'rgba(5,9,18,0.5)'};
+       color: ${({ active }) => active ? 'rgba(39,39,39,0.8)' : 'rgba(255,255,255,0.8)' };
+    }
+    
+    &  .icon-search { fill: #FFFFFF !important; }
 `,
   
   Container: styled.div`
@@ -115,6 +141,11 @@ const S = {
       transform: translateX(-50%);
       text-transform: uppercase;
       border-radius: 5px;
+      background-color: #272727;
+      border: transparent;
+      font-weight: bold;
+      color: white;
+      width: 218px;
     }
 `,
   

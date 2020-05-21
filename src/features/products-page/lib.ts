@@ -98,6 +98,7 @@ export const encodeProductsUrl = (params: QueryFields): string | null => {
   let search = ''
   Object.entries(params).forEach(([key, value]) => {
     switch (key) {
+      case 'sex_id': return null
       case 'price_from':
       case 'price_to':
       case 'sale_from':

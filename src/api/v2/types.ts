@@ -61,7 +61,15 @@ export interface GetProductsParams{
 
 
 // region Filters:
-export interface GetFiltersParams extends GetProductsParams {
+export interface  GetFiltersParams {
+  sex_id: SexId,
+  categories?: Array<keyof typeof unisexCategoryKeys> | Array<number>,
+  brands?: Array<string>,
+  sizes?: Array<string>,
+  price_from?: number,
+  price_to?: number,
+  sale_from?: number,
+  sale_to?: number,
   brand_search?: string,
   brand_all?: boolean,
 }
