@@ -122,11 +122,11 @@ export const encodeProductsUrl = (params: QueryFields): string | null => {
 
 
 // region
-const c = (char: string): number => {
+export const sortByChar = (char: string): number => {
   if (!isNaN(Number(char.charAt(0)))) return 2e4 + Number(char.charAt(0))
   return char.toLowerCase().charCodeAt(0)
 }
-export const sortBrands = (arr: Array<string>): Array<string> => arr.sort((a, b) => c(a) - c(b))
+export const sortBrands = (arr: Array<string>): Array<string> => arr.sort((a, b) => sortByChar(a) - sortByChar(b))
 // endregion
 
 
@@ -134,7 +134,7 @@ export const sortBrands = (arr: Array<string>): Array<string> => arr.sort((a, b)
 const sizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXL', 'XXXL', '4XL' ]
 const getIndex = (str: string): number => {
   const index = sizes.findIndex(size => size === str)
-  if (index === -1) return c(str)
+  if (index === -1) return sortByChar(str)
   return index
 }
 export const sortSizes = (arr: Array<string>): Array<string> => arr.sort((a, b) => getIndex(a) - getIndex(b))

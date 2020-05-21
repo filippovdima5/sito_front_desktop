@@ -16,6 +16,7 @@ export type PaginateResponse<Item> = {
 
 // region popularBrands
 import { SexId } from '../../types'
+import {BrandItem} from '../v1/types'
 
 
 export type PopularBrandsParams = {
@@ -78,5 +79,18 @@ export type FacetFilters = {
   categories: Array<keyof typeof unisexCategoryKeys> | Array<number>,
   brands: Array<string>,
   sizes: Array<string>,
+}
+// endregion
+
+
+// region brand by char
+export type GetBrandsByCharParams = {
+  sex_id: SexId,
+  phrase?: string,
+}
+
+export type BrandByChar = {
+  char: string,
+  brands: Array<string>,
 }
 // endregion

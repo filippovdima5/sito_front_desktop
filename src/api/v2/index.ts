@@ -1,7 +1,8 @@
 import axios, { AxiosPromise } from 'axios'
 import config from '../../config'
 import {
-  FacetFilters,
+  BrandByChar,
+  FacetFilters, GetBrandsByCharParams,
   GetFiltersParams,
   GetProductsParams,
   PaginateResponse,
@@ -26,6 +27,9 @@ export const api = {
   
   getProductsList: (params: GetProductsParams): AxiosPromise<PaginateResponse<ShortProduct>> => request
     .get(`/products${formQueryGetProductsList(params)}`),
+  
+  getBrandsByChar: ({ sex_id, phrase }: GetBrandsByCharParams): AxiosPromise<Array<BrandByChar>> => request
+    .get(`/brands-by-char?sex_id=${sex_id}&phrase=${phrase ?? ''}`),
   
   filters: {
     facet: (params: GetFiltersParams): AxiosPromise<FacetFilters> => request

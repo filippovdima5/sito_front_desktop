@@ -1,12 +1,17 @@
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useEvent } from 'effector-react/ssr'
 import { Search } from '../../assets/svg'
+import { SexId } from '../../types'
+import { $setFetchBrands } from './store'
 
 
-export function SearchInput() {
+export function SearchInput({ sexId }: { sexId: SexId }) {
   const placeholder = useRef('Поиск бренда')
   const [ focus, setFocus ] = useState(false)
   const [ value, setValue ] = useState('')
+  
+  const setFetchBrands = useEvent($setFetchBrands)
   
   return (
     <S.Search>
@@ -15,7 +20,10 @@ export function SearchInput() {
       <S.SearchInput
         placeholder={!focus ? placeholder.current : value}
         value={focus ? value : (value ?? placeholder.current)}
-        onChange={e => setValue(e.target.value)}
+        onChange={e => {
+          setValue(e.target.value)
+          setFetchBrands({ sex_id: sexId, phrase: e.target.value })
+        }}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
       />
