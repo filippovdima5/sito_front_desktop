@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useBodyScrollTop } from '../../hooks/use-body-scroll-top'
 
 
 
 export function AboutAs() {
+  useBodyScrollTop()
+  
   return (
     <S.Wrap>
       
@@ -19,7 +22,7 @@ export function AboutAs() {
       <S.VideoWrap>
         <S.VideoContainer>
           <S.VideoInner>
-            <iframe width="1400" height="500" src="https://www.youtube-nocookie.com/embed/U0bQUlGWXUs?controls=0" frameBorder="0"
+            <iframe id={'video'} title={'video'} width="1400" height="500" src="https://www.youtube-nocookie.com/embed/U0bQUlGWXUs?controls=0" frameBorder="0"
               allow="accelerometer;   " allowFullScreen={false}/>
           </S.VideoInner>
         </S.VideoContainer>

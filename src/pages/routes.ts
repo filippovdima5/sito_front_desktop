@@ -1,9 +1,10 @@
-import { AboutAs } from '../features/about-us-page'
+import { AboutAs } from './about-us'
 import { GenderDetected } from './start-page'
 import { Home } from './home'
 import { NotFound } from './not-found'
 import { Products } from './products'
 import { Brands } from './brands'
+import { PrivateOffice } from './private-office'
 
 
 
@@ -23,6 +24,11 @@ export const ROUTES = [
   { path: '/about', exact: true, component: AboutAs },
   { path: '/men/about', exact: true, component: AboutAs },
   { path: '/women/about', exact: true, component: AboutAs },
+  
+  
+  { path: '/private-office', exact: true, component: PrivateOffice },
+  { path: '/men/private-office', exact: true, component: PrivateOffice },
+  { path: '/women/private-office', exact: true, component: PrivateOffice },
   
   { path: '*', exact: true, component: NotFound },
 ]
