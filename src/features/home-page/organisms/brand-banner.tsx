@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link, useLocation } from 'react-router-dom'
 import { Button } from '../../../ui/button'
+import {findSexInPath} from '../../../lib'
 
 
 const banner = {
@@ -10,6 +12,9 @@ const banner = {
 }
 
 export function BrandBanner() {
+  const { pathname } = useLocation()
+  
+  
   return (
     <S.Wrap>
       <img
@@ -18,7 +23,7 @@ export function BrandBanner() {
         className='img'
       />
       
-      <S.Container>
+      <S.Container to={`/${findSexInPath(pathname)}/brands`}>
         <S.Inner>
           <Button className='button'>Бренды</Button>
           <S.InfoContainer>
@@ -57,7 +62,7 @@ const S = {
     }
 `,
   
-  Container: styled.div`
+  Container: styled(Link)`
     box-sizing: border-box;
     position: absolute;
     top: 0;

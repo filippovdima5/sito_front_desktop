@@ -1,21 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link, useLocation } from 'react-router-dom'
 import { namesCategory } from '../../../constants/category-keys'
 import { Button } from '../../../ui/button'
+import { findSexInPath } from '../../../lib'
 
 
 const saleBanners = [
   { categoryId: 2001, percent: 50 },
+  { categoryId: 1003, percent: 85 },
   { categoryId: 3001, percent: 70 },
-  { categoryId: 1003, percent: 85 }
 ]
 
 
 export function SaleBanners() {
+  const { pathname } = useLocation()
+  
   return (
     <S.Wrap>
       {saleBanners.map(item => (
-        <S.Container key={item.categoryId}>
+        <S.Container to={`/${findSexInPath(pathname)}/products?categories=${item.categoryId}`} key={item.categoryId}>
           <S.Inner>
             <img
               className='img'
@@ -48,7 +52,7 @@ const S = {
     margin: 0 -15px;
 `,
   
-  Container: styled.div`
+  Container: styled(Link)`
       flex: 1 1 auto;
       margin: 0 15px;
 `,
