@@ -80,7 +80,6 @@ export function BrandsPage({ sexId }: {sexId: SexId} ) {
 const S = {
   Wrap: styled.div`
     width: 100%;
-    
 `,
   
   SearchPanel: styled.div<{ activeBtn: string }>`

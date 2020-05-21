@@ -1,11 +1,10 @@
+import { AboutAs } from '../features/about-us-page'
 import { GenderDetected } from './start-page'
 import { Home } from './home'
 import { NotFound } from './not-found'
 import { Products } from './products'
 import { Brands } from './brands'
 
-
-export type PathParamsSex = { sex: 'men' | 'women' }
 
 
 export const ROUTES = [
@@ -20,6 +19,10 @@ export const ROUTES = [
   
   { path: '/men/brands', exact: true, component: Brands },
   { path: '/women/brands', exact: true, component: Brands },
+  
+  { path: '/about', exact: true, component: AboutAs },
+  { path: '/men/about', exact: true, component: AboutAs },
+  { path: '/women/about', exact: true, component: AboutAs },
   
   { path: '*', exact: true, component: NotFound },
 ]
