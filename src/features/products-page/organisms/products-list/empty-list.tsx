@@ -4,8 +4,7 @@ import { useLocation } from 'react-router'
 import { useEvent } from 'effector-react/ssr'
 import styles from '../../../../assets/styles/info-page.module.scss'
 import { Button1 } from '../../../../commons/atoms'
-import { $mountProductsPage } from '../../new-store'
-import { SexId } from '../../../../types'
+import { $mountProductsPage } from '../../store'
 
 
 

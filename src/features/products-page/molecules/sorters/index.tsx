@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useStore, useEvent } from 'effector-react/ssr'
 import { Close, Arrow } from '../../../../assets/svg'
 import { sortTypes } from '../../constants'
-import { $viewFilterButtons, $deleteOneFilterValue, $setSort, $allFields } from '../../new-store'
+import { $viewFilterButtons, $deleteOneFilterValue, $setSort, $allFields } from '../../store'
 
 
 export function Sorters() {

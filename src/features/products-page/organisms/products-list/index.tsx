@@ -1,6 +1,6 @@
 import React  from 'react'
 import { useStore } from 'effector-react/ssr'
-import { $loading, $statusPageProducts, $products , $allFields } from '../../new-store'
+import { $loading, $statusPageProducts, $products , $allFields } from '../../store'
 import { ProductCard, SkeletonCard } from '../../../../commons/organisms/product-card'
 import config from '../../../../config'
 import { StatusPage } from '../../types'

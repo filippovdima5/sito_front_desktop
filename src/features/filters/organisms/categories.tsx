@@ -2,7 +2,7 @@ import React from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
 import { FilterCurtain } from '../templates'
 import { Option } from '../../../commons/atoms'
-import { $categoryFilters , $allFields, $addOneFilterValue, $deleteOneFilterValue } from '../../products-page/new-store'
+import { $categoryFilters , $allFields, $addOneFilterValue, $deleteOneFilterValue } from '../../products-page/store'
 import { categoryKeys } from '../../../constants'
 
 

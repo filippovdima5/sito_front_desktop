@@ -8,7 +8,7 @@ import styles from './styles.module.scss'
 import { Sorters } from './molecules/sorters'
 import { Pagination } from './molecules/pagination'
 import { ProductsList } from './organisms/products-list'
-import { $mountProductsPage } from './new-store'
+import { $mountProductsPage } from './store'
 
 
 export function ProductsPage({ sexId }: { sexId: SexId }) {

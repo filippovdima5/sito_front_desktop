@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { $totalPages, $allFields, $setPage } from '../../new-store'
+import { $totalPages, $allFields, $setPage } from '../../store'
 import config from '../../../../config'
 import { Arrow } from '../../../../assets/svg'
 import styles from './styles.module.scss'

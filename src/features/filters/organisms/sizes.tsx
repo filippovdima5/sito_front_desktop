@@ -10,7 +10,7 @@ import {
   $size_search,
   $allFields,
   $setNotSize
-} from '../../products-page/new-store'
+} from '../../products-page/store'
 
 
 function SearchSize() {

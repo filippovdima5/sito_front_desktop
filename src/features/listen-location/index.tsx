@@ -2,7 +2,7 @@ import { useLocation , useHistory } from 'react-router'
 import { useEvent } from 'effector-react/ssr'
 import { $setPathname } from '../../stores/location-listen'
 import { useEffectSafe } from '../../hooks/use-effect-safe'
-import { $setReplace } from '../products-page/new-store'
+import { $setReplace } from '../products-page/store'
 
 
 export function ListenLocation() {

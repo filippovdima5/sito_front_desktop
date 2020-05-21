@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useStore } from 'effector-react/ssr'
-import { $allFields } from '../products-page/new-store'
+import { $allFields } from '../products-page/store'
 import { BrandsFilter, CategoriesFilter, SizesFilter, RangeFilter } from './organisms'
 
 

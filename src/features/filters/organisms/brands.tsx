@@ -10,7 +10,7 @@ import {
   $brandFilters,
   $setSearchBrands,
   $setShowAllBrands,
-  $extraFields } from '../../products-page/new-store'
+  $extraFields } from '../../products-page/store'
 
 
 

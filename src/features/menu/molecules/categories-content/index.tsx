@@ -3,7 +3,7 @@ import { Link , useLocation } from 'react-router-dom'
 import { useEvent } from 'effector-react/ssr'
 import { namesCategory } from '../../../../constants/category-keys'
 import { categoriesGroupBySub } from '../../../../constants/categories-group-by-sub'
-import { $mountProductsPage } from '../../../products-page/new-store'
+import { $mountProductsPage } from '../../../products-page/store'
 import { findSexInPath, sexIdToStr } from '../../../../lib'
 import styles from './styles.module.scss'
 

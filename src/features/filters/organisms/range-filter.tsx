@@ -4,7 +4,7 @@ import { useEvent } from 'effector-react/ssr'
 import { QueryFields } from '../../products-page/types'
 import { FilterCurtain } from '../templates'
 import { Input } from '../../../commons/atoms'
-import { $addOneFilterValue } from '../../products-page/new-store'
+import { $addOneFilterValue } from '../../products-page/store'
 import { defaultFields } from '../../products-page/constants'
 
 
