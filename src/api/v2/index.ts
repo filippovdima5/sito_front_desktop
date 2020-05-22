@@ -6,10 +6,10 @@ import {
   GetFiltersParams,
   GetProductsParams,
   PaginateResponse,
-  PopularBrandsParams,
+  PopularBrandsParams,  SearchItem, SearchParams,
   ShortProduct
 } from './types'
-import { formQueryGetFilters, formQueryGetProductsList } from './lib'
+import { formQueryGetFilters, formQueryGetProductsList, formQuerySimple } from './lib'
 
 
 export const request = axios.create({
@@ -37,6 +37,11 @@ export const api = {
     
     brands: (params: GetFiltersParams): AxiosPromise<Array<string>> => request
       .get(`/brand-filters${formQueryGetFilters(params)}`),
+  },
+  
+  search: {
+    brands: (params: SearchParams): AxiosPromise<Array<SearchItem>> => request
+      .get(`/search-brands${formQuerySimple(params)}`)
   }
 }
 

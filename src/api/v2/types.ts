@@ -94,3 +94,23 @@ export type BrandByChar = {
   brands: Array<string>,
 }
 // endregion
+
+
+// region SEARCH:
+export const typeMainSearchResultItem = {
+  brand: ' Бренд',
+} as const
+
+
+export interface SearchParams {
+  sex_id?: SexId,
+  phrase?: string,
+  limit?: number,
+}
+
+export type SearchItem= {
+  title: string,
+  count: number,
+  type: keyof typeof typeMainSearchResultItem,
+}
+// endregion

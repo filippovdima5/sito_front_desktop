@@ -30,6 +30,12 @@ export const findSexIdInPath = (pathname: string): SexId => {
   return 1
 }
 
+export const findSexIdInPathNotStrict = (pathname: string): SexId | undefined => {
+  if (pathname.includes('/women')) return 2
+  if (pathname.includes('/men')) return 1
+  return undefined
+}
+
 export const recordWithoutNull = (record: any, returnedRecord?: any) => {
   const newRecord: any = returnedRecord ?? {}
   Object.entries(record).forEach(([key, value]) => {

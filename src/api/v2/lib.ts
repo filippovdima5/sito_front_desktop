@@ -1,4 +1,4 @@
-import {GetFiltersParams, GetProductsParams} from './types'
+import {GetFiltersParams, GetProductsParams, SearchParams} from './types'
 
 
 const encodeNumber = (key: string, value?: number): string | '' => {
@@ -63,6 +63,21 @@ export const formQueryGetFilters = (params: GetFiltersParams): string => {
     }
   })
   
+  return search.slice(0, -1)
+}
+// endregion
+
+
+// region
+interface SimpleQueryParams extends SearchParams {
+  id?: string,
+}
+
+export const formQuerySimple = (params: SimpleQueryParams): string => {
+  let search = '?'
+  Object.entries(params)
+    .sort((a, b) => a[0].charCodeAt(0) - b[0].charCodeAt(0))
+    .forEach(([key, value]) => (search = search + encodeString(key, value as string)))
   return search.slice(0, -1)
 }
 // endregion

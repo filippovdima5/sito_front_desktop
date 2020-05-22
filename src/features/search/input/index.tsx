@@ -1,16 +1,19 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
+import { useLocation } from 'react-router'
 import { useEffectSafe } from '../../../hooks/use-effect-safe'
-
-import { $setPhrase, $modSearch  } from '../store'
-
+import { $setSearch, $modSearch  } from '../store'
+import { findSexIdInPathNotStrict } from '../../../lib'
 import styles from './styles.module.scss'
 
 
 export function Input() {
   const inputRef = useRef<HTMLInputElement>(null)
   const modSearch = useStore($modSearch)
-  const setPhrase = useEvent($setPhrase)
+  const setSearch = useEvent($setSearch)
+  
+  const { pathname } = useLocation()
+  const sexId = useMemo(() => findSexIdInPathNotStrict(pathname), [pathname])
   
   
   useEffectSafe(() => {
@@ -23,8 +26,8 @@ export function Input() {
   const handleChange = useCallback((event: any) => {
     const phrase = event.currentTarget.value
     setValue(phrase)
-    setPhrase(phrase)
-  }, [setPhrase])
+    setSearch({ phrase, sex_id: sexId })
+  }, [setSearch, sexId])
 
 
   return (
