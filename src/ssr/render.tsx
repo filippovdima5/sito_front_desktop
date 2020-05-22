@@ -42,7 +42,7 @@ export const render = async ({ sexId, path, search }: { path: string, search: st
     try {
       await Promise.all(pageEvents.map(event => allSettled(event, { scope, params: undefined })))
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
   
@@ -67,7 +67,7 @@ export const render = async ({ sexId, path, search }: { path: string, search: st
     
     return template({ html, preloadedState,  styleTags,  scripts, helmet }).split('').join('')
   } catch (e) {
-    console.log(e)
+    console.error(e)
     return ''
   }
 }

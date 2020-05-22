@@ -21,7 +21,7 @@ const addBabelPlugin = (config, name, { prepend } = {}) => {
 }
 
 
-
+// region
 const enableLoadable = (config) => {
   config.plugins = config.plugins || []
   config.plugins.push(new LoadablePlugin())
@@ -32,10 +32,16 @@ const enabledEffectorReact = (config) => {
   addBabelPlugin(config, 'effector/babel-plugin')
 }
 
+const enableStyledSSR = (config) => {
+  addBabelPlugin(config, 'babel-plugin-styled-components', { prepend: true })
+}
+// endregion
+
 
 const webpack = function override(config) {
   enabledEffectorReact(config)
   enableLoadable(config)
+  enableStyledSSR(config)
   return config
 }
 

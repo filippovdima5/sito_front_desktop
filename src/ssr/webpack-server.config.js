@@ -1,53 +1,54 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
-const getCSSModuleLocalIdent = require('./utils/getCSSModuleLocalIdent');
+const getCSSModuleLocalIdent = require('./utils/getCSSModuleLocalIdent')
 
 
 const commonPresets = [
   [
-    "@babel/preset-env",
+    '@babel/preset-env',
     {
-      "targets": {
-        "browsers": [">0.5%", "last 2 versions", "ie >= 10"]
+      'targets': {
+        'browsers': ['>0.5%', 'last 2 versions', 'ie >= 10']
       }
     }
   ],
-  "@babel/preset-react"
+  '@babel/preset-react'
 ]
 
 const babelConfig = {
-  "plugins": [
-      ["@babel/transform-runtime", {"corejs": 2}],
-      ["effector/babel-plugin", { "addLoc": true }],
+  'plugins': [
+    'babel-plugin-styled-components',
+    ['@babel/transform-runtime', { 'corejs': 2 }],
+    ['effector/babel-plugin', { 'addLoc': true }],
 
-    "@loadable/babel-plugin",
-    "@babel/transform-async-to-generator",
-    "@babel/proposal-class-properties",
-    "@babel/proposal-object-rest-spread",
-    "@babel/syntax-dynamic-import",
-    "@babel/plugin-proposal-export-default-from",
-    "@babel/plugin-syntax-export-namespace-from",
-    "@babel/plugin-proposal-optional-chaining",
-    "transform-export-extensions",
+    '@loadable/babel-plugin',
+    '@babel/transform-async-to-generator',
+    '@babel/proposal-class-properties',
+    '@babel/proposal-object-rest-spread',
+    '@babel/syntax-dynamic-import',
+    '@babel/plugin-proposal-export-default-from',
+    '@babel/plugin-syntax-export-namespace-from',
+    '@babel/plugin-proposal-optional-chaining',
+    'transform-export-extensions',
   ],
-  "overrides": [
+  'overrides': [
     {
-      "test": [
-        "./src/**/*.ts",
-        "./src/**/*.tsx"
+      'test': [
+        './src/**/*.ts',
+        './src/**/*.tsx'
       ],
-      "presets": [
-        "@babel/preset-typescript",
+      'presets': [
+        '@babel/preset-typescript',
         ...commonPresets
       ]
     },
     {
-      "test": [
-        "./src/**/*.js",
-        "./src/**/*.jsx"
+      'test': [
+        './src/**/*.js',
+        './src/**/*.jsx'
       ],
-      "presets": [
-        "@babel/preset-flow",
+      'presets': [
+        '@babel/preset-flow',
         ...commonPresets
       ]
     }
@@ -82,6 +83,7 @@ const serverEntryConfig = {
   externals: [
     nodeExternals({
       whitelist: [
+        /normalize\.css/,
         /react-dnd-html5-backend(\/.+)?/,
         /dnd-core(\/.+)?/,
         /react-dnd(\/.+)?/,
@@ -97,6 +99,14 @@ const serverEntryConfig = {
         exclude: /(node_modules\/)/,
         loader: 'babel-loader',
         options: babelConfig,
+      },
+      {
+        test: /\.css$/,
+        loader: 'file-loader',
+        options: {
+          emitFile: false,
+        },
+        sideEffects: true,
       },
 
       {

@@ -18,21 +18,21 @@ const cacheRender = createCache(renderLRU)
 const app = new Koa()
 
 const setupKoa = () => {
-  if (process.env.NODE_ENV !== 'production') {
-    app.use(mount('/static', serve(`${path.resolve(__dirname, 'static')}`)))
-    app.use(mount('/cdn', serve(`${path.resolve(__dirname, 'cdn')}`)))
-    app.use(mount('/icons', serve(`${path.resolve(__dirname, 'icons')}`)))
-    app.use(mount('/favicon', serve(`${path.resolve(__dirname, '/')}`)))
-    app.use(mount('/loadable-stats', serve(`${path.resolve(__dirname, '/')}`)))
-    app.use(mount('/precache-manifest', serve(`${path.resolve(__dirname, '/')}`)))
+  // if (process.env.NODE_ENV !== 'production') {
+  app.use(mount('/static', serve(`${path.resolve(__dirname, 'static')}`)))
+  app.use(mount('/assets', serve(`${path.resolve(__dirname, 'assets')}`)))
+  app.use(mount('/icons', serve(`${path.resolve(__dirname, 'icons')}`)))
+  app.use(mount('/favicon', serve(`${path.resolve(__dirname, '/')}`)))
+  app.use(mount('/loadable-stats', serve(`${path.resolve(__dirname, '/')}`)))
+  app.use(mount('/precache-manifest', serve(`${path.resolve(__dirname, '/')}`)))
   
-    app.use(mount('/api', proxy({
-      host: 'http://localhost:8080',
-      map: path => `/api${path}`
-    })))
+  app.use(mount('/api/v2', proxy({
+    host: 'http://localhost:8080',
+    map: path => `/api/v2${path}`
+  })))
   
-    app.use(logger())
-  }
+  app.use(logger())
+  //}
 
   
   app.use(async (ctx) => {
@@ -56,7 +56,7 @@ const setupKoa = () => {
     }
   })
   
-  app.listen({ host: '127.0.0.1', port: 9001 }, () => {console.log('app started: 9001')})
+  app.listen({ host: 'localhost', port: 9001 }, () => {console.info('App desktop started: 9001')})
 }
 
 setupKoa()

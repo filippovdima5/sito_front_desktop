@@ -16,6 +16,7 @@ export const template = (
     <meta name="format-detection" content="telephone=no">
     ${helmet.title.toString()}
     ${helmet.meta.toString()}
+    ${helmet.link.toString()}
     <link rel="shortcut icon" href="/icons/favicon.ico">
     <link rel="shortcut icon" href="/icons/favicon.png">
     <link rel="shortcut icon" href="/icons/favicon.jpg">
