@@ -59,7 +59,7 @@ export const styledProductCard = {
     }
     
     & .like:hover {
-       background-color: rgba(0,0,0,0.1);
+       background-color: ${({ isLike }) => isLike ? 'rgba(237,108,80,0.8)' : 'rgba(0,0,0,0.1)'};
        
         & .svg-heart {
           fill: rgba(109,109,109,0.7);

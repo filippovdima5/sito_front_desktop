@@ -114,3 +114,16 @@ export type SearchItem= {
   type: keyof typeof typeMainSearchResultItem,
 }
 // endregion
+
+
+// region session
+export type SetLikeParams = {
+  id: string,
+  type_set: 'add' | 'del',
+}
+
+export type SessionInfo = {
+  sex_id: SexId | null,
+  like_products: Array<string>,
+}
+// endregion

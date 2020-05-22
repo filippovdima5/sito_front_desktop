@@ -77,7 +77,10 @@ export const formQuerySimple = (params: SimpleQueryParams): string => {
   let search = '?'
   Object.entries(params)
     .sort((a, b) => a[0].charCodeAt(0) - b[0].charCodeAt(0))
-    .forEach(([key, value]) => (search = search + encodeString(key, value as string)))
+    .forEach(([key, value]) => {
+      if (Array.isArray(value)) return (search = search + encodeStringArray(key, value as Array<string>))
+      return (search = search + encodeString(key, value as string))
+    })
   return search.slice(0, -1)
 }
 // endregion

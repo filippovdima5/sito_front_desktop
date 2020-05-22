@@ -1,12 +1,17 @@
 import axios, { AxiosPromise } from 'axios'
 import config from '../../config'
+import { SexId } from '../../types'
 import {
   BrandByChar,
   FacetFilters, GetBrandsByCharParams,
   GetFiltersParams,
   GetProductsParams,
   PaginateResponse,
-  PopularBrandsParams,  SearchItem, SearchParams,
+  PopularBrandsParams,
+  SearchItem,
+  SearchParams,
+  SessionInfo,
+  SetLikeParams,
   ShortProduct
 } from './types'
 import { formQueryGetFilters, formQueryGetProductsList, formQuerySimple } from './lib'
@@ -42,6 +47,14 @@ export const api = {
   search: {
     brands: (params: SearchParams): AxiosPromise<Array<SearchItem>> => request
       .get(`/search-brands${formQuerySimple(params)}`)
+  },
+  
+  session: {
+    mountOrGetInfo: (params: { sexId?: SexId }): AxiosPromise<SessionInfo> => request.get(`/session/mount?sex_id=${params.sexId ?? ''}`),
+    getSessionById: (params: { id: string }): AxiosPromise<{ id: string, sex_id: SexId, like_products: Array<string> } | null> => request
+      .get(`/session/get-by-id?id=${params.id}`),
+    setLike: (params: SetLikeParams) => request
+      .get(`/session/set-like${formQuerySimple(params)}`)
   }
 }
 
