@@ -5,7 +5,7 @@ import {
   BrandByChar,
   FacetFilters, GetBrandsByCharParams,
   GetFiltersParams,
-  GetProductsParams,
+  GetProductsParams, MetaTags,
   PaginateResponse,
   PopularBrandsParams,
   SearchItem,
@@ -37,6 +37,8 @@ export const api = {
     .get(`/brands-by-char?sex_id=${sex_id}&phrase=${phrase ?? ''}`),
   
   getLikeProducts: (): AxiosPromise<Array<ShortProduct>> => request.get('like-products'),
+  
+  getMetaTags: (params: { link: string }): AxiosPromise<MetaTags> => request.post('/meta-tags', params),
   
   filters: {
     facet: (params: GetFiltersParams): AxiosPromise<FacetFilters> => request

@@ -127,3 +127,12 @@ export type SessionInfo = {
   like_products: Array<string>,
 }
 // endregion
+
+
+// region meta Tags
+export type MetaTags = {
+  link: string,
+  title: string,
+  description: string,
+}
+// endregion

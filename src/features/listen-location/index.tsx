@@ -6,7 +6,7 @@ import { $setReplace } from '../products-page/store'
 
 
 export function ListenLocation() {
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
   const { replace } = useHistory()
   
   const setPathname = useEvent($setPathname)
@@ -22,8 +22,8 @@ export function ListenLocation() {
   
   // При любом изменении pathname:
   useEffectSafe(() => {
-    setPathname(pathname)
-  }, [pathname])
+    setPathname({ pathname, search })
+  }, [pathname, search])
   
   return null
 }
