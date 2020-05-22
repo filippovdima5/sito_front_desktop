@@ -16,7 +16,7 @@ export function EmptyPage() {
     <S.Wrap className={styles.wrap}>
       <div>
         <div className={styles.container}>
-          <div style={{ backgroundImage: 'url("/assets/like-image.svg")' }} className={`${styles.img}`}/>
+          <div style={{ backgroundImage: 'url("/icons/like-image.svg")' }} className={`${styles.img}`}/>
           <div className={styles.title}>Не найдено</div>
           <div className={styles.body}>
             <span>

@@ -92,7 +92,7 @@ const S = {
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
-        background-image: url('/assets/check.svg');
+        background-image: url('/icons/check.svg');
         display: block;
         position: absolute;
         top: 50%;

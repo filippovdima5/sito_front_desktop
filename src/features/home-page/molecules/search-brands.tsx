@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useStore, useEvent } from 'effector-react/ssr'
 import { Input, Option } from '../../../commons/atoms'
 import { SexId } from '../../../types'
-import { $brands, $setSearchBrands, $loadingBrands } from '../store'
+import { $brands, $setSearchBrands, $loadingBrands, $stateOfLoadBrands } from '../store'
 import { Loader } from '../../../commons/templates/loader'
 
 
@@ -21,6 +21,7 @@ export function SearchBrands({ categories, sexId, selectedBrands, setBrands }: P
   const selectRef = useRef<HTMLDivElement>(null)
   
   const brands = useStore($brands)
+  const stateOfLoadBrands = useStore($stateOfLoadBrands)
   const loader = useStore($loadingBrands)
   const setSearchBrands = useEvent($setSearchBrands)
   
@@ -61,7 +62,11 @@ export function SearchBrands({ categories, sexId, selectedBrands, setBrands }: P
       { opened && brands.length === 0 && (
         <S.OptionContainer>
           <div className='loader'>
-            <Loader classNameBall='ball' classNameRing='loader-ring'/>
+            { (stateOfLoadBrands === 'START' || stateOfLoadBrands === 'LOADING') ? (
+              <Loader classNameBall='ball' classNameRing='loader-ring'/>
+            ) :
+              (<div>Не удалось найти</div>)
+            }
           </div>
         </S.OptionContainer>
       ) }

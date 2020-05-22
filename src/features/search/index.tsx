@@ -21,7 +21,6 @@ export function Search() {
           <Input/>
         </div>
         <SearchResult/>
-        
       </div>
     </div>
   )
