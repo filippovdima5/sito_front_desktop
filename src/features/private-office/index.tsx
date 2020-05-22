@@ -50,7 +50,6 @@ const S = {
 `,
   
   ProductsContainer: styled.div`
-    padding: 30px 38px;
     
     & .inner {
       width: 100%;

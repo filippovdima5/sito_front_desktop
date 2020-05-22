@@ -51,6 +51,7 @@ const S = {
     box-sizing: border-box;
     position: relative;
     margin-top: 28px;
+    overflow: hidden;
     
     & .img{
       box-sizing: border-box;

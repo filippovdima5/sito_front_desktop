@@ -55,6 +55,7 @@ const S = {
   Container: styled(Link)`
       flex: 1 1 auto;
       margin: 0 15px;
+      overflow: hidden;
 `,
   
   Inner: styled.div`

@@ -36,6 +36,8 @@ export const api = {
   getBrandsByChar: ({ sex_id, phrase }: GetBrandsByCharParams): AxiosPromise<Array<BrandByChar>> => request
     .get(`/brands-by-char?sex_id=${sex_id}&phrase=${phrase ?? ''}`),
   
+  getLikeProducts: (): AxiosPromise<Array<ShortProduct>> => request.get('like-products'),
+  
   filters: {
     facet: (params: GetFiltersParams): AxiosPromise<FacetFilters> => request
       .get(`/facet-filters${formQueryGetFilters(params)}`),

@@ -7,6 +7,7 @@ import { mountCookie } from './location-listen'
 export const $likesProducts = createStore<Array<string>>([])
 $likesProducts.on(mountCookie.done, (state, { result: { data: { like_products } } }) => like_products)
 
+
 export const $setLike = createEvent<string>()
 
 const fetchSetLike = createEffect({
