@@ -37,10 +37,10 @@ function BrandsGroup({ brands, sexId }: {brands: Array<string>, sexId: 1 | 2}) {
 export function BrandsPage({ sexId }: {sexId: SexId} ) {
   const loader = useStore($loadingBrands)
   const charGroups = useStore($brands)
-  const fetchBrands = useEvent($mountBrandsPage)
+  const mountBrandsPage = useEvent($mountBrandsPage)
   
   useEffectSafe(() => {
-    fetchBrands({ sex_id: sexId })
+    mountBrandsPage({ sex_id: sexId })
   }, [sexId])
   
   return (

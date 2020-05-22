@@ -83,11 +83,6 @@ $statusPageProducts.on(fetchProductsList.done, (_, { result: { data: { items } }
 
 
 
-
-
-
-
-
 // region pushToUrlString:
 export const $setReplace = createEvent<any>()
 // eslint-disable-next-line @typescript-eslint/no-empty-function
