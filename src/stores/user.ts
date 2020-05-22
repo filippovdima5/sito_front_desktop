@@ -44,14 +44,6 @@ const targetSexUpdate = merge([$user.updates.map(payload => {
 }), $setGender])
 
 export const $genderInfo = createStore<GenderInfo | null>(null)
-export const $sexId = $genderInfo.map(state => {
-  if (state === null) return null
-  return state.sexId
-})
-export const $sexLine = $genderInfo.map(state => {
-  if (state === null) return null
-  return  state.sexLine
-})
 
 $genderInfo.on(targetSexUpdate, (state, payload) => {
   if (!payload || payload === state?.sexId) return undefined
