@@ -8,7 +8,7 @@ function getApiEndpoint() {
 }
 
 function getApiV2Endpoint() {
-  if (PRODUCTION) return 'http://37.228.116.226:80/api/v2/'
+  if (PRODUCTION) return '/api/v2/'
   if (SERVER) return 'http://localhost:8080/api/v2/'
   return '/api/v2/'
 }

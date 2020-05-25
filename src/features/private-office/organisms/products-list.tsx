@@ -34,9 +34,10 @@ export function ProductsList() {
     <S.Wrap>
       {loading && <Loader/>}
       <div className='products-list'>
-        { data.map(({ oldPrice, images, sale, sizes, price, title, brand, categoryId,colors, id, sexId }) => (
+        { data.map(({ oldPrice, images, sale, sizes, price, title, brand, categoryId,colors, id, sexId, url }) => (
           <ProductCard
             key={id}
+            url={url}
             id={id}
             title={title}
             brand={brand}

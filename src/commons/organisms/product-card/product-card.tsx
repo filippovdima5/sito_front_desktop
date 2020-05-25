@@ -15,7 +15,7 @@ const viewCost = (cost: number): string => {
 }
 
 
-export function ProductCard({ id, brand, images, oldPrice, price, sale, title, sizes  }: ShortProduct) {
+export function ProductCard({ id, brand, images,  oldPrice, price, sale, title, sizes, url  }: ShortProduct) {
   const setLike = useEvent($setLike)
   const likeIds = useStore($likeIds)
   
@@ -25,8 +25,9 @@ export function ProductCard({ id, brand, images, oldPrice, price, sale, title, s
   return (
     <S.CardWrap itemScope itemType={'http://schema.org/Product'}>
       <S.CardContainer isLike={isLike}>
+        <a href={url} target='_blank' rel='noreferrer noopener' className='link'>sito</a>
         <div className='sale flag'>-{sale}%</div>
-        <div onClick={() => setLike(id)} className='like flag'>
+        <div onClickCapture={(e) => {e.stopPropagation(); setLike(id)} } className='like flag'>
           <div className='like-container'>
             <Heart className='svg-heart'/>
           </div>

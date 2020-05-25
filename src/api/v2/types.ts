@@ -40,6 +40,7 @@ export interface ShortProduct {
   'price': number,
   'oldPrice': number,
   'sale': number,
+  url: string,
 }
 // endregion
 
