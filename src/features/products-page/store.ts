@@ -123,7 +123,7 @@ guard({
   target: fetchFacetFilters
 })
 
-fetchFacetFilters.watch(payload => console.log('fetchFacetFilters', payload))
+
 
 $categoryFilters.on(
   sample($allFields, fetchFacetFilters.done, ({ sex_id }, { result: { data: { categories } } }) => ({ sex_id, categories })),
@@ -259,12 +259,6 @@ guard({
   filter: () => !config.ssr,
   target: $debounceFetchFilters
 })
-
-
-$mountInServer.watch(state => console.log('inServer', state))
-mountProductsPage.watch(payload => console.log('mountProductsPage', payload))
-mountWithParams.watch(payload => console.log('mountWithParams', payload))
-firstMountFilters.watch(payload => console.log('firstMountFilters', payload))
 // endregion
 
 

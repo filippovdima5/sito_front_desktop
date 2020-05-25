@@ -1,4 +1,4 @@
-import {  createEffect, createEvent, createStore, forward, sample, guard } from 'lib/effector'
+import {  createEffect, createEvent, createStore, forward, guard, merge } from 'lib/effector'
 import { createDebounce } from 'effector-debounce'
 import { BrandByChar, GetBrandsByCharParams } from '../../api/v2/types'
 import { SexId } from '../../types'
@@ -7,36 +7,37 @@ import { sortByChar } from '../products-page/lib'
 import config from '../../config'
 
 
+
 export const $brands = createStore<Array<BrandByChar>>([])
 export const $loadingBrands = createStore<boolean>(false)
 
-const $paramsForFetch = createStore<{ sex_id: SexId } | null>(null)
-const $mountInServer = createStore<boolean>(false)
+
+const $inServer = createStore<boolean>(false)
+const unLockFetch = createEffect({ handler: () => config.ssr })
+$inServer.on(unLockFetch.done, (_, { result }) => result)
+
+
+export const $setFetchBrands = createEvent<{ sex_id: SexId, phrase?: string }>()
 export const $mountBrandsPage = createEvent<{ sex_id: SexId }>()
-const $eventForMount = sample($mountInServer, $mountBrandsPage, (inServer, params) => {
-  if (config.ssr) return params
-  if (inServer) return null
-  return params
-})
-$mountInServer.on($eventForMount, () => config.ssr)
-$paramsForFetch.on($eventForMount, (state, payload) => {
-  if (!payload) return
-  return payload
-})
+const mountBrandPage = createEvent<{ sex_id: SexId }>()
+
+
+guard({ source: $mountBrandsPage, filter: $inServer.map(inServer => !inServer), target: mountBrandPage })
+guard({ source: $mountBrandsPage, filter: (() => true) , target: unLockFetch })
+
 
 const fetchBrands = createEffect({
   handler: (params: GetBrandsByCharParams) => apiV2.getBrandsByChar(params)
 })
 
-guard({
-  source: $paramsForFetch.updates,
-  filter: $paramsForFetch.map(state => state !== null),
-  target: fetchBrands,
+
+forward({
+  from: merge([
+    createDebounce($setFetchBrands, 1000),
+    mountBrandPage
+  ]),
+  to: fetchBrands
 })
-
-
-export const $setFetchBrands = createEvent<{ sex_id: SexId, phrase?: string }>()
-forward({ from: createDebounce($setFetchBrands, 1000), to: fetchBrands })
 
 
 $brands.on(fetchBrands.done, (_, { result: { data } }) => data.sort((a, b) => sortByChar(a.char) - sortByChar(b.char)))
