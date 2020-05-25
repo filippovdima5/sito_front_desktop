@@ -1,36 +1,23 @@
-import React, { useRef } from 'react'
-import { useHistory } from 'react-router'
-import {  useEvent } from 'effector-react/ssr'
-import { useEffectSafe } from '../../helpers/hooks/use-effect-safe'
+import React from 'react'
+import { useLocation } from 'react-router'
+import { useEvent } from 'effector-react/ssr'
+import { SexId } from '../../types'
+import { useEffectSafe } from '../../hooks/use-effect-safe'
+import { Filters } from '../filters'
 import styles from './styles.module.scss'
-import {  $toggleSex, $initRouteHistory } from './store'
 import { Sorters } from './molecules/sorters'
 import { Pagination } from './molecules/pagination'
 import { ProductsList } from './organisms/products-list'
-import { Filters } from './organisms/filters'
+import { $mountProductsPage } from './store'
 
 
-type Props = {
-  sexId: 1 | 2,
-}
-
-export function ProductsPage({ sexId }: Props) {
-  const history = useHistory()
-  const prevSexId = useRef<Props['sexId']>(sexId)
-  
-  const toggleSex = useEvent($toggleSex)
-  const initRouteHistory = useEvent($initRouteHistory)
+export function ProductsPage({ sexId }: { sexId: SexId }) {
+  const mountProductsPage = useEvent($mountProductsPage)
+  const { pathname, search } = useLocation()
   
   useEffectSafe(() => {
-    if (sexId !== prevSexId.current ) toggleSex(sexId)
-    prevSexId.current = sexId
-  }, [ sexId ])
-  
-  
-  useEffectSafe(() => {
-    initRouteHistory(history)
-  }, [])
-  
+    mountProductsPage({ pathname, search })
+  }, [sexId])
   
   return (
     <div className={styles.products}>

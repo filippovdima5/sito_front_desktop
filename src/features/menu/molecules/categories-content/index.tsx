@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link , useLocation } from 'react-router-dom'
 import { useEvent } from 'effector-react/ssr'
-import { $goToONlySomeFilter } from '../../../products-page/store'
 import { namesCategory } from '../../../../constants/category-keys'
 import { categoriesGroupBySub } from '../../../../constants/categories-group-by-sub'
-import { sexIdToStr } from '../../../../helpers/lib'
+import { $mountProductsPage } from '../../../products-page/store'
+import { findSexInPath, sexIdToStr } from '../../../../lib'
 import styles from './styles.module.scss'
 
 
@@ -16,8 +16,11 @@ const subCategories = [
 
 
 export function CategoriesContent({ sexId }: { sexId: 1 | 2 }) {
-  const goToONlySomeFilter = useEvent($goToONlySomeFilter)
-  const sexLine = useMemo(() => sexIdToStr(sexId), [sexId])
+  const { pathname } = useLocation()
+  const mountProductsPage = useEvent($mountProductsPage)
+  const pathSex = useMemo(() => findSexInPath(pathname), [pathname])
+  const lineSex = useMemo(() => sexIdToStr(sexId), [sexId])
+  
   
   return (
     <div className={styles.categoriesContent}>
@@ -29,9 +32,11 @@ export function CategoriesContent({ sexId }: { sexId: 1 | 2 }) {
               {categoriesGroupBySub[sexId][subKey].map((categoryId) => (
                 <li key={`${categoryId}_${sexId}`} className={styles.liLink}>
                   <Link
-                    onClick={() => goToONlySomeFilter({ key: 'categories', value: categoryId })}
+                    onClick={() => {
+                      if (pathSex === lineSex) mountProductsPage({ pathname: `/${lineSex}/products`, search: `?categories=${categoryId}` })
+                    }}
                     className={styles.categoryLink}
-                    to={`/products/${sexLine}?categories=${categoryId}`}
+                    to={`/${lineSex}/products?categories=${categoryId}`}
                   >
                     {namesCategory[sexId][categoryId]}
                   </Link>

@@ -1,7 +1,7 @@
 import { restore, createEvent, createStore } from 'lib/effector'
 
 
-type MenuContent = 'BRANDS' | 'MEN_CATEGORIES' | 'WOMEN_CATEGORIES'
+export type MenuContent = 'BRANDS' | 'MEN_CATEGORIES' | 'WOMEN_CATEGORIES'
 
 
 export const $setShowMenu = createEvent<boolean>()
@@ -21,3 +21,7 @@ export const $forceCloseState = createStore(false)
 $forceCloseState.on($setForceClose, (_, payload) => payload)
 $showMenu.on($setForceClose, () => false)
 
+
+$menuContent.on($showMenu.updates, (_, payload) => {
+  if (!payload) return null
+})

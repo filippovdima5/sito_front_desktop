@@ -1,16 +1,29 @@
 import React from 'react'
+import styled from 'styled-components'
 import { SexId } from '../../types'
-import styles from './styles.module.scss'
-import { MainBanner } from './organisms'
+import { useBodyScrollTop } from '../../hooks/use-body-scroll-top'
+import { MainBanner, BrandBanner, SaleBanners } from './organisms'
 
 
 export function HomePage({ sexId }: { sexId: SexId }) {
+  useBodyScrollTop()
   
   return (
-    <div className={styles.home}>
-      <div className={styles.container}>
-        <MainBanner/>
+    <S.Wrap>
+      <div>
+        <MainBanner sexId={sexId}/>
+        <BrandBanner/>
+        <SaleBanners/>
       </div>
-    </div>
+    </S.Wrap>
   )
+}
+
+
+const S = {
+  Wrap: styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    
+`
 }

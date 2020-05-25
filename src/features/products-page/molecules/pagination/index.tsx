@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { $productsInfoStore, $mainState, $setPage } from '../../store'
+import { $totalPages, $allFields, $setPage } from '../../store'
 import config from '../../../../config'
+import { Arrow } from '../../../../assets/svg'
 import styles from './styles.module.scss'
-
 
 
 const handleToTop = () => {
@@ -11,8 +11,8 @@ const handleToTop = () => {
 }
 
 export function Pagination() {
-  const { total_pages } = useStore($productsInfoStore)
-  const { page } = useStore($mainState)
+  const totalPages = useStore($totalPages)
+  const { page } = useStore($allFields)
   const setCurrentPage = useEvent($setPage)
   
   const currentPage = useMemo(() => {
@@ -26,20 +26,24 @@ export function Pagination() {
   }, [ currentPage, setCurrentPage ])
   
   const handleNext = useCallback(() => {
-    if (currentPage < total_pages - 1) setCurrentPage(currentPage + 1)
-  }, [currentPage, total_pages, setCurrentPage])
+    if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1)
+  }, [currentPage, totalPages, setCurrentPage])
   
+  
+  if (totalPages <= 1) return null
   
   
   return (
     <div className={styles.Pagination}>
       <div className={styles.inner} onClick={() => handleToTop()}>
         <div className={styles.left} onClick={handlePrev}>
-          <span className={`${styles.arrow} ${styles.prev}`}/>
+          <span className={`${styles.arrow} ${styles.prev}`}>
+            <Arrow className={styles.arrowSvg} rotate={90}/>
+          </span>
         </div>
         
         <div className={`${styles.main} ${styles.cdp}`} data-actpage={currentPage}>
-          {Array.from({ length: total_pages }).map((_, i) => (
+          {Array.from({ length: totalPages }).map((_, i) => (
             <span
               onClick={() => setCurrentPage(i+1)}
               data-page = {i}
@@ -52,7 +56,9 @@ export function Pagination() {
         </div>
       
         <div className={styles.right} onClick={handleNext}>
-          <span className={`${styles.arrow} ${styles.next}`}/>
+          <span className={`${styles.arrow} ${styles.next}`}>
+            <Arrow className={styles.arrowSvg} rotate={270}/>
+          </span>
         </div>
       </div>
     </div>

@@ -1,8 +1,7 @@
 .main{
   width: 100%;
   box-sizing: border-box;
-  margin-top: 2px;
-  padding: 10px 5px;
+  margin: 0;
 
 
   .wrap{
@@ -17,6 +16,7 @@
 
 
       .gender{
+        padding-top: 66%;
         width: 100%;
         position: relative;
 

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { useEffectSafe } from '../../../helpers/hooks/use-effect-safe'
+import { useEffectSafe } from '../../../hooks/use-effect-safe'
 import { $setShowMenu, $navActive, $menuActive } from '../store'
 
 

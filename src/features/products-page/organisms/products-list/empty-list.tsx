@@ -1,18 +1,21 @@
 import React from 'react'
+import styled from 'styled-components'
+import { useLocation } from 'react-router'
 import { useEvent } from 'effector-react/ssr'
-import { $skipAllFilters } from '../../store'
-import { Button } from '../../../../commons/atoms/button'
-import styles from '../../../../media/css/info-page.module.scss'
+import styles from '../../../../assets/styles/info-page.module.scss'
+import { Button1 } from '../../../../commons/atoms'
+import { $mountProductsPage } from '../../store'
+
 
 
 export function EmptyList() {
-  const skipAllFilters = useEvent($skipAllFilters)
+  const { pathname } = useLocation()
+  const mountProductsPage = useEvent($mountProductsPage)
   
   return (
     <div className={styles.wrap}>
       <div>
         <div className={styles.container}>
-          <div className={styles.img}/>
           <div className={styles.title}>К сожалению, по вашему запросу ничего не найдено</div>
           <div className={styles.body}>
             <span>
@@ -22,11 +25,15 @@ export function EmptyList() {
         
           <div className={styles.buttons}>
         
-            <div className={styles.link}>
-              <Button
-                onClick={() => skipAllFilters()}
-                title={'Сбросить все фильтры'}/>
-            </div>
+            <S.LinkWrap className={styles.link}>
+              <Button1
+                href={pathname}
+                onClick={() => mountProductsPage({ pathname, search: '?' })}
+                className='button'
+              >
+                Сбросить все фильтры
+              </Button1>
+            </S.LinkWrap>
      
           </div>
         </div>
@@ -34,3 +41,16 @@ export function EmptyList() {
     </div>
   )
 }
+
+
+const S = {
+  LinkWrap: styled.div`
+    
+    & .button {
+      background-color: #272727;
+      border: transparent;
+      color: white
+    }
+`
+}
+

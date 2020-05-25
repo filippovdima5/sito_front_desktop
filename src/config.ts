@@ -1,20 +1,23 @@
 const SERVER = typeof window === 'undefined'
-const LOCAL = !SERVER && window.location.hostname.includes('localhost') && process.env.NODE_ENV === 'development'
+
 
 function getApiEndpoint() {
-  //if (LOCAL) return '/api'
   if (SERVER) return 'http://37.228.116.226:80/api/'
-  
   return '/api/'
+}
+
+function getApiV2Endpoint() {
+  if (SERVER) return 'http://localhost:8080/api/v2/'
+  return '/api/v2/'
 }
 
 
 export default {
   ssr: SERVER,
-  local: LOCAL,
   api: {
     main: {
-      endpoint: getApiEndpoint()
+      endpoint: getApiEndpoint(),
+      v2: getApiV2Endpoint()
     }
   }
 }

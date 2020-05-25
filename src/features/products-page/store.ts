@@ -1,252 +1,394 @@
-import { createEffect, createEvent, createStore, guard, merge, sample } from 'lib/effector'
-import { RouteComponentProps } from 'react-router'
-import { TypesSortProducts, FilterReqParams, ProductsReqParams, ProductsRequest, PaginateInfo, FiltersRequest } from '../../api/types'
-import { api } from '../../api'
-import { $baseLink } from '../../stores/env'
-import { recordWithoutNull , sexIdToStr, sexStrToId } from '../../helpers/lib'
+import { createStore, createEvent, sample, createEffect, guard, forward, merge } from 'lib/effector'
+import { createDebounce } from 'effector-debounce'
+import { GetFiltersParams, GetProductsParams, ShortProduct } from '../../api/v2/types'
 import config from '../../config'
-import { parseQueryProducts, parseSearch } from '../../ssr/lib'
-import { StatusPage, MainState  } from './types'
-import { setItemToArray } from './lib'
-import {  ListFilters, ListTranslateFilters } from './organisms/filters/types'
-
-
-//region route_history:
-export const $initRouteHistory = createEvent<RouteComponentProps['history']>()
-const routeHistory = createStore<RouteComponentProps['history'] | null>(null)
-routeHistory.on($initRouteHistory, (_, payload) => payload)
-//endregion route_history
+import { apiV2 } from '../../api'
+import { SexId } from '../../types'
+import { categoryKeys } from '../../constants'
+import { encodeProductsUrl, parseUrl, sortBrands, sortSizes } from './lib'
+import { QueryFields, StatusPage } from './types'
+import { defaultFields, sortTypes, valuesOfFilterButtons } from './constants'
 
 
 
-// region main_state:
-export const $mainState = createStore<MainState>({
-  sexId: null,
-  categories: null,
-  brands: null,
-  sizes: null,
-  colors: null,
-  price_from: null,
-  price_to: null,
-  sale_from: null,
-  sale_to: null,
-  favorite: null,
-  page: 1,
-  sort: 'update_up',
-  limit: null,
-})
+// region Fields:
+export const $allFields = createStore<Required<QueryFields>>(defaultFields)
+const $setFields = createEvent<QueryFields | null>()
+const $setFieldsWithReset = createEvent<QueryFields | null>()
 
-
-
-export const $toggleSex = createEvent<1 | 2>()
-$mainState.on($toggleSex, (_, sexId) => ({ ...$mainState.defaultState, sexId }))
-
-
-export const filtersState = $mainState.map(({ sexId, categories, brands, sizes, colors, price_to, price_from, sale_to, sale_from, favorite }) => ({
-  sexId, categories, brands, sizes, colors, price_to, price_from, sale_to, sale_from, favorite
+$allFields.on($setFieldsWithReset, ((state, payload) => {
+  if (payload === null) return $allFields.defaultState
+  return ({ ...$allFields.defaultState, ...payload })
 }))
 
-
-export const productsState = $mainState.map(({ limit, page, sort }) => ({ limit, sort, page }))
-// endregion main_state:
-
-
-
-
-// region setsSomeFilter:
-export const $setSomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number | boolean | null}>('filters')
-export const $setListFilter = createEvent<{key: ListTranslateFilters | ListFilters, value: string | number}>()
-export const $skipCurrentFilter = createEvent<{key: ListTranslateFilters | ListFilters}>()
-export const $skipAllFilters = createEvent()
-export const $goToONlySomeFilter = createEvent<{key: keyof Omit<MainState, 'sort' | 'limit' | 'page'>, value: string | number }>()
-
-$mainState.on(merge([$setListFilter, $setSomeFilter]), (state, { key, value }) => {
-  if (value == null) return ({ ...state, [key] : null })
-  switch (key) {
-    case 'categories':
-    case 'brands':
-    case 'sizes':
-    case 'colors': return { ...state, [key]: setItemToArray(state[key], value) }
-    case 'price_from':
-    case 'price_to':
-    case 'sale_from':
-    case 'sale_to': return { ...state, [key]: Number(value) }
-    case 'favorite': return { ...state, [key]: Boolean(value) }
-    default: return undefined
-  }
+$allFields.on($setFields, (state, payload) => {
+  if (payload !== null) return ({ ...state, ...payload })
 })
-
-$mainState.on($skipCurrentFilter, (state, { key }) => {
-  switch (key) {
-    case 'brands':
-    case 'categories':
-    case 'colors':
-    case 'sizes': return { ...state, [key]: null }
-    
-    default: return undefined
-  }
-})
-
-$mainState.on($skipAllFilters, ({ sexId }) => ({ ...$mainState.defaultState, sexId }))
-
-$mainState.on($goToONlySomeFilter, (state, { key, value }) => {
-  switch (key) {
-    case 'categories': return { ...state, sexId: state.sexId, categories: [Number(value)] }
-    case 'brands': return { ...state, sexId: state.sexId, brands: [value.toString()]  }
-    default: return
-  }
-})
-
-// endregion setsSomeFilter
+// endregion
 
 
 
-// region setsSomeProductsParams:
-export const $setPage = createEvent<number>()
-$mainState.on($setPage, (state, page) => ({ ...state, page }))
+// region stores with data:
+export const $statusPageProducts = createStore<StatusPage>('START')
+export const $products = createStore<Array<ShortProduct>>([])
+export const $totalPages = createStore<number>(0)
+export const $loading = createStore<boolean>(false)
 
-export const $setSort = createEvent<TypesSortProducts>()
-$mainState.on($setSort, (state, sort) => ({ ...state, sort }))
-// endregion setsSomeProductsParams
-
-
-
-// region fetchFilters:
-const fetchFilters = createEffect({
-  handler: ( params: FilterReqParams ) => api.products.getFilters(params)
-})
-
-const $fetchFiltersParams = filtersState.map(state => {
-  if (state.sexId === null) return undefined
-  const params: any = { sex_id: state.sexId }
-  return recordWithoutNull(state, params) as FilterReqParams
-})
-
-guard({
-  source: $fetchFiltersParams.updates,
-  filter: () => true,
-  target: fetchFilters
-})
-// endregion fetchFilters
+export const $brandFilters = createStore<Array<string>>([])
+export const $categoryFilters = createStore<Array<{ key: number, available: boolean, label: string }>>([])
+export const $sizeFilters = createStore<Array<string>>([])
+//export const $loadingCategoryFilters = createStore<boolean>(false)
+export const $loadingBrandFilters = createStore<boolean>(false)
+//export const $loadingSizeFilters = createStore<boolean>(false)
+// endregion
 
 
 
 // region fetchProducts:
-const fetchProducts = createEffect({
-  handler: (params: ProductsReqParams) => api.products.getProducts(params)
-})
+/**При передачи любого поля будет загрузка:*/
+const $setFetchProducts = createEvent<QueryFields | null>()
+const $debounceFetchProducts = createEvent<QueryFields | null>()
 
-const $fetchProductsParams = $mainState.map(state => {
-  if (state.sexId === null) return undefined
-  const params: any = { sex_id: state.sexId }
-  return recordWithoutNull(state, params) as ProductsReqParams
-})
+const fetchProductsList = createEffect({ handler: (params: GetProductsParams) => apiV2.getProductsList(params) })
 
 guard({
-  source: $fetchProductsParams.updates,
-  filter: () => true,
-  target: fetchProducts
-})
-// endregion fetchProducts
-
-
-
-// region encodeUrlState:
-sample(routeHistory, $mainState.updates, (history, payload) => {
-  if (config.ssr || payload.sexId === null) return undefined
-  
-  const newUrl = '/products/' + sexIdToStr(payload.sexId)
-  let search = ''
-  
-  const encodeState = recordWithoutNull(payload) as NonNullable<MainState>
-  if (Object.entries(encodeState).length > 0) {
-    search = '?' +
-      Object.entries(encodeState)
-        .filter(([key, value]) => {
-          switch (key as keyof MainState) {
-            case 'sexId': return false
-            case 'sort': return value !== 'update_up'
-            case 'page': return value !== 1
-            case 'favorite': return Boolean(value)
-            default: return true
-          }
-        })
-        .map(([key, value]) => {
-          if (Array.isArray(value)) return key + '=' + value.join('|')
-          switch (typeof value) {
-            case 'number': return key + '=' + value.toString()
-            case 'string': return key + '=' + value
-            case 'boolean': return key + '=' + (value ? '1' : '0')
-            default: return key + '='
-          }
-        })
-        .join('&')
-  }
-  const url = newUrl + search
-  history?.replace(url)
-})
-// endregion encodeUrlState
-
-
-
-//region filtersStore:
-export const $filtersStore = createStore<FiltersRequest | null>(null)
-$filtersStore.on(fetchFilters.done, (state, { result: { data } }) => data)
-//endregion filtersStore
-
-
-
-//region productsStore:
-export const $productsStore = createStore<ProductsRequest['products']>([])
-$productsStore.on(fetchProducts.done, (state, { result: { data: { products } } }) => products)
-
-export const $productsInfoStore = createStore<PaginateInfo>({
-  total: 0,
-  total_pages: 0
-})
-$productsInfoStore.on(fetchProducts.done, ((state, { result: { data: { info } } }) => info))
-//endregion productsStore
-
-
-
-// region mountApp:
-export const $mountProductsPage = createEvent()
-
-const storeForMount = $baseLink.map(state => {
-  const { linkParams: { search, sexLine } } = state
-  if (sexLine === null) return null
-  const sexId = sexStrToId(sexLine)
-  const queryParams = parseSearch(search)
-  return { ...parseQueryProducts(queryParams), sexId }
+  source: sample(
+    $allFields, merge([$setFetchProducts, createDebounce($debounceFetchProducts, 1000)]),
+    (fields, newState) => ({ ...fields, ...(newState as QueryFields || null) })
+  ),
+  filter: (value => value !== null),
+  target: fetchProductsList
 })
 
 
-const targetUpdate = sample(storeForMount, $mountProductsPage)
-$mainState.on(targetUpdate, (state, payload) => {
-  if (payload === null) return undefined
-  return { ...state, ...payload }
-})
-
-
-$mainState.on($initRouteHistory, (state, history) => {
-  const { location: { pathname, search } } = history
-  if (!pathname.includes('men')) return undefined
-  const sexId = pathname.includes('women') ? 2 : 1
-  const queryParams = parseSearch(search.replace('?', ''))
-  return { ...state, ...parseQueryProducts(queryParams), sexId }
-})
-// endregion mountApp
-
-
-
-// region statusPage:
-export const $loadingProducts = fetchProducts.pending.map(state => state)
-$loadingProducts.on(fetchProducts, () => true)
-$loadingProducts.on(merge([fetchProducts.done, fetchProducts.fail]), () => false)
-
-export const $statusPageProducts = createStore<StatusPage>('START')
-$statusPageProducts.on(fetchProducts.done, (state, { result: { data: { products } } }) => {
-  if (products.length === 0) return 'EMPTY'
+$products.on(fetchProductsList.done, (_, { result: { data: { items } } }) => items)
+$totalPages.on(fetchProductsList.done, (_, { result: { data: { pagination: { totalPages } } } }) => totalPages)
+$loading.on(fetchProductsList.pending, (_, p) => p)
+$statusPageProducts.on(fetchProductsList.done, (_, { result: { data: { items } } }) => {
+  if (items.length === 0) return 'EMPTY'
   return 'READY'
 })
-// endregion statusPage
+// endregion
+
+
+
+
+// region pushToUrlString:
+export const $setReplace = createEvent<any>()
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const $replace = createStore<any>(() => {})
+$replace.on($setReplace, (_, p) => p)
+
+
+const $setPushUrl = createEvent<QueryFields>()
+const $debouncePushUrl = createDebounce($setPushUrl, 2000)
+
+sample($replace, $debouncePushUrl, (replace, query) => ({ query, replace }))
+  .watch(({ query, replace }) => {
+    if (config.ssr) return
+    const url = encodeProductsUrl(query)
+    replace(url)
+  })
+// endregion
+
+
+
+
+/** FILTERS*/
+// region fetch facet:
+const $debounceFetchFilters = createEvent<QueryFields | null>()
+
+export const $extraFields = createStore({
+  brand_search: '',
+  brand_all: false,
+})
+
+const $paramsForFetchFilters = createStore<null | GetFiltersParams>(null)
+const $eventFetchFilters = sample(
+  $allFields,
+  createDebounce($debounceFetchFilters, 500),
+  (fields, newState) => ({ fields, newState })
+)
+$paramsForFetchFilters.on(
+  sample($extraFields, $eventFetchFilters, ((extraFields, clock) => ({ ...clock, extraFields }))),
+  (_, payload) => { if (payload) { // @ts-ignore
+    return ({ ...payload.fields, ...payload.newState, ...payload.extraFields })
+  } }
+)
+
+const fetchFacetFilters = createEffect({ handler: (params: GetFiltersParams) => apiV2.filters.facet(params) })
+guard({
+  source: $paramsForFetchFilters.updates,
+  filter: $paramsForFetchFilters.map(state => (state !== null && !config.ssr)),
+  target: fetchFacetFilters
+})
+
+
+
+$categoryFilters.on(
+  sample($allFields, fetchFacetFilters.done, ({ sex_id }, { result: { data: { categories } } }) => ({ sex_id, categories })),
+  // @ts-ignore
+  (state, payload) => Object.entries(categoryKeys[payload.sex_id as 1 | 2])
+    // @ts-ignore
+    .map(([key, value]) => ({ key: Number(key), available: payload.categories.includes(Number(key)), label: value as string }))
+    .filter(({ key }) => ![1000, 2000, 3000].includes(key))
+)
+
+const doneFetchFacetFilters = fetchFacetFilters.done.map(({ result: { data } }) => data)
+$brandFilters.on(fetchFacetFilters.done, (state, { result: { data: { brands } } }) => sortBrands(brands))
+$sizeFilters.on(fetchFacetFilters.done, (state, { result: { data: { sizes } } }) => sortSizes(sizes))
+$loadingBrandFilters.on(fetchFacetFilters.pending, (_, p) => { if (!p) return p })
+// endregion
+
+
+// region fetch brand filters
+const $debounceFetchBrandFilters = createEvent<QueryFields | null>()
+const $fetchBrandFilters = createEvent<QueryFields | null>()
+
+const $paramsForFetchBrandFilters = createStore<null | GetFiltersParams>(null)
+
+const $eventFetchBrandFilters = sample(
+  $allFields,
+  merge([createDebounce($debounceFetchBrandFilters, 1000), $fetchBrandFilters]),
+  (fields, newState) => ({ fields, newState })
+)
+
+$paramsForFetchBrandFilters.on(
+  sample($extraFields, $eventFetchBrandFilters, ((extraFields, clock) => ({ ...clock, extraFields }))),
+  (_, payload) => { if (payload) { // @ts-ignore
+    return ({ ...payload.fields, ...payload.newState, ...payload.extraFields })
+  } }
+)
+
+const fetchBrandFilters = createEffect({ handler: (params: GetFiltersParams) => apiV2.filters.brands(params) })
+guard({
+  source: $paramsForFetchBrandFilters.updates,
+  filter: $paramsForFetchBrandFilters.map(state => (state !== null && !config.ssr)),
+  target: fetchBrandFilters
+})
+
+$brandFilters.on(fetchBrandFilters.done, (_, { result: { data } }) => sortBrands(data))
+// endregion
+
+
+
+
+// region
+export const $setSearchBrands = createEvent<string>()
+$extraFields.on($setSearchBrands, (_, brand_search) => ({ brand_search, brand_all: false }))
+forward({
+  from: sample(
+    $paramsForFetchFilters,
+    $setSearchBrands,
+    (params, phrase) => {
+      if (!params) return null
+      return ({ ...params, brand_all: false, brand_search: phrase })
+    }
+  ),
+  to: $debounceFetchBrandFilters
+})
+
+export const $setShowAllBrands = createEvent()
+$extraFields.on($setShowAllBrands, state => ({ ...state, brand_all: true }))
+forward({
+  from: sample(
+    $paramsForFetchFilters,
+    $setShowAllBrands,
+    (params) => {
+      if (!params) return null
+      return ({ ...params, brand_all: true })
+    }
+  ),
+  to: $fetchBrandFilters
+})
+
+// endregion
+
+// region search sizes
+export const $size_search = createStore<string>('')
+export const $setSearchSize = createEvent<string>()
+const $bufferSizesFilters = createStore<Array<string>>([])
+$bufferSizesFilters.on(doneFetchFacetFilters, (state, { sizes }) => sizes)
+
+$sizeFilters.on(
+  sample($bufferSizesFilters, $setSearchSize, (sizes, phrase) => ({ sizes, phrase })),
+  (_, payload) => {
+    if (!payload) { // @ts-ignore
+      return sortSizes(payload.sizes)
+    }
+    // @ts-ignore
+    return sortSizes(payload.sizes.filter(item => item.toLowerCase().includes((payload.phrase as string).toLowerCase())))
+  })
+// endregion
+
+// region
+export const $setNotSize = createEvent()
+forward({
+  from: sample($allFields, $setNotSize, (fields) => ({ ...fields, not_size: !fields.not_size })),
+  to: [$setFields, $debounceFetchProducts, $setPushUrl, $debounceFetchFilters]
+})
+// endregion
+/** END_FILTERS*/
+
+
+
+
+
+// region mountPage:
+const $mountInServer = createStore<boolean>(false)
+const unLockFetch = createEffect({ handler: () => config.ssr })
+$mountInServer.on(unLockFetch.done, (_, { result }) => result)
+
+export const $mountProductsPage = createEvent<{ pathname: string, search: string }>()
+const mountProductsPage = createEvent<{ pathname: string, search: string }>()
+const firstMountFilters = createEvent<{ pathname: string, search: string }>()
+
+guard({ source: $mountProductsPage, filter: $mountInServer.map(v => !v), target: mountProductsPage })
+guard({ source: $mountProductsPage, filter: $mountInServer.map(v => v), target: firstMountFilters })
+guard({ source: $mountProductsPage, filter: (() => true), target: unLockFetch })
+
+
+const mountWithParams = mountProductsPage.map(({ pathname, search }) => parseUrl(pathname, search))
+
+// Фетч товаров:
+forward({ from: mountWithParams, to: [$setFetchProducts, $setFieldsWithReset] })
+
+// Фетч фильтров, на сервере игнорируем:
+guard({
+  source: merge([ mountWithParams, firstMountFilters.map(({ pathname, search }) => parseUrl(pathname, search)) ]),
+  filter: () => !config.ssr,
+  target: $debounceFetchFilters
+})
+// endregion
+
+
+
+// region filter buttons view:
+type ViewFilterButton = { key: keyof Pick<QueryFields, 'sex_id'>, value: SexId, label: string } |
+{ key: keyof Pick<QueryFields, 'sort'>, value: keyof typeof sortTypes, label: string} |
+{ key: keyof Pick<QueryFields, 'brands' | 'sizes'>, value: string, label: string} |
+{ key: keyof Omit<QueryFields, 'sex_id' | 'sort' | 'brands' | 'sizes'>, value: number, label: string}
+
+
+const pushButton = (key: string, value: any, buttons: Array<ViewFilterButton>) => {
+  if (value === defaultFields[key as keyof QueryFields]) return
+  // @ts-ignore
+  buttons.push({ key, value: value, label: valuesOfFilterButtons[key](value) })
+}
+
+export const $viewFilterButtons = createStore<Array<ViewFilterButton>>([])
+
+const $filtersFields = $allFields
+  .map(({ price_to, sex_id, brands, categories, price_from, sale_from, sale_to, sizes }) =>
+    ({ price_to, sex_id, brands, categories, price_from, sale_from, sale_to, sizes }))
+
+$viewFilterButtons.on($filtersFields, (state, payload) => {
+  const buttons: Array<ViewFilterButton> = []
+  
+  Object.entries(payload).forEach(([ key, value ]) => {
+    switch (key as keyof QueryFields) {
+      case 'price_from':
+      case 'price_to':
+      case 'sale_from':
+      case 'sale_to': return pushButton(key, value, buttons)
+      case 'brands':
+      case 'sizes': {
+        // @ts-ignore
+        payload[key].forEach(item => buttons.push({ key, value: item, label: valuesOfFilterButtons[key](item) }))
+        return
+      }
+      case 'categories': {
+        // @ts-ignore
+        payload[key].forEach(item => buttons.push({ key, value: item, label: valuesOfFilterButtons[key](item, payload.sex_id) }))
+        return
+      }
+    }
+  })
+  
+  const lastButtons = state
+    .filter(item => !!buttons.find(({ label }) => label === item.label))
+    .map(item => JSON.stringify(item))
+  
+  const newButtons = Array.from(new Set([
+    ...lastButtons,
+    ...buttons.map(item => JSON.stringify(item))
+  ]))
+  
+  return newButtons.map(item => JSON.parse(item))
+})
+// endregion
+
+
+
+// region addFilterValue
+export const $addOneFilterValue = createEvent<{ key: keyof QueryFields, value: string | number | boolean}>()
+forward({
+  from: sample($allFields, $addOneFilterValue, (query, { key, value }) => {
+    switch (key) {
+      case 'price_from':
+      case 'price_to':
+      case 'sale_from':
+      case 'sale_to': return ({ ...query, [key]: value })
+      case 'brands':
+      case 'sizes': return ({ ...query, [key]: [...query[key], value] })
+      case 'categories': return ({ ...query, [key]: [...query[key], value as number ] })
+      default: return null
+    }
+  }),
+  to: [$setFields, $debounceFetchProducts, $setPushUrl, $debounceFetchFilters]
+})
+// endregion
+
+
+
+// region deleteFilterValue:
+export const $deleteOneFilterValue = createEvent<{ key: keyof QueryFields, value: string | number | boolean}>()
+forward({
+  from: sample($allFields, $deleteOneFilterValue, (query, { key, value }) => {
+    switch (key) {
+      case 'price_from':
+      case 'price_to':
+      case 'sale_from':
+      case 'sale_to': return ({ ...query, [key]: defaultFields[key] })
+      case 'brands':
+      case 'sizes': return ({ ...query, [key]: query[key].filter(item => item !== value.toString()) })
+      case 'categories': return ({ ...query, [key]: query[key].filter(item => item !== Number(value)) })
+      default: return null
+    }
+  }),
+  to: [ $setFields, $debounceFetchProducts, $setPushUrl, $debounceFetchFilters ]
+})
+// endregion
+
+
+
+// region set sort:
+export const $setSort = createEvent<keyof typeof sortTypes>()
+
+forward({
+  from: sample($allFields, $setSort, (query, typeSort) => ({ ...query, sort: typeSort })),
+  to: [ $setFetchProducts, $setFields, $setPushUrl ]
+})
+// endregion
+
+
+// region set page
+export const $setPage = createEvent<number>()
+
+forward({
+  from: sample($allFields, $setPage, (query, page) => ({ ...query, page })),
+  to: [ $setFetchProducts, $setFields, $setPushUrl ]
+})
+// endregion
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,27 +1,31 @@
-import React  from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
 import Masonry from 'react-masonry-css'
-import { useEffectSafe } from '../../helpers/hooks/use-effect-safe'
-import { sexIdToStr } from '../../helpers/lib'
-import { BrandItem } from '../../api/types'
+import styled from 'styled-components'
+import { useEffectSafe } from '../../hooks/use-effect-safe'
+import { sexIdToStr } from '../../lib'
 import { Loader } from '../../commons/templates/loader'
-import { $filteredBrands, $fetchBrands, $loadingBrands } from './store'
+import { SexId } from '../../types'
+import { Button1 } from '../../commons/atoms'
+import { $brands, $mountBrandsPage, $loadingBrands } from './store'
 import styles from './styles.module.scss'
+import { SearchInput } from './search-input'
 
 
-
-function BrandsGroup({ brands, sexId }: {brands: Array<BrandItem>, sexId: 1 | 2}) {
+function BrandsGroup({ brands, sexId }: {brands: Array<string>, sexId: 1 | 2}) {
+  const sex = useMemo(() => sexIdToStr(sexId), [sexId])
+  
   return(
     <ol>
-      {brands.map(({ _id }) => (
+      {brands.map(item => (
         <li   
           className={styles.item} 
-          key={_id}>
+          key={item}>
           <Link
-            to={`/products/${sexIdToStr(sexId)}?brands=${_id}`}
+            to={`/${sex}/products?brands=${item}`}
           >
-            {_id}
+            {item}
           </Link>
         </li>
       ))}
@@ -30,34 +34,91 @@ function BrandsGroup({ brands, sexId }: {brands: Array<BrandItem>, sexId: 1 | 2}
 }
 
 
-export function BrandsPage({ sexId }: {sexId: 1 | 2} ) {
+export function BrandsPage({ sexId }: {sexId: SexId} ) {
   const loader = useStore($loadingBrands)
-  const charGroups = useStore($filteredBrands)
-  const fetchBrands = useEvent($fetchBrands)
+  const charGroups = useStore($brands)
+  const mountBrandsPage = useEvent($mountBrandsPage)
   
   useEffectSafe(() => {
-    fetchBrands({ sexId })
+    mountBrandsPage({ sex_id: sexId })
   }, [sexId])
   
   return (
-    <div className={styles.brands}>
-      {loader && <Loader/>}
-      <ul>
-        <Masonry
-          breakpointCols={4}
-          className={styles.myMasonryGrid}
-          columnClassName={styles.myMasonryGrid_column}
-        >
-          {charGroups.map(({ char, brands }) => (
-            <li className={styles.charGroup} key={char}>
-              <div className={styles.charGroupContainer}>
-                <h3 className={styles.titleCard}>{char}</h3>
-                <BrandsGroup sexId={sexId} brands={brands}/>
-              </div>
-            </li>
-          ))}
-        </Masonry>
-      </ul>
-    </div>
+    <S.Wrap>
+      <S.SearchPanel activeBtn={sexIdToStr(sexId)}>
+        <div className='inner'>
+          <SearchInput sexId={sexId}/>
+          <Button1 borderRad={5} className='button men' href={'/men/brands'}>Мужчины</Button1>
+          <Button1 borderRad={5} className='button women' href={'/women/brands'}>Женщины</Button1>
+        </div>
+      </S.SearchPanel>
+      
+      <div className={styles.brands}>
+        {loader && <Loader/>}
+        <ul className={styles.ul}>
+          <Masonry
+            breakpointCols={4}
+            className={styles.myMasonryGrid}
+            columnClassName={styles.myMasonryGrid_column}
+          >
+            {charGroups.map(({ char, brands }) => (
+              <li className={styles.charGroup} key={char}>
+                <div className={styles.charGroupContainer}>
+                  <h3 className={styles.titleCard}>{char}</h3>
+                  <BrandsGroup sexId={sexId} brands={brands}/>
+                </div>
+              </li>
+            ))}
+          </Masonry>
+        </ul>
+      </div>
+    </S.Wrap>
   )
+}
+
+
+const S = {
+  Wrap: styled.div`
+    width: 100%;
+`,
+  
+  SearchPanel: styled.div<{ activeBtn: string }>`
+    width: 100%;
+    margin-bottom: 30px;
+
+
+    & .inner {
+      background-color: white;
+      padding: 15px 20px 16px;
+      box-sizing: border-box;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      
+      .men {
+          background-color: ${({ activeBtn }) => activeBtn === 'men' ? '#272727' : 'rgba(0,0,0,0.1)'};
+          color: ${({ activeBtn }) => activeBtn === 'men' ? 'white' : 'gba(39,39,39,0.8)'};
+      }
+      
+      .women {
+          background-color: ${({ activeBtn }) => activeBtn === 'women' ? '#272727' : 'rgba(0,0,0,0.1)'};
+          color: ${({ activeBtn }) => activeBtn === 'women' ? 'white' : 'gba(39,39,39,0.8)'};
+      }
+      
+      & .button {
+        margin: 0 5px;
+        border: transparent;
+      }
+      
+      & .button:nth-child(1) {
+        margin-left: auto;
+      }
+      
+      & .button:hover {
+        background-color: rgba(0,0,0,0.3);
+        color: white;
+      }
+    }
+`,
 }

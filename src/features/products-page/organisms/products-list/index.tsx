@@ -1,6 +1,6 @@
 import React  from 'react'
 import { useStore } from 'effector-react/ssr'
-import { $productsStore, $loadingProducts, $statusPageProducts } from '../../store'
+import { $loading, $statusPageProducts, $products , $allFields } from '../../store'
 import { ProductCard, SkeletonCard } from '../../../../commons/organisms/product-card'
 import config from '../../../../config'
 import { StatusPage } from '../../types'
@@ -15,24 +15,27 @@ function SkeletonsList({ length }: { length: number }) {
 }
 
 function ProductsList() {
-  const data = useStore($productsStore)
+  const data = useStore($products)
   return (
     <>
       {data.map(item => (
-        <ProductCard showLike={true} key={item.id} {...item}/>
+        <ProductCard key={item.id} {...item}/>
       ))}
     </>
   )
 }
 
+//      
+
 function Controller({ status, loading }: { status: StatusPage, loading: boolean }) {
+  const { limit } = useStore($allFields)
   switch (status) {
     case 'EMPTY': return (<EmptyList/>)
     case 'FAIL': return (<div>ОШИБКА</div>)
     default: return (
       <div className={styles.productsList}>
-        <ProductsList/>
-        {(loading || status === 'START') && !config.ssr && <SkeletonsList length={20}/>}
+        { !loading  && <ProductsList/> }
+        {(loading || status === 'START') && !config.ssr && <SkeletonsList length={limit}/>}
       </div>
     )
   }
@@ -40,7 +43,7 @@ function Controller({ status, loading }: { status: StatusPage, loading: boolean 
 
 function List() {
   const status = useStore($statusPageProducts)
-  const loading = useStore($loadingProducts)
+  const loading = useStore($loading)
 
   
   return (

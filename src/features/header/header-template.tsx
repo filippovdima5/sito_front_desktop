@@ -2,9 +2,9 @@ import React from 'react'
 import { Navigation } from '../menu'
 import { HiddenNavigation } from '../menu/hidden-navigation'
 import { Search } from '../search'
+import { Logo } from '../../commons/atoms/logo'
 import styles from './styles.module.scss'
 
-import { Logo } from '../../commons/atoms/logo'
 
 
 export function HeaderTemplate() {

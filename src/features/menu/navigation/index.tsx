@@ -1,7 +1,7 @@
-import React, {useMemo} from 'react'
+import React, { useMemo } from 'react'
 import { Link , useLocation } from 'react-router-dom'
 import { useStore, useEvent } from 'effector-react/ssr'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { $setNavActive, $setMenuContent, $setForceClose, $menuContent, MenuContent } from '../store'
 import { useMouseOpenMenu } from '../hooks/use-mouse-open-menu'
 

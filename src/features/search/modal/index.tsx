@@ -1,30 +1,26 @@
 import React, {  useMemo, useRef } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { useHistory } from 'react-router'
+import { useLocation } from 'react-router'
 import { useStore, useEvent } from 'effector-react/ssr'
-import { useTransitionNames } from '../../../helpers/hooks/use-transition-names'
-import { $searchResult, $showResults, $setModSearch } from '../store'
-import { $genderInfo } from '../../../stores/user'
-
-
+import { Link } from 'react-router-dom'
+import { useTransitionNames } from '../../../hooks/use-transition-names'
+import { $searchResult,  $setModSearch, $modSearch } from '../store'
+import { findSexIdInPathNotStrict, sexIdToStr } from '../../../lib'
+import { $mountProductsPage } from '../../products-page/store'
 import styles from './styles.module.scss'
-
 
 
 function  SearchResult() {
   const modalSearchRef = useRef<HTMLDivElement | null>(null)
+  const mountProductsPage = useEvent($mountProductsPage)
   const searchResults = useStore($searchResult)
-  const genderInfo = useStore($genderInfo)
   const setModSearch = useEvent($setModSearch)
-  const { push } = useHistory()
   
+  const { pathname } = useLocation()
+  const sexId = useMemo(() => findSexIdInPathNotStrict(pathname), [pathname])
+
   
-  const sexLine = useMemo(() => {
-    if (genderInfo === null) return ''
-    if (genderInfo.sexLine === null) return ''
-    return genderInfo.sexLine
-  }, [genderInfo])
-  
+
   
   return (
     <div
@@ -36,20 +32,19 @@ function  SearchResult() {
           
           {searchResults.map(({ count, title }) => (
             <li key={title} className={styles.title}>
-              <div
+              <Link
+                to={sexId ? `/${sexIdToStr(sexId)}/products?brands=${title}` : `/women/products?brands=${title}`}
                 onClick={() => {
-                  setModSearch(false)
-                  push(`/products/${sexLine}?brands=${title}`)
+                  setModSearch({ mod: false, sex_id: sexId })
+                  mountProductsPage({ pathname: (sexId ? `/${sexIdToStr(sexId)}` : '/women' ), search: `?brands=${title}` })
                 }}
                 className={styles.link}
               >
                 {title}
-                
                 <span>
                   <span className={styles.count}>{count}</span>
                 </span>
-                
-              </div>
+              </Link>
             </li>
           ))}
         </ul>
@@ -59,12 +54,12 @@ function  SearchResult() {
 }
 
 function ShowModal() {
-  const showResults = useStore($showResults)
+  const modSearch = useStore($modSearch)
   const classNames = useTransitionNames(styles)
   
   return (
     <TransitionGroup>
-      {showResults && (
+      {modSearch && (
         <CSSTransition
           timeout={200}
           classNames={classNames}

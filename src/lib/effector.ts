@@ -1,7 +1,8 @@
 import * as effector from 'effector'
-export * from 'effector'
 
-export const rootDomain = effector.createDomain('rootDomain');
+
+export * from 'effector'
+export const rootDomain = effector.createDomain('rootDomain')
 
 
 export const {
@@ -9,6 +10,7 @@ export const {
   createEffect,
   createEvent,
   createStore,
-} = rootDomain;
+} = rootDomain
 
-export const START = `☄️/start-event`;
+export const START = 'start'
+export const INFO = 'info'

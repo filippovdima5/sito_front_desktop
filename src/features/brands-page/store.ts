@@ -1,55 +1,45 @@
-import {  createEffect, createEvent, createStore, merge, guard, sample } from 'lib/effector'
-import { AllBrandsRequest } from '../../api/types'
-import { api } from '../../api'
-import { $sexId } from '../../stores/user'
-
-
-const $brands = createStore<Array<AllBrandsRequest>>([])
-export const $filteredBrands = createStore<Array<AllBrandsRequest>>([])
-
-const loadBrands = createEffect({
-  handler: (params: {sexId: 1 | 2}) => api.simple.allBrands({ sexId: params.sexId })
-})
-$brands.on(loadBrands.done, (_, { result: { data } }) => data )
-$filteredBrands.on(loadBrands.done, (_, { result: { data } }) => data)
-
-
-export const $fetchBrands = createEvent<{ sexId: 1 | 2 }>()
-guard({
-  source: $fetchBrands,
-  filter: () => true,
-  target: loadBrands
-})
-
-export const $mountBrandsPage = createEvent()
-guard({
-  source: sample($sexId, $mountBrandsPage, source => ({ sexId: source })),
-  filter: $sexId.map(state => state !== null),
-  target: loadBrands
-})
+import {  createEffect, createEvent, createStore, forward, guard, merge } from 'lib/effector'
+import { createDebounce } from 'effector-debounce'
+import { BrandByChar, GetBrandsByCharParams } from '../../api/v2/types'
+import { SexId } from '../../types'
+import { apiV2 } from '../../api'
+import { sortByChar } from '../products-page/lib'
+import config from '../../config'
 
 
 
-export const $setFilterString = createEvent<string>()
-export const filterString = createStore<string>('')
-filterString.on($setFilterString, (_, string) => string)
-
-
-const filterSample = sample($brands, filterString, (brands, filterString) => {
-  if (filterString.length < 1) return brands
-  
-  const firstChar = filterString.charAt(0)
-  const oneGroup = brands.filter(({ char }) => (char.toLowerCase() === firstChar.toLowerCase()))
-  return oneGroup.map(item => ({
-    ...item,
-    brands: item.brands.filter(item => item._id.toLowerCase().includes(filterString.toLowerCase()))
-  }))
-})
-
-
-$filteredBrands.on(filterSample.updates, (_, payload) => payload)
-
-
+export const $brands = createStore<Array<BrandByChar>>([])
 export const $loadingBrands = createStore<boolean>(false)
-$loadingBrands.on(loadBrands, () => true)
-$loadingBrands.on(merge([loadBrands.done, loadBrands.fail]), () => false)
+
+
+const $inServer = createStore<boolean>(false)
+const unLockFetch = createEffect({ handler: () => config.ssr })
+$inServer.on(unLockFetch.done, (_, { result }) => result)
+
+
+export const $setFetchBrands = createEvent<{ sex_id: SexId, phrase?: string }>()
+export const $mountBrandsPage = createEvent<{ sex_id: SexId }>()
+const mountBrandPage = createEvent<{ sex_id: SexId }>()
+
+
+guard({ source: $mountBrandsPage, filter: $inServer.map(inServer => !inServer), target: mountBrandPage })
+guard({ source: $mountBrandsPage, filter: (() => true) , target: unLockFetch })
+
+
+const fetchBrands = createEffect({
+  handler: (params: GetBrandsByCharParams) => apiV2.getBrandsByChar(params)
+})
+
+
+forward({
+  from: merge([
+    createDebounce($setFetchBrands, 1000),
+    mountBrandPage
+  ]),
+  to: fetchBrands
+})
+
+
+$brands.on(fetchBrands.done, (_, { result: { data } }) => data.sort((a, b) => sortByChar(a.char) - sortByChar(b.char)))
+$loadingBrands.on(fetchBrands.pending, (_, p) => p)
+
