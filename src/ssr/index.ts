@@ -62,7 +62,7 @@ const setupKoa = () => {
     
     
     const cacheKey = `${path}_${search}_${sexIdUser}`
-    ctx.body = await cacheRender(() => render({ path, search }), cacheKey)()
+    ctx.body = await cacheRender(() => render(ctx, { path, search }), cacheKey)()
     if (ctx.status !== 200) {
       renderLRU.remove(cacheKey)
     }

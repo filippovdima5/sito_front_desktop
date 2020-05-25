@@ -4,7 +4,7 @@ import { START } from 'lib/effector'
 import { useBodyScrollTop } from '../hooks/use-body-scroll-top'
 import { findSexIdInPath } from '../lib'
 import { ProductsPage } from '../features/products-page'
-
+import { $mountProductsPage } from '../features/products-page/store'
 
 
 export function Products() {
@@ -14,5 +14,5 @@ export function Products() {
 }
 
 // !!! ssr
-Products[START] = ''
+Products[START] = $mountProductsPage
 

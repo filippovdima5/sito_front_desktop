@@ -5,7 +5,7 @@ import { Button1 } from '../../commons/atoms'
 import styles from './styles.module.scss'
 
 
-export function NotFound() {
+export function NotFoundPage() {
   useBodyScrollTop()
   
   const { pathname } = useLocation()

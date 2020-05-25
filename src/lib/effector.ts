@@ -12,4 +12,5 @@ export const {
   createStore,
 } = rootDomain
 
-export const START = '☄️/start-event'
+export const START = 'start'
+export const INFO = 'info'

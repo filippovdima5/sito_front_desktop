@@ -49,24 +49,14 @@ export const $loadingBrandFilters = createStore<boolean>(false)
 const $setFetchProducts = createEvent<QueryFields | null>()
 const $debounceFetchProducts = createEvent<QueryFields | null>()
 
-const $paramsForFetchProducts = createStore<GetProductsParams | null>(null)
-
-$paramsForFetchProducts.on(
-  sample($allFields, merge([
-    $setFetchProducts,
-    createDebounce($debounceFetchProducts, 1000)
-  ]), (fields, newState) => ({ fields, newState })),
-  // @ts-ignore
-  (_, payload) => { if (payload) return ({ ...payload.fields, ...payload.newState }) }
-)
-
-
 const fetchProductsList = createEffect({ handler: (params: GetProductsParams) => apiV2.getProductsList(params) })
 
-
 guard({
-  source: $paramsForFetchProducts.updates,
-  filter: $paramsForFetchProducts.map(params => !!params),
+  source: sample(
+    $allFields, merge([$setFetchProducts, createDebounce($debounceFetchProducts, 1000)]),
+    (fields, newState) => ({ ...fields, ...(newState as QueryFields || null) })
+  ),
+  filter: (value => value !== null),
   target: fetchProductsList
 })
 
@@ -133,6 +123,7 @@ guard({
   target: fetchFacetFilters
 })
 
+fetchFacetFilters.watch(payload => console.log('fetchFacetFilters', payload))
 
 $categoryFilters.on(
   sample($allFields, fetchFacetFilters.done, ({ sex_id }, { result: { data: { categories } } }) => ({ sex_id, categories })),
@@ -245,33 +236,35 @@ forward({
 
 // region mountPage:
 const $mountInServer = createStore<boolean>(false)
+const unLockFetch = createEffect({ handler: () => config.ssr })
+$mountInServer.on(unLockFetch.done, (_, { result }) => result)
+
 export const $mountProductsPage = createEvent<{ pathname: string, search: string }>()
+const mountProductsPage = createEvent<{ pathname: string, search: string }>()
+const firstMountFilters = createEvent<{ pathname: string, search: string }>()
 
-const $eventForMount = sample($mountInServer, $mountProductsPage, (inServer, urlParams) => {
-  if (config.ssr) return urlParams
-  if (inServer) return null
-  return urlParams
+guard({ source: $mountProductsPage, filter: $mountInServer.map(v => !v), target: mountProductsPage })
+guard({ source: $mountProductsPage, filter: $mountInServer.map(v => v), target: firstMountFilters })
+guard({ source: $mountProductsPage, filter: (() => true), target: unLockFetch })
+
+
+const mountWithParams = mountProductsPage.map(({ pathname, search }) => parseUrl(pathname, search))
+
+// Фетч товаров:
+forward({ from: mountWithParams, to: [$setFetchProducts, $setFieldsWithReset] })
+
+// Фетч фильтров, на сервере игнорируем:
+guard({
+  source: merge([ mountWithParams, firstMountFilters.map(({ pathname, search }) => parseUrl(pathname, search)) ]),
+  filter: () => !config.ssr,
+  target: $debounceFetchFilters
 })
-$mountInServer.on($eventForMount, () => config.ssr)
 
 
-const $paramsForMount = createStore<QueryFields | null>(null)
-$paramsForMount.on($eventForMount, (state, urlParams) => {
-  if (!urlParams) return
-  return parseUrl(urlParams.pathname, urlParams.search)
-})
-
-forward({ from: $paramsForMount.updates, to: [$setFetchProducts, $setFieldsWithReset, $debounceFetchFilters] })
-
-
-// Фильтры на сервере не отрендерятся, поэтому нужно вызвать этот евент на клиенте в любом случае:
-const $paramsForMountFilters = createStore<QueryFields | null>(null)
-$paramsForMountFilters.on(sample($mountInServer, $mountProductsPage, (inServer, urlParams) => ({ inServer, urlParams })), (state, payload) => {
-  // @ts-ignore
-  if (payload.inServer && !config.ssr) return parseUrl(payload.urlParams.pathname, payload.urlParams.search)
-  return null
-})
-forward({ from: $paramsForMountFilters.updates, to: $debounceFetchFilters })
+$mountInServer.watch(state => console.log('inServer', state))
+mountProductsPage.watch(payload => console.log('mountProductsPage', payload))
+mountWithParams.watch(payload => console.log('mountWithParams', payload))
+firstMountFilters.watch(payload => console.log('firstMountFilters', payload))
 // endregion
 
 

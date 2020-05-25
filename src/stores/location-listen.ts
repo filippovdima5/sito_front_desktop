@@ -27,10 +27,10 @@ guard({ source: $sexId.updates, filter: $inServer.map(inServer => !inServer), ta
 guard({ source: $setUrl, filter: (() => true) , target: unLockFetch })
 
 
-$inServer.watch(state => console.log(state, '$setInServer'))
-$setUrl.watch(payload => console.log('$setUrl: ', payload))
-setUrl.watch(payload => console.log('setUrl: ', payload))
-setSexId.watch(payload => console.log('setSexId', payload))
+// $inServer.watch(state => console.log(state, '$setInServer'))
+// $setUrl.watch(payload => console.log('$setUrl: ', payload))
+// setUrl.watch(payload => console.log('setUrl: ', payload))
+// setSexId.watch(payload => console.log('setSexId', payload))
 // endregion
 
 
