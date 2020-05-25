@@ -17,9 +17,12 @@ const commonPresets = [
 
 const babelConfig = {
   'plugins': [
-    'babel-plugin-styled-components',
     ['@babel/transform-runtime', { 'corejs': 2 }],
+
     ['effector/babel-plugin', { 'addLoc': true }],
+    ['babel-plugin-styled-components', { ssr: true }],
+    ['babel-plugin-macros'],
+
 
     '@loadable/babel-plugin',
     '@babel/transform-async-to-generator',
@@ -56,17 +59,16 @@ const babelConfig = {
 }
 
 
-
 const serverEntryConfig = {
-  context: path.resolve(__dirname, '..'),
-  mode: 'production',
+  context: path.resolve(__dirname, '..', '..'),
+  mode: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',
   target: 'async-node',
   name: 'server',
   optimization: {
     minimize: false,
   },
   entry: {
-    main: './ssr/index.ts',
+    main: './src/ssr/index.ts',
   },
   output: {
     path: path.resolve(__dirname, '..', '..', 'build'),

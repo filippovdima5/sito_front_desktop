@@ -17,5 +17,4 @@ forward({
   to: fetchPopularBrands
 })
 
-
 $popularBrands.on(fetchPopularBrands.done, (_, { result: { data } }) => data)

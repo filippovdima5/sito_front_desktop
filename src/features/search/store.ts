@@ -1,9 +1,10 @@
-import { createEffect, createEvent, createStore, sample, forward } from 'lib/effector'
+import { createEffect, createEvent, createStore, forward } from 'lib/effector'
 import { createDebounce } from 'effector-debounce'
 import { SearchItem, SearchParams } from '../../api/v2/types'
 import { apiV2 } from '../../api'
+import { setSexId } from '../../stores/location-listen'
 import { SexId } from '../../types'
-import {sortByChar} from '../products-page/lib'
+import { sortByChar } from '../products-page/lib'
 
 
 const LIMIT = 48
@@ -27,6 +28,9 @@ export const fetchSearch = createEffect({
   handler: async (params: SearchParams) => await apiV2.search.brands(params)
 })
 
+$searchResult.on(setSexId, () => [])
+
+
 $searchResult.on(fetchSearch.done, (_, { result: { data } }) => data.sort((a, b) => sortByChar(a.title) - sortByChar(b.title)))
 $loadingSearchItems.on(fetchSearch.pending, (_, p) => p)
 $stateFetchSearchItems.on(fetchSearch.pending, (_, p) => {
@@ -39,23 +43,6 @@ $stateFetchSearchItems.on(fetchSearch.done, (_, { result: { data } }) => {
 $stateFetchSearchItems.on(fetchSearch.fail, () => 'ERROR')
 // endregion
 
-
-// region
-const $paramsForSearch = createStore<{ sex_id?: SexId, limit?: number, phrase?: string }>({ limit: LIMIT })
-
-$paramsForSearch.on(
-  sample($stateFetchSearchItems, $setModSearch, (stateFetch, setMod) => ({ stateFetch, setMod })),
-  (state, payload) => {
-    if (!payload) return
-    // @ts-ignore
-    if (payload.setMod.mod && payload.stateFetch === 'START') return ({ ...state, sex_id: payload.setMod.sex_id })
-  })
-
-forward({
-  from: $paramsForSearch.updates,
-  to: fetchSearch
-})
-// endregion
 
 const $debounceFetch = createEvent<SearchParams>()
 forward({
@@ -70,4 +57,4 @@ forward({
 })
 // endregion
 
-
+// $paramsForSearch.watch(state => console.log(state, 'paramsForSearchBrandsa'))

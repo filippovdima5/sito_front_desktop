@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { useEvent, useStore } from 'effector-react/ssr'
 import { ShortProduct } from '../../../api/v2/types'
 import { Heart } from '../../../assets/svg'
-import { $likesProducts, $setLike } from '../../../stores/likes-products'
+import { $likeIds, $setLike } from './store'
 import { CardImage } from './molecules'
 import { styledProductCard as S } from './styled'
 
@@ -17,9 +17,9 @@ const viewCost = (cost: number): string => {
 
 export function ProductCard({ id, brand, images, oldPrice, price, sale, title, sizes  }: ShortProduct) {
   const setLike = useEvent($setLike)
-  const likesProducts = useStore($likesProducts)
+  const likeIds = useStore($likeIds)
   
-  const isLike = useMemo(() => likesProducts.includes(id), [likesProducts, id])
+  const isLike = useMemo(() => likeIds.includes(id), [likeIds, id])
   
   
   return (

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { SexId } from '../../../types'
 import { Button1 } from '../../../commons/atoms'
 import { useEffectSafe } from '../../../hooks/use-effect-safe'

@@ -7,7 +7,7 @@ function getApiEndpoint() {
 }
 
 function getApiV2Endpoint() {
-  if (SERVER) return ''
+  if (SERVER) return 'http://localhost:8080/api/v2/'
   return '/api/v2/'
 }
 

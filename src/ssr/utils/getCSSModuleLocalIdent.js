@@ -26,6 +26,7 @@ module.exports = function getLocalIdent(
     // Create a hash based on a the file location and class name. Will be unique across a project, and close to globally unique.
 
   // Убираем /src  и тогда будет аналог CRA
+
   const rootContext = context.rootContext.replace('/src', '')
 
   const hash = loaderUtils.getHashDigest(

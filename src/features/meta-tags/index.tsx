@@ -1,7 +1,7 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import { useStore } from 'effector-react/ssr'
-import { $metaTags } from '../../stores/location-listen'
+import { $metaTags } from '../../stores/meta-tags'
 
 
 export function MetaTags() {

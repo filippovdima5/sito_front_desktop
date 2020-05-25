@@ -4,24 +4,54 @@ import { SexId } from '../types'
 import { findSexIdInPathNotStrict } from '../lib'
 import { apiV2 } from '../api'
 import config from '../config'
-import { MetaTags } from '../api/v2/types'
+import { getMetaTagsLink } from '../lib/get-meta-tags-link'
+import { fetchMetaTags } from './meta-tags'
 import { $fetchPopularBrands } from './popular-brands'
 
 
-// region mainState:
-export const $mountClientApp = createEvent<{ pathname: string }>()
+// region:
+const $inServer = createStore(false)
+const unLockFetch = createEffect({ handler: () => config.ssr })
+$inServer.on(unLockFetch.done, (_, { result }) => result)
 
-export const $setPathname = createEvent<{ pathname: string, search: string }>()
-//const $pathname = restore($setPathname, '/')
-
+export const $setUrl = createEvent<{ pathname: string, search: string }>()
+const setUrl = createEvent<{ pathname: string, search: string }>()
 
 const $sexId = createStore<SexId | null>(null)
-$sexId.on($setPathname, (sex, { pathname }) => findSexIdInPathNotStrict(pathname))
+$sexId.on(setUrl, (_, payload) => findSexIdInPathNotStrict(payload.pathname))
+export const setSexId = createEvent<SexId>()
+
+
+guard({ source: $setUrl, filter: $inServer.map(inServer => !inServer), target: setUrl })
+guard({ source: $sexId.updates, filter: $inServer.map(inServer => !inServer), target: setSexId })
+guard({ source: $setUrl, filter: (() => true) , target: unLockFetch })
+
+
+$inServer.watch(state => console.log(state, '$setInServer'))
+$setUrl.watch(payload => console.log('$setUrl: ', payload))
+setUrl.watch(payload => console.log('setUrl: ', payload))
+setSexId.watch(payload => console.log('setSexId', payload))
+// endregion
+
+
+// region popular-brands:
+forward({ from: setSexId.map(sexId => ({ sexId })), to: $fetchPopularBrands })
+// endregion
+
+
+// region meta-tags:
+forward({
+  from: setUrl.map(payload => ({ link: getMetaTagsLink(payload.pathname, payload.search) })),
+  to: fetchMetaTags
+})
 // endregion
 
 
 
+/**  Только на клиенте: */
 // region mountCookie
+export const $mountClientApp = createEvent<{ pathname: string }>()
+
 export const mountCookie = createEffect({ handler: ({ sexId }: { sexId?: SexId }) => apiV2.session.mountOrGetInfo({ sexId }) })
 const debounceMountCookie = createEvent<{ sexId?: SexId }>()
 forward({
@@ -29,7 +59,7 @@ forward({
   to: debounceMountCookie
 })
 guard({
-  source: $sexId.updates.map(sexId => ({ sexId: sexId ?? undefined })),
+  source: setSexId.map(sexId => ({ sexId: sexId })),
   filter: () => !config.ssr,
   target: debounceMountCookie
 })
@@ -38,67 +68,4 @@ forward({
   to: mountCookie
 })
 // endregion
-
-
-
-// region popular brands:
-guard({
-  source: $sexId.updates.map(sexId => ({ sexId })),
-  filter: $sexId.map(sexId => sexId !== null),
-  target: $fetchPopularBrands,
-})
-// endregion
-
-
-
-
-// 2. Meta-tags (by pathname debounce) :
-export const $metaTags = createStore<MetaTags>({
-  link: '/',
-  title: 'SITO - сайт выгодных скидок. Каталог акций в интернет-магазинах.',
-  description: 'Все скидки рунета на SITO: поиск выгодных цен на одежду, обувь и аксессуары в интернет-магазинах. Агрегатор скидок – акции от 50%'
-})
-const $paramsForFetchTags = createStore('/')
-$paramsForFetchTags.on($setPathname, (state, { pathname, search }) => {
-  let link = pathname
-  if (!search) return link
-  let foundFields: any = {}
-  try {
-    foundFields = Object.fromEntries(
-      decodeURI(search).replace('?', '')
-        .split('&')
-        .map(i => i.split('='))
-    )
-  } catch (e) {
-    console.error(e)
-    return link
-  }
-  Object.entries(foundFields).forEach(([key, value]) => {
-    if (key === 'categories') {
-      if (!value) return
-      const cats = (value as string).split(',')
-      link = `${link}?categories=${cats[cats.length - 1]}`
-    }
-    return
-  })
-  return link
-})
-
-const fetchMetaTags = createEffect({
-  handler: (params: { link: string }) => apiV2.getMetaTags(params)
-})
-
-forward({
-  from: $paramsForFetchTags.updates.map(link => ({ link })),
-  to: fetchMetaTags
-})
-
-$metaTags.on(fetchMetaTags.done, (state, { result: { data } }) => data)
-// -----
-
-
-
-// endregion
-
-
 

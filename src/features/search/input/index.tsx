@@ -14,6 +14,7 @@ export function Input() {
   
   const { pathname } = useLocation()
   const sexId = useMemo(() => findSexIdInPathNotStrict(pathname), [pathname])
+
   
   
   useEffectSafe(() => {
@@ -22,6 +23,7 @@ export function Input() {
   }, [ modSearch ])
 
   const [value, setValue] = useState<string>('')
+  useEffectSafe(() => {setValue('')}, [sexId])
 
   const handleChange = useCallback((event: any) => {
     const phrase = event.currentTarget.value
