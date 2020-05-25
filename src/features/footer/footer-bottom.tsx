@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import styles from './styles.module.scss'
+import { FooterStyled } from './styled'
 
 
 export function FooterBottom() {
   return(
-    <S.Wrap className={styles.footerBottom}>
-      <div className={styles.wrap}>
-        <div className={styles.container}>
+    <S.Wrap>
+      <FooterStyled.Wrap>
+        <FooterStyled.Container>
         
           <span>© SITO
             <span className='date'> {new Date().getFullYear()}</span>
@@ -18,8 +18,8 @@ export function FooterBottom() {
             <S.IconWrap href='https://www.youtube.com/channel/UCP7EyqO5XlzPZvN_39w_YNw' target='_blank'><img src={'/icons/youtube.svg'} alt='youtube'/></S.IconWrap>
             <S.IconWrap href='https://www.instagram.com/sito.store' target='_blank'><img src={'/icons/instagram.svg'} alt='instagram'/></S.IconWrap>
           </S.Icons>
-        </div>
-      </div>
+        </FooterStyled.Container>
+      </FooterStyled.Wrap>
     </S.Wrap>
   )
 }
@@ -27,6 +27,8 @@ export function FooterBottom() {
 const S = {
   Wrap: styled.div`
     user-select: none;
+    background-color: #383838;
+    padding: 0;
 
     
     & .date {

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import { Logo } from '../../commons/atoms/logo'
-import styles from './styles.module.scss'
+import { FooterStyled } from './styled'
 
 
 export function FooterTop() {
@@ -15,19 +15,19 @@ export function FooterTop() {
   }, [pathname])
   
   return(
-    <S.Wrap className={styles.footerTop}>
-      <div className={styles.wrap}>
-        <div className={styles.container}>
+    <S.Wrap>
+      <FooterStyled.Wrap>
+        <FooterStyled.Container>
           
           <Logo color={'white'}/>
   
-          <div className={styles.about}>
-            <div className={styles.wrapAbout}>
+          <S.About>
+            <S.AboutContainer>
               Сервис сканирует ассортимент десятков магазинов, на данный сайт
               попадают товары со скидкой от 50%. Сейчас мы усиленно работаем над
               улучшением сортировки товаров и увеличением количества магазинов партнеров.
-            </div>
-          </div>
+            </S.AboutContainer>
+          </S.About>
           
           <S.Links>
             <Link className='link' to={!sex ? '/about' : `/${sex}/about`}>О нас</Link>
@@ -35,14 +35,29 @@ export function FooterTop() {
           </S.Links>
           
           
-        </div>
-      </div>
+        </FooterStyled.Container>
+      </FooterStyled.Wrap>
     </S.Wrap>
   )
 }
 
 const S = {
-  Wrap: styled.div``,
+  Wrap: styled.div`
+      background-color: #272727;
+      padding: 22px 0 33px;
+`,
+  
+  About: styled.div`
+    width: 50%;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0 10px 0 20px;
+`,
+  
+  AboutContainer: styled.div`
+      width: 92%;
+      color: white !important;
+`,
   
   Links: styled.div`
     height: 100%;

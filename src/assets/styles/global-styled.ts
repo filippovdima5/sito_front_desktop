@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import { resetStyles } from './reset'
 
 
 export function fontFace(name: string, src: string, fontWeight: string | number = 'normal', fontStyle = 'normal'){
@@ -36,4 +37,9 @@ export const GlobalStyle = createGlobalStyle`
     ${fontFace('Circe', 'open-sans/OpenSans-Light', 300, 'normal')}
     ${fontFace('Circe', 'open-sans/OpenSans-Regular', 400, 'normal')}
     ${fontFace('Circe', 'open-sans/OpenSans-Bold', 600, 'normal')}
+    
+    
+    // ResetStyles:
+    ${resetStyles}
+
 `
