@@ -68,7 +68,7 @@ const setupKoa = () => {
     }
   })
   
-  app.listen({ host: 'localhost', port: 9001 }, () => {console.info('App desktop started: 9001')})
+  app.listen({ host: '127.0.0.1', port: 9001 }, () => {console.info('App desktop started: 9001')})
 }
 
 setupKoa()
