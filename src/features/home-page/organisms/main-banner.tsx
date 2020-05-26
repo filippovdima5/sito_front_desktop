@@ -78,7 +78,7 @@ const S = {
     padding-bottom: 33.1540013%;
     box-sizing: border-box;
     position: relative;
-    overflow: hidden;
+    //overflow: hidden;
     
     & .mainBanner{
       box-sizing: border-box;
