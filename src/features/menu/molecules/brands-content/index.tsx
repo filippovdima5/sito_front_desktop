@@ -26,7 +26,7 @@ export function BrandsContent() {
           {brand}
         </Link>
       ))}
-      <Link to={'/brands'} className={styles.allBrand}>Показать все бренды</Link>
+      <Link to={`/${sexPath}/brands`} className={styles.allBrand}>Показать все бренды</Link>
     </div>
   )
 }
