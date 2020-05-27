@@ -23,13 +23,6 @@ export interface QueryFields  {
   not_size?: boolean,
 }
 
-export interface QueryFieldGetFilters extends QueryFields{
-  brand_search?: string,
-  brand_all?: boolean,
-}
-
-
-
 export type MainState = {
   sexId: 1 | 2 | null,
   categories: Array<number> | null,

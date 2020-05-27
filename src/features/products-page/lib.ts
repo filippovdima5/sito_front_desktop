@@ -5,6 +5,14 @@ import { QueryFields } from './types'
 
 
 // region parse uri:
+function parsePage(key: string, value: string, query: any): void {
+  if (Number(value) !== 1) {
+    query[key as keyof QueryFields] = 1
+    return
+  }
+  if (!isNaN(Number(value))) query[key as keyof QueryFields] = Number(value)
+}
+
 function parseNumber(key: string, value: string, query: any): void {
   if (!isNaN(Number(value))) query[key as keyof QueryFields] = Number(value)
 }
@@ -55,7 +63,7 @@ export const parseUrl = (pathname: string, search: string ): QueryFields => {
       case 'price_to':
       case 'sale_from':
       case 'sale_to':
-      case 'page':
+      case 'page': return parsePage(key, value as string, query)
       case 'limit': return parseNumber(key, value as string, query)
       case 'brands':
       case 'sizes': return parseArrayString(key, value as string, query)
