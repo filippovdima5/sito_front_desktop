@@ -63,8 +63,8 @@ export const parseUrl = (pathname: string, search: string ): QueryFields => {
       case 'price_to':
       case 'sale_from':
       case 'sale_to':
-      case 'page': return parsePage(key, value as string, query)
       case 'limit': return parseNumber(key, value as string, query)
+      case 'page': return parsePage(key, value as string, query)
       case 'brands':
       case 'sizes': return parseArrayString(key, value as string, query)
       case 'categories': return parseArrayNumber(key, value as string, query)
